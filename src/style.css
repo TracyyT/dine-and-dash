@@ -1,7 +1,7 @@
-:root { font-family: system-ui, sans-serif; 
-  color: #3b2a4a; background: #fff3e6; }
+:root { font-family: var(--font-body, system-ui, sans-serif); color: var(--ivory, #f1e6cf); background: var(--wall-deep, #0e3d38); }
 body { margin: 0; min-height: 100vh; }
 #app { max-width: 1100px; margin: 0 auto; padding: 24px; }
-button { font: inherit; 
-  padding: 10px 18px; border: 0; border-radius: 10px; 
-  background: #ff8fb1; color: #fff; cursor: pointer; }
+h1, h2 { font-family: var(--font-display, serif); font-weight: 400; color: var(--brass-light, #f4dd8e); }
+button { font: inherit; padding: 10px 18px; border: 2px solid var(--brass, #c9a24a); background: var(--marble, #1c1620); color: var(--brass-light, #f4dd8e); cursor: pointer; }
+button:hover { background: var(--burgundy, #7d1d33); }
+button:focus-visible { outline: 3px solid var(--brass-light, #f4dd8e); outline-offset: 2px; }

@@ -1,0 +1,26 @@
+export const city = {
+  id: 'city',
+  name: 'City Supper Club',
+  era: '1930s art deco',
+  palette: {
+    wall: '#14625a',
+    wallDeep: '#0e3d38',
+    brass: '#c9a24a',
+    brassLight: '#f4dd8e',
+    brassDark: '#8f6a22',
+    burgundy: '#7d1d33',
+    burgundyLight: '#a52e4a',
+    ivory: '#f1e6cf',
+    marble: '#1c1620',
+    nightTop: '#25357a',
+    nightMid: '#8a4f9c',
+    nightLow: '#ffa77a',
+    ink: '#1b1220',
+    glow: '#ffe6a8',
+  },
+  fonts: {
+    display: "'Limelight', serif",
+    body: "'Josefin Sans', system-ui, sans-serif",
+  },
+  light: { vignette: 0.42, beam: 0.55 },
+};
