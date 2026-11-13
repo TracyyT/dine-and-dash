@@ -10,5 +10,11 @@ export const DISHES = {
   fishtaco:   { name: 'Fish Tacos',     time: 6,  price: 14 },
   burger:     { name: 'Beach Burger',   time: 8,  price: 17 },
   shrimp:     { name: 'Grilled Shrimp', time: 10, price: 21 },
+  // Lantern Garden menu
+  dumpling:   { name: 'Dumplings',      time: 4,  price: 10 },
+  friedrice:  { name: 'Fried Rice',     time: 6,  price: 14 },
+  noodles:    { name: 'Noodle Bowl',    time: 8,  price: 18 },
+  duck:       { name: 'Roast Duck',     time: 11, price: 25 },
+  dimsum:     { name: 'Dim Sum Tower',  time: 14, price: 32 },
   lobster:    { name: 'Lobster Plate',  time: 13, price: 30 },
 };

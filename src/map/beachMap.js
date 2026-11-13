@@ -147,6 +147,5 @@ export function renderBeach(S, LB, chapter, progress) {
   });
   // start sign + next-chapter sign
   el('g', { transform: 'translate(230,1290)' }, S).innerHTML = `<ellipse cy="6" rx="30" ry="10" fill="#000" opacity=".2"/><rect x="-4" y="-70" width="8" height="74" fill="#7a4a22"/><path d="M4 -70h54l-12 14 12 14H4z" fill="#ff7a6a" stroke="${OL}" stroke-width="2.5"/>`;
-  el('g', { transform: 'translate(1960,900)' }, S).innerHTML = `<ellipse cy="6" rx="40" ry="12" fill="#000" opacity=".2"/><rect x="-5" y="-110" width="10" height="114" fill="#7a4a22"/><rect x="-70" y="-150" width="140" height="64" rx="10" fill="#6b4420" stroke="#ffe6b0" stroke-width="3"/><g transform="translate(0,-118) scale(1.3)"><rect x="-8" y="-2" width="16" height="12" rx="2" fill="#e0b070"/><path d="M-5-2V-8a5 5 0 0 1 10 0V-2" fill="none" stroke="#e0b070" stroke-width="2.5"/></g>`;
   return { nodes: lvl, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }

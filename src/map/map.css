@@ -67,3 +67,10 @@ body[data-map=beach] #wallet{top:120px}
   #hint{display:none}
 }
 @media (pointer:coarse){#zin,#zout{display:none}} /* pinch to zoom on touch */
+
+/* Chinese map chrome */
+body[data-map=chinese] #hud,body[data-map=chinese] #wallet,body[data-map=chinese] #tools button,body[data-map=chinese] #hint,body[data-map=chinese] #toast{background:#7a1818;border-color:#e8b64a;color:#fff0d8}
+body[data-map=chinese] #hud{outline-color:#e8b64a}
+body[data-map=chinese] #hud b{font-family:'Cinzel Decorative',serif}
+body[data-map=chinese] #tools button:hover:not(:disabled){background:#d9302a}
+body[data-map=chinese] #wallet{top:120px}
