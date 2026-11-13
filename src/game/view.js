@@ -1,7 +1,7 @@
 // Draws the restaurant and keeps it in sync with the engine. Clicks are reported through callbacks.
 import { ICONS, use, customerSVG, waiterSVG, STAFF_LOOK, tableSVG, chairSVG, stoveSVG, chefSVG } from './sprites.js';
 import { DISHES } from '../data/dishes.js';
-import { moodOf } from './engine.js';
+import { moodOf, taskOrder } from './engine.js';
 import { OBJ_ICON } from './popups.js';
 import { sceneHTML } from './scene.js';
 import { sound } from './sound.js';
@@ -33,7 +33,7 @@ export function createView(host, g, info, handlers) {
   // static pieces
   const tableEls = g.tables.map((t) => {
     const chair = mk('ent chair', chairSVG()); place(chair, t.x, t.y - 36); chair.style.zIndex = Math.round(t.y - 60);
-    const el = mk('ent table', `${tableSVG(t.id)}<div class="mess"></div><div class="bubble tb">${use('ic-spark', 24)}</div>`);
+    const el = mk('ent table', `${tableSVG(t.id)}<div class="mess"></div><div class="bubble tb">${use('ic-spark', 24)}</div><div class="qn"></div>`);
     el.dataset.t = t.id; place(el, t.x, t.y);
     ents.append(chair, el);
     return { t, el };
@@ -73,18 +73,36 @@ export function createView(host, g, info, handlers) {
     else if (t.dataset.act === 'music') handlers.music();
   });
 
+  // numbers on whatever the waiter will do next, in order (1 = now / next)
+  function queueNumbers() {
+    const num = new Map();
+    taskOrder(g).forEach((t, i) => {
+      const key = (t.type === 'clean' ? 't' : t.type === 'pickup' ? 'd' : 'c') + t.id;
+      if (!num.has(key)) num.set(key, i + 1);
+    });
+    const mark = (el, key) => {
+      const q = el.querySelector('.qn'), n = num.get(key);
+      if (!q) return;
+      const txt = n ? String(n) : '';
+      if (q.textContent !== txt) { q.textContent = txt; q.style.display = txt ? 'block' : 'none'; q.classList.toggle('first', n === 1); }
+    };
+    return { num, mark };
+  }
+
   function sync() {
+    const qn = queueNumbers();
     // customers
     const live = new Set();
     for (const c of g.customers) {
       live.add(c.id);
       let e = guests.get(c.id);
       if (!e) {
-        const el = mk('ent guest', `${customerSVG(c.look, info.theme === 'fine')}<div class="bar"><div></div></div><div class="bubble"></div><div class="addons"></div>`);
+        const el = mk('ent guest', `${customerSVG(c.look, info.theme === 'fine')}<div class="bar"><div></div></div><div class="bubble"></div><div class="qn"></div><div class="addons"></div>`);
         el.dataset.c = c.id; ents.appendChild(el); e = { el, sig: '', ad: '', addons: el.querySelector('.addons'), bubble: el.querySelector('.bubble'), fill: el.querySelector('.bar div'), svg: el.querySelector('svg.cust') };
         guests.set(c.id, e);
       }
       place(e.el, c.x, c.y);
+      qn.mark(e.el, 'c' + c.id);
       const adSig = c.addons.join(',');
       if (e.ad !== adSig) { e.ad = adSig; e.addons.innerHTML = c.addons.map((k) => `<div class="ad">${use('d-' + k, 18)}</div>`).join(''); }
       const sig = c.state + c.dish + c.kind + c.happy;
@@ -104,6 +122,7 @@ export function createView(host, g, info, handlers) {
       el.classList.toggle('dirty', t.state === 'dirty');
       el.classList.toggle('used', t.state === 'taken');
       el.classList.toggle('tap', t.state === 'dirty');
+      qn.mark(el, 't' + t.id);
     }
     // kitchen
     for (const { s, el } of stationEls) {
@@ -128,10 +147,11 @@ export function createView(host, g, info, handlers) {
       seen.add(d.id);
       let e = dishes.get(d.id);
       if (!e) {
-        const el = mk('ent dish tap', `${use('d-' + d.dish, 44)}<span class="tag">${d.label === 'GO' ? use('ic-bag', 16) : 'T' + d.label}</span>`);
+        const el = mk('ent dish tap', `${use('d-' + d.dish, 44)}<span class="tag">${d.label === 'GO' ? use('ic-bag', 16) : 'T' + d.label}</span><div class="qn"></div>`);
         el.dataset.d = d.id; place(el, d.x, d.y); ents.appendChild(el); e = { el }; dishes.set(d.id, e);
       }
       e.el.classList.toggle('late', d.age > 8);
+      qn.mark(e.el, 'd' + d.id);
     }
     for (const [id, e] of dishes) if (!seen.has(id)) { e.el.remove(); dishes.delete(id); }
     // hired staff
