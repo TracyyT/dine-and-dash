@@ -1,12 +1,13 @@
 import '../map/map.css';
 import { go } from '../router.js';
 import { chapters } from '../data/chapters.js';
-import { getProgress, isUnlocked, resetProgress, getWallet, isChapterDone } from '../state/progress.js';
+import { getProgress, isUnlocked, resetProgress, getWallet, isChapterDone, getLives, nextLifeIn, MAX_LIVES } from '../state/progress.js';
 import { COIN_ICON } from '../map/upgradeIcons.js';
 import { clearTheme } from '../themes/apply.js';
 import { renderCity } from '../map/cityMap.js';
 import { renderBeach, BEACH_DEFS } from '../map/beachMap.js';
 import { renderChinese, CHINESE_DEFS } from '../map/chineseMap.js';
+import { directionBoard } from '../map/board.js';
 import { renderFine, FINE_DEFS } from '../map/fineMap.js';
 import { renderSteak, STEAK_DEFS } from '../map/steakMap.js';
 import { createPanZoom } from '../map/panzoom.js';
@@ -43,10 +44,11 @@ export function renderMap(app, params = {}) {
     <div id="vig"></div>
     <div id="hud"><b>${chapter.name}</b><span>CHAPTER ${chapterIndex + 1}</span><div class="pips" aria-label="${doneCount} of ${chapter.levels.length} levels done">${chapter.levels.map((l) => `<i class="${(progress.stars[l.n] || 0) > 0 ? 'on' : ''}"></i>`).join('')}</div></div>
     <div id="wallet" aria-label="Coins">${COIN_ICON}<b></b></div>
+    <div id="lives" aria-label="Lives"><svg viewBox="0 0 40 40" width="22" height="22" aria-hidden="true"><path d="M20 35C6 25 5 14 11 10Q17 7 20 14Q23 7 29 10C35 14 34 25 20 35Z" fill="#e0476a" stroke="#8c1f3d" stroke-width="2"/></svg><b></b><small></small></div>
     <div id="tools">
       <button id="cp" aria-label="Previous chapter" title="Previous chapter"${chapterIndex > 0 ? '' : ' disabled'}>&#9664;</button>
       <button id="cn" aria-label="Next chapter" title="Next chapter"${chapterIndex < chapters.length - 1 && open(chapterIndex + 1) ? '' : ' disabled'}>&#9654;</button>
-      <button id="upb" aria-label="Upgrades" title="Upgrades"><svg viewBox="0 0 48 48" width="26" height="26" aria-hidden="true"><path d="M24 5L38 21H29V43H19V21H10Z" fill="#ffe9a8" stroke="#8f6a22" stroke-width="2" stroke-linejoin="round"/></svg></button>
+      <button id="upb" aria-label="Upgrades" title="Upgrades"><svg viewBox="0 0 48 48" width="26" height="26" aria-hidden="true"><path d="M4 8h7l5 22h21l4-16H14" fill="#ffe9a8" stroke="#8f6a22" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="19" cy="38" r="3.6" fill="#ffe9a8" stroke="#8f6a22" stroke-width="2.4"/><circle cx="33" cy="38" r="3.6" fill="#ffe9a8" stroke="#8f6a22" stroke-width="2.4"/></svg></button>
       <button id="zin" aria-label="Zoom in">+</button>
       <button id="zout" aria-label="Zoom out">&minus;</button>
       <button id="ctr" aria-label="Current level" title="Current level"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="none" stroke="#ffe9a8" stroke-width="3.5"/><circle cx="20" cy="20" r="4" fill="#ffe9a8"/><path d="M20 2v7M20 31v7M2 20h7M31 20h7" stroke="#ffe9a8" stroke-width="3.5" stroke-linecap="round"/></svg></button>
@@ -66,6 +68,15 @@ export function renderMap(app, params = {}) {
   pz.home(...city.home);
 
   $('wallet').querySelector('b').textContent = getWallet();
+  const paintLives = () => {
+    const n = getLives(), el = $('lives');
+    el.querySelector('b').textContent = n;
+    el.classList.toggle('empty', n <= 0);
+    const t = nextLifeIn();
+    el.querySelector('small').textContent = n < MAX_LIVES ? `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}` : '';
+  };
+  paintLives();
+  const livesTimer = setInterval(paintLives, 1000);
   $('upb').onclick = () => go('upgrades', { chapter: chapter.id });
 
   const LOCK = '<span style="margin-right:8px;font-weight:700">Locked</span><svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true"><rect x="8" y="18" width="24" height="18" rx="3" fill="#e8c766" stroke="#8f6a22" stroke-width="2.5"/><path d="M13 18v-5a7 7 0 0 1 14 0v5" fill="none" stroke="#e8c766" stroke-width="4"/><circle cx="20" cy="27" r="3" fill="#6b4a12"/></svg>';
@@ -75,6 +86,15 @@ export function renderMap(app, params = {}) {
     t.innerHTML = msg; t.style.opacity = 1;
     clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.style.opacity = 0; }, 2200);
   };
+  if (city.board) {
+    const nextCh = chapters[chapterIndex + 1] || null, nextOpen = !!nextCh && open(chapterIndex + 1);
+    const bd = directionBoard($('scene'), { ...city.board, theme: chapter.theme, next: nextCh, open: nextOpen });
+    if (nextOpen) {
+      const goNext = () => { if (!pz.isDragging()) go('map', { chapter: nextCh.id }); };
+      bd.addEventListener('click', goNext);
+      bd.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goNext(); } });
+    }
+  }
   const choose = (n) => {
     if (pz.isDragging()) return; // a drag is not a click
     if (!isUnlocked(chapter.id, n)) toast(LOCK);
@@ -93,7 +113,7 @@ export function renderMap(app, params = {}) {
   $('fs').onclick = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.());
   const hintTimer = setTimeout(() => { $('hint').style.opacity = 0; }, 5000);
 
-  return () => { // cleanup when leaving the map
+  return () => { clearInterval(livesTimer); // cleanup when leaving the map
     clearTimeout(hintTimer); clearTimeout(toastTimer); pz.destroy();
     document.body.classList.remove('map-open'); delete document.body.dataset.map;
   };

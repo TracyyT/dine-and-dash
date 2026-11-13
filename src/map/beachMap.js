@@ -82,12 +82,13 @@ export function renderBeach(S, LB, chapter, progress) {
   boat(S, 1230, 700); boat(S, 760, 735);
 
   // level stops
-  const spots = [[430, 1170], [880, 1050], [1330, 1170], [1770, 1060], [1640, 790]];
+  const YS = [1250, 1140, 1250, 1140, 1250, 1140, 1250, 1140];
+  const spots = YS.map((y, i) => [280 + i * 235, y]);
   const done = (n) => (progress.stars[n] || 0) > 0;
   const current = chapter.levels.find((l) => !done(l.n));
   const lvl = chapter.levels.map((l, i) => ({ n: l.n, name: l.name, s: progress.stars[l.n] || 0, st: done(l.n) ? 'done' : (current && current.n === l.n ? 'now' : 'lock'), pos: spots[i] }));
   // path through the stops (smooth)
-  const route = [[230, 1290], ...spots];
+  const route = [[110, 1330], ...spots];
   let d = `M${route[0].join(' ')}`;
   for (let i = 1; i < route.length; i++) {
     const a = route[i - 1], b = route[i], p0 = route[i - 2] || a, p1 = route[i + 1] || b;
@@ -112,16 +113,16 @@ export function renderBeach(S, LB, chapter, progress) {
   // scenery (back to front)
   bistro(S, 90, 800);
   tiki(S, 1060, 830);
-  palm(S, 780, 840, 1.1); palm(S, 1480, 820, 1); palm(S, 2230, 960, 1.3, -1); palm(S, 40, 1010, 1.25); palm(S, 2290, 1400, 1.1);
+  palm(S, 780, 840, 1.1); palm(S, 1480, 820, 1); palm(S, 2230, 960, 1.3, -1); palm(S, 40, 1010, 1.25);
   rock(S, 150, 1450, 1.4); rock(S, 300, 1470, 1); rock(S, 2000, 1440, 1.2);
   surf(S, 700, 830, '#e9f3f6', '#2f7fb0'); surf(S, 740, 840, '#ff9a4a', '#fff', -4);
-  umbrella(S, 1080, 1260, '#3f7fc0', 1.15); umbrella(S, 1880, 1350, '#ff7a6a', 1.2);
+  umbrella(S, 560, 1450, '#3f7fc0', 1.15); umbrella(S, 1180, 1485, '#ff7a6a', 1);
   // table under the umbrella
-  el('g', { transform: 'translate(1080,1262)' }, S).innerHTML = `<ellipse rx="52" ry="14" fill="#a87a42" stroke="${OL}" stroke-width="3"/><rect x="-5" y="-30" width="10" height="30" fill="#7a4a22"/><ellipse cy="-30" rx="46" ry="12" fill="#d9a060" stroke="${OL}" stroke-width="3"/>`;
+  el('g', { transform: 'translate(560,1452)' }, S).innerHTML = `<ellipse rx="52" ry="14" fill="#a87a42" stroke="${OL}" stroke-width="3"/><rect x="-5" y="-30" width="10" height="30" fill="#7a4a22"/><ellipse cy="-30" rx="46" ry="12" fill="#d9a060" stroke="${OL}" stroke-width="3"/>`;
   flower(S, 90, 1220, '#ff6fa0'); flower(S, 140, 1250, '#ff9a4a'); flower(S, 2330, 940, '#ff6fa0'); flower(S, 600, 1020, '#ffd84a');
   star(S, 640, 1400); star(S, 1500, 1410); star(S, 1180, 940);
   // sun lounger + cabana
-  el('g', { transform: 'translate(2230,1130)' }, S).innerHTML = `<ellipse cx="0" cy="40" rx="130" ry="22" fill="#000" opacity=".16"/><rect x="-110" y="-110" width="220" height="130" rx="10" fill="#fff4e0" stroke="${OL}" stroke-width="3"/><path d="M-110 -110Q0 -170 110 -110" fill="#e8f2f4" stroke="${OL}" stroke-width="3"/><rect x="-100" y="-50" width="200" height="60" rx="8" fill="#9ac8d6" stroke="${OL}" stroke-width="3"/><path d="M-110 -110V30M110 -110V30" stroke="#8a5a2a" stroke-width="8"/>`;
+  el('g', { transform: 'translate(2200,1420)' }, S).innerHTML = `<ellipse cx="0" cy="40" rx="130" ry="22" fill="#000" opacity=".16"/><rect x="-110" y="-110" width="220" height="130" rx="10" fill="#fff4e0" stroke="${OL}" stroke-width="3"/><path d="M-110 -110Q0 -170 110 -110" fill="#e8f2f4" stroke="${OL}" stroke-width="3"/><rect x="-100" y="-50" width="200" height="60" rx="8" fill="#9ac8d6" stroke="${OL}" stroke-width="3"/><path d="M-110 -110V30M110 -110V30" stroke="#8a5a2a" stroke-width="8"/>`;
 
   // stops
   const star5 = (x, y, on) => `<path transform="translate(${x},${y}) scale(1.4)" d="M0-9L2.7-3 9-2.4 4.2 1.8 5.6 8 0 4.8 -5.6 8 -4.2 1.8 -9-2.4 -2.7-3Z" fill="${on ? '#ffd84a' : '#5a6a78'}" stroke="#14100f" stroke-width="1.2"/>`;
@@ -141,11 +142,10 @@ export function renderBeach(S, LB, chapter, progress) {
     const lab = el('g', { transform: 'translate(0,64)' }, g);
     el('rect', { x: -86, y: -17, width: 172, height: 32, rx: 8, fill: '#6b4420', stroke: lock ? '#8a7a64' : '#ffe6b0', 'stroke-width': 2 }, lab);
     const tt = el('text', { y: 6, 'text-anchor': 'middle', 'font-family': 'Josefin Sans', 'font-weight': 700, 'font-size': 18, fill: lock ? '#cbb89a' : '#fff4e0' }, lab); tt.textContent = l.name;
-    if (l.st === 'done') el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
-    if (l.st === 'now') { const s = el('g', { transform: 'translate(0,-84)', class: 'bob' }, g); el('rect', { x: -42, y: -16, width: 84, height: 32, rx: 10, fill: '#fff4e0', stroke: OL, 'stroke-width': 2 }, s); el('path', { d: 'M-8 16L0 26L8 16Z', fill: '#fff4e0', stroke: OL, 'stroke-width': 2 }, s); el('path', { transform: 'translate(0,0) scale(.9)', d: 'M-9-8L9 0L-9 8Z', fill: '#d9435f' }, s); }
-    if (l.n === 5) el('path', { transform: 'translate(0,-60)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: '#ffd96a', stroke: OL, 'stroke-width': 1.5 }, g);
+    if (!lock) el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
+    if (l.n === chapter.levels.length) el('path', { transform: 'translate(0,-100)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: '#ffd96a', stroke: OL, 'stroke-width': 1.5 }, g);
   });
   // start sign + next-chapter sign
-  el('g', { transform: 'translate(230,1290)' }, S).innerHTML = `<ellipse cy="6" rx="30" ry="10" fill="#000" opacity=".2"/><rect x="-4" y="-70" width="8" height="74" fill="#7a4a22"/><path d="M4 -70h54l-12 14 12 14H4z" fill="#ff7a6a" stroke="${OL}" stroke-width="2.5"/>`;
-  return { nodes: lvl, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
+  el('g', { transform: 'translate(110,1330)' }, S).innerHTML = `<ellipse cy="6" rx="30" ry="10" fill="#000" opacity=".2"/><rect x="-4" y="-70" width="8" height="74" fill="#7a4a22"/><path d="M4 -70h54l-12 14 12 14H4z" fill="#ff7a6a" stroke="${OL}" stroke-width="2.5"/>`;
+  return { nodes: lvl, board: { x: 2290, y: 1200, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }

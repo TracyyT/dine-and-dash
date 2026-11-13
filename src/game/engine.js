@@ -9,11 +9,11 @@ const BOOST = 0.25; // satisfaction a guest regains each time the waiter complet
 
 const rand = (a, b) => a + Math.random() * (b - a);
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const WORK = { order: 0.5, bill: 0.4, clean: 1.3, pickup: 0.3, drop: 0.3, deliver: 0.4 };
+const WORK = { order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop: 0.3, deliver: 0.4 };
 const MOOD_RATE = { queue: 1, wantOrder: 1.3, waitFood: 1, wantBill: 1.5, eating: 0.1 };
 
 export function createGame(baseCfg, owned = {}) {
-  const own = { chefs: 0, kitchen: 0, ingredients: 0, shoes: 0, seats: 0, tips: 0, host: 0, busser: 0, runner: 0, ...owned };
+  const own = { training: 0, cleaning: 0, chefs: 0, kitchen: 0, ingredients: 0, shoes: 0, seats: 0, tips: 0, host: 0, busser: 0, runner: 0, ...owned };
   const cfg = { ...baseCfg, stations: Math.min(3, 1 + own.chefs) };
   const L = buildLayout(cfg);
   const g = {
@@ -21,7 +21,8 @@ export function createGame(baseCfg, owned = {}) {
     over: false, customers: [], tables: [], stations: [], tickets: [], pickup: [], takeSlots: [], stallJobs: [],
     tasks: [], events: [], owned: own, staff: [], nextId: 1, nextArrival: 1,
     stats: { dishes: 0, made: 0, happy: 0, take: 0, satSum: 0 },
-    objectives: cfg.objectives.map((o) => ({ ...o, status: 'open', value: 0 })),
+    objectives: [{ ...cfg.objective, status: 'open', value: 0 }], // ONE requirement per level
+    result: null,
     waiter: { x: L.home.x, y: L.home.y, carry: null, task: null, work: 0, face: 1 },
   };
   L.tables.slice(0, cfg.tables).forEach(([x, y], i) => g.tables.push({ id: i + 1, x, y, state: 'free', guest: null }));
@@ -29,29 +30,29 @@ export function createGame(baseCfg, owned = {}) {
   L.take.forEach((s, i) => g.takeSlots.push({ id: i + 1, x: s.x, y: s.y, guest: null }));
   // Hired staff start the level already at work.
   for (const role of ['host', 'busser', 'runner']) {
-    if (!own[role]) continue;
-    const home = role === 'host' ? { x: 215, y: L.queue[0].y + 40 } : role === 'busser' ? { x: L.dineX + 40, y: L.H - 60 } : { x: L.pickupPoint.x - 70, y: L.pickupPoint.y };
-    g.staff.push({ id: g.nextId++, role, x: home.x, y: home.y, home, task: null, carry: null, face: 1 });
+    for (let k = 0; k < (own[role] || 0); k++) { // each tier hires one more person of that role
+      const home = role === 'host' ? { x: 215 + k * 36, y: L.queue[0].y + 40 + k * 14 } : role === 'busser' ? { x: L.dineX + 40 + k * 44, y: L.H - 60 } : { x: L.pickupPoint.x - 70 - k * 40, y: L.pickupPoint.y + k * 22 };
+      g.staff.push({ id: g.nextId++, role, x: home.x, y: home.y, home, task: null, carry: null, face: 1 });
+    }
   }
   return g;
 }
 
-// ---- star objectives ----
+// ---- the level's single requirement ----
+// A level is passed or failed by this one requirement alone. Stars are separate: they only count angry guests who stormed out.
 const objectiveValue = (g, type) => ({ coins: g.earned, guests: g.served, dishes: g.stats.dishes, items: g.stats.made, happy: g.stats.happy, takeout: g.stats.take, noAngry: g.lost })[type];
 function evalObjectives(g, final) {
-  const elapsed = g.cfg.duration - g.timeLeft;
-  for (const o of g.objectives) {
-    if (o.status !== 'open') continue;
-    o.value = objectiveValue(g, o.type);
-    if (o.type === 'noAngry') {
-      if (g.lost > 0) o.status = 'failed';
-      else if (o.within ? elapsed >= o.within : final) o.status = 'done';
-    } else if (o.value >= o.target) o.status = 'done';
-    else if ((o.within && elapsed > o.within) || final) o.status = 'failed';
-    if (o.status === 'done') emit(g, { type: 'goal' });
-  }
+  const o = g.objectives[0];
+  if (o.status === 'failed') return;
+  o.value = objectiveValue(g, o.type); // keeps counting after the goal is met: the level plays on until the timer ends
+  if (o.type === 'noAngry') {
+    if (g.lost > 0) o.status = 'failed'; // the one case that ends the level early: an angry guest leaving
+  } else if (o.status === 'open' && o.value >= o.target) { o.status = 'done'; emit(g, { type: 'goal' }); } // met: stays met
+  if (o.status === 'failed') { g.over = true; g.result = 'fail'; return; }
+  if (final) { g.over = true; g.result = o.type === 'noAngry' || o.status === 'done' ? 'pass' : 'fail'; if (g.result === 'fail') o.status = 'failed'; else o.status = 'done'; }
 }
-export const stars = (g) => g.objectives.filter((o) => o.status === 'done').length;
+// 3 stars = nobody left angry, 2 = one angry guest left, 1 = two or more. A failed level earns none.
+export const stars = (g) => (g.result !== 'pass' ? 0 : g.lost === 0 ? 3 : g.lost === 1 ? 2 : 1);
 export const moodOf = (sat) => (sat > 0.66 ? 'green' : sat > 0.4 ? 'yellow' : sat > 0.2 ? 'orange' : 'red');
 
 const byId = (list, id) => list.find((o) => o.id === id);
@@ -242,7 +243,7 @@ function updateWaiter(g, dt) {
     }
   } else {
     task.t += dt;
-    if (task.t >= WORK[task.type]) finish(g, task);
+    if (task.t >= WORK[task.type] * (task.type === 'clean' ? 1 - 0.3 * g.owned.cleaning : 1)) finish(g, task);
   }
 }
 
@@ -286,7 +287,7 @@ const waiterBusyWith = (g, type, id) => (g.waiter.task && g.waiter.task.type ===
 
 function pickStaffTask(g, s) {
   if (s.role === 'host') {
-    const c = g.customers.filter((x) => x.state === 'queue').sort((a, b) => a.id - b.id)
+    const c = g.customers.filter((x) => x.state === 'queue' && !g.staff.some((o) => o !== s && o.task && o.task.type === 'seat' && o.task.id === x.id)).sort((a, b) => a.id - b.id)
       .find((x) => (x.kind === 'dine' ? g.tables.some((t) => t.state === 'free') : g.takeSlots.some((t) => !t.guest)));
     if (c) return { type: 'seat', id: c.id };
   } else if (s.role === 'busser') {
@@ -342,14 +343,14 @@ function updateStaff(g, dt) {
     if (t.phase === 'walk') {
       const spot = staffSpot(g, s, t);
       if (!spot || !staffValid(g, t)) { staffDrop(g, s); continue; }
-      if (step(s, spot.x, spot.y, STAFF_SPEED[s.role], dt)) {
+      if (step(s, spot.x, spot.y, STAFF_SPEED[s.role] * (1 + 0.2 * g.owned.training), dt)) {
         if (!staffValid(g, t)) { staffDrop(g, s); continue; }
         t.phase = 'work'; t.t = 0;
       }
     } else {
       t.t += dt;
       if (!staffValid(g, t)) { staffDrop(g, s); continue; }
-      if (t.t >= STAFF_WORK[t.type]) staffFinish(g, s, t);
+      if (t.t >= (STAFF_WORK[t.type] * (t.type === 'clean' ? 1 - 0.3 * g.owned.cleaning : 1)) / (1 + 0.25 * g.owned.training)) staffFinish(g, s, t);
     }
   }
 }

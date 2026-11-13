@@ -6,13 +6,16 @@ export const chapters = [
     theme: 'city',
     map: 'city',
     nextLabel: 'CHAPTER 2',
-    path: [[5, 23], [5, 17], [11, 17], [11, 11], [17, 11], [17, 5], [20.5, 5]],
+    path: [[5, 23], [5, 17], [11, 17], [11, 11], [17, 11], [17, 5], [23, 5], [23, 11], [23, 17], [29.5, 17]],
     levels: [
       { n: 1, name: 'Corner Cafe', sign: 'CAFE', arc: 3 },
       { n: 2, name: 'Jazz Bar', sign: 'JAZZ', arc: 9.5 },
       { n: 3, name: 'Hotel Lounge', sign: 'HOTEL', arc: 16 },
       { n: 4, name: 'Opera Terrace', sign: 'OPERA', arc: 22.5 },
       { n: 5, name: 'Skyline Gala', sign: 'GALA', arc: 28 },
+      { n: 6, name: 'Rooftop Terrace', sign: 'ROOF', arc: 34 },
+      { n: 7, name: 'Metro Grill', sign: 'METRO', arc: 40 },
+      { n: 8, name: "Mayor's Banquet", sign: 'MAYOR', arc: 46 },
     ],
   },
   {
@@ -27,6 +30,9 @@ export const chapters = [
       { n: 3, name: 'Surf Club', sign: 'SURF' },
       { n: 4, name: 'Sunset Deck', sign: 'DECK' },
       { n: 5, name: 'Lighthouse Feast', sign: 'LIGHT' },
+      { n: 6, name: 'Coral Cove', sign: 'CORAL' },
+      { n: 7, name: 'Pirate Grill', sign: 'PIRATE' },
+      { n: 8, name: 'Grand Regatta', sign: 'REGATTA' },
     ],
   },
   {
@@ -40,6 +46,9 @@ export const chapters = [
       { n: 3, name: 'Noodle Bar', sign: 'NOODLE' },
       { n: 4, name: 'Moon Pavilion', sign: 'MOON' },
       { n: 5, name: 'Dragon Banquet', sign: 'DRAGON' },
+      { n: 6, name: 'Jade Pavilion', sign: 'JADE' },
+      { n: 7, name: 'Spice Market', sign: 'SPICE' },
+      { n: 8, name: "Emperor's Feast", sign: 'EMPEROR' },
     ],
   },
   {
@@ -53,6 +62,9 @@ export const chapters = [
       { n: 3, name: "Chef's Table", sign: 'TABLE' },
       { n: 4, name: 'Crystal Salon', sign: 'SALON' },
       { n: 5, name: 'Royal Gala', sign: 'GALA' },
+      { n: 6, name: 'Opera Box', sign: 'OPERA' },
+      { n: 7, name: 'Wine Cellar', sign: 'CELLAR' },
+      { n: 8, name: 'Grand Ballroom', sign: 'BALL' },
     ],
   },
   {
@@ -66,6 +78,9 @@ export const chapters = [
       { n: 3, name: 'Grill Pit', sign: 'GRILL' },
       { n: 4, name: 'Wagon Wheel', sign: 'WHEEL' },
       { n: 5, name: 'Rodeo Night', sign: 'RODEO' },
+      { n: 6, name: 'Cattle Drive', sign: 'CATTLE' },
+      { n: 7, name: 'BBQ Showdown', sign: 'SHOWDOWN' },
+      { n: 8, name: 'Cook-Off Finals', sign: 'COOKOFF' },
     ],
   },
 ];

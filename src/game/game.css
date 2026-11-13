@@ -365,3 +365,28 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 [data-theme=steak] .chair.booth svg{left:-85px;top:-46px}
 [data-theme=steak] .station .flame,[data-theme=steak] .station svg .flame{animation:flk .5s steps(2) infinite alternate;transform-origin:50% 100%}
 @keyframes flk{from{transform:scaleY(1)}to{transform:scaleY(1.18)}}
+
+/* ---- one requirement per level, stars from angry guests, lives ---- */
+.orow.main{padding:8px 12px}
+.orow.main>svg:first-child{filter:none}
+.orow.main b{font-size:22px}
+.srule{display:flex;justify-content:center;align-items:center;gap:12px;padding:4px 6px;background:#fffaf0;border:2px solid #e0cfa0;border-radius:14px}
+.srule .sr{display:flex;flex-direction:column;align-items:center;gap:1px}
+.srule .sr svg{display:inline-block}
+.srule .sr i{display:flex;align-items:center;gap:2px;font-style:normal}
+.srule .sr b{font:700 14px var(--font-body);color:#7d1d33}
+.srule.note{gap:8px;font:700 15px var(--font-body);color:#7d1d33}
+.lives{display:flex;align-items:center;justify-content:center;gap:4px}
+.lives svg.off{filter:grayscale(1) brightness(.8) opacity(.45)}
+.lives small{margin-left:8px;font:700 13px var(--font-body);color:#7d1d33;letter-spacing:.04em}
+.lifelost{display:flex;align-items:center;justify-content:center;gap:10px}
+.lifelost b{font:700 30px var(--font-body);color:#c0392b}
+.lifelost .lives svg{width:20px;height:20px}
+.pbtn:disabled{opacity:.55;filter:grayscale(.6);cursor:not-allowed}
+.hstars{display:flex;align-items:center;gap:2px;padding:4px 8px;background:#0007;border:2px solid var(--brass);border-radius:14px}
+.hstars svg{width:22px;height:22px;transition:.25s}
+.hstars svg.off{filter:grayscale(1) brightness(.6) opacity(.5)}
+.hstars.hide{display:none}
+.objs .obj{flex:0 1 420px}
+.srule .sr u{display:flex;text-decoration:none;gap:1px}
+.srule .sr{gap:3px}

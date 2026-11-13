@@ -60,11 +60,12 @@ export function renderChinese(S, LB, chapter, progress) {
   for (let i = 0; i < 12; i++) el('path', { d: `M${1480 + (i % 6) * 140} ${1240 + Math.floor(i / 6) * 120 + (i % 3) * 20}q14 -8 30 0t30 0`, fill: 'none', stroke: '#fff', 'stroke-width': 3, opacity: 0.45, 'stroke-linecap': 'round' }, S);
 
   // stops along a stone path
-  const spots = [[420, 1210], [860, 1090], [1290, 1010], [1720, 960], [2060, 1070]];
+  const YS = [1250, 1150, 1060, 1000, 1060, 1000, 1060, 1000];
+  const spots = YS.map((y, i) => [280 + i * 235, y]);
   const done = (n) => (progress.stars[n] || 0) > 0;
   const current = chapter.levels.find((l) => !done(l.n));
   const lvl = chapter.levels.map((l, i) => ({ n: l.n, name: l.name, s: progress.stars[l.n] || 0, st: done(l.n) ? 'done' : (current && current.n === l.n ? 'now' : 'lock'), pos: spots[i] }));
-  const route = [[210, 1330], ...spots];
+  const route = [[110, 1340], ...spots];
   let d = `M${route[0].join(' ')}`;
   for (let i = 1; i < route.length; i++) {
     const a = route[i - 1], b = route[i], p0 = route[i - 2] || a, p1 = route[i + 1] || b;
@@ -114,11 +115,10 @@ export function renderChinese(S, LB, chapter, progress) {
     const lab = el('g', { transform: 'translate(0,64)' }, g);
     el('rect', { x: -88, y: -17, width: 176, height: 32, rx: 8, fill: '#7a1818', stroke: lock ? '#8a7a64' : '#e8b64a', 'stroke-width': 2 }, lab);
     const tt = el('text', { y: 6, 'text-anchor': 'middle', 'font-family': 'Josefin Sans', 'font-weight': 700, 'font-size': 18, fill: lock ? '#cbb89a' : '#fff0d8' }, lab); tt.textContent = l.name;
-    if (l.st === 'done') el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
-    if (l.st === 'now') { const s = el('g', { transform: 'translate(0,-84)', class: 'bob' }, g); el('rect', { x: -42, y: -16, width: 84, height: 32, rx: 10, fill: '#fff0d8', stroke: OL, 'stroke-width': 2 }, s); el('path', { d: 'M-8 16L0 26L8 16Z', fill: '#fff0d8', stroke: OL, 'stroke-width': 2 }, s); el('path', { transform: 'scale(.9)', d: 'M-9-8L9 0L-9 8Z', fill: '#d9302a' }, s); }
-    if (l.n === 5) el('path', { transform: 'translate(0,-60)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: '#ffd96a', stroke: OL, 'stroke-width': 1.5 }, g);
+    if (!lock) el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
+    if (l.n === chapter.levels.length) el('path', { transform: 'translate(0,-100)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: '#ffd96a', stroke: OL, 'stroke-width': 1.5 }, g);
   });
-  // start flag + "coming soon" sign
-  G(S, 210, 1330, `<ellipse cy="6" rx="30" ry="10" fill="#000" opacity=".2"/><rect x="-4" y="-70" width="8" height="74" fill="#6a3a22"/><path d="M4 -70h54l-12 14 12 14H4z" fill="#d9302a" stroke="${OL}" stroke-width="2.5"/>`);
-  return { nodes: lvl, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
+  // start flag
+  G(S, 110, 1340, `<ellipse cy="6" rx="30" ry="10" fill="#000" opacity=".2"/><rect x="-4" y="-70" width="8" height="74" fill="#6a3a22"/><path d="M4 -70h54l-12 14 12 14H4z" fill="#d9302a" stroke="${OL}" stroke-width="2.5"/>`);
+  return { nodes: lvl, board: { x: 2290, y: 1140, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }

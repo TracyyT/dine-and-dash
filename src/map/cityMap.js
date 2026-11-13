@@ -84,28 +84,15 @@ export function renderCity(S, LB, chapter, progress) {
     el('ellipse',{rx:34,ry:17,fill:base,stroke:lock?'#5a5068':'#fff3c0','stroke-width':1.6,opacity:.95},u);
     const t=el('text',{y:10,'text-anchor':'middle','font-family':'Limelight,serif','font-size':30,fill:lock?'#4a4258':'#fff8e0',stroke:'#14100f','stroke-width':1,'paint-order':'stroke'},u);t.textContent=l.n;
     if(lock){const lk=el('g',{transform:'translate(0,-28) scale(1.4)'},u);lk.innerHTML='<rect x="-7" y="-2" width="14" height="11" rx="2" fill="#5a5068" stroke="#14100f"/><path d="M-4-2V-6a4 4 0 0 1 8 0V-2" fill="none" stroke="#5a5068" stroke-width="2.4"/>'}
-    if(l.st=='now'){const c=el('g',{class:'bob',transform:'translate(0,-32) scale(1.5)'},u);c.innerHTML='<ellipse cy="26" rx="9" ry="3" fill="#1a0a30" opacity=".3"/><rect x="-7" y="6" width="14" height="16" rx="5" fill="#f7efe0" stroke="#14100f" stroke-width="1.2"/><circle cy="-2" r="8" fill="#f1b98f" stroke="#14100f" stroke-width="1.2"/><path d="M-9-6a9 8 0 0 1 4-8 5 5 0 0 1 5-3 5 5 0 0 1 5 3 9 8 0 0 1 4 8Z" fill="#fff" stroke="#14100f" stroke-width="1.2"/><circle cx="-3" cy="-2" r="1.3" fill="#241418"/><circle cx="3" cy="-2" r="1.3" fill="#241418"/><path d="M-3 2q3 3 6 0" stroke="#8a2f3c" stroke-width="1.4" fill="none"/>'}
    });
    const g=el('g',{transform:`translate(${x},${y})`,'pointer-events':'none'},LB);
    const lab=el('g',{transform:'translate(0,62)'},g);el('rect',{x:-80,y:-17,width:160,height:32,fill:'#14100f',stroke:lock?'#5a5068':'#c9a24a','stroke-width':2},lab);
    const tt=el('text',{y:6,'text-anchor':'middle','font-family':'Josefin Sans','font-weight':700,'font-size':18,fill:lock?'#9a90ac':'#f2e2b8'},lab);tt.textContent=l.name;
-   if(l.st=='done'){const s=el('g',{transform:'translate(0,-56)'},g);s.innerHTML=star(-30,0,l.s>=1)+star(0,-8,l.s>=2)+star(30,0,l.s>=3)}
-   if(l.st=='now'){const s=el('g',{transform:'translate(0,-100)'},g);el('rect',{x:-42,y:-16,width:84,height:32,fill:'#ffd96a',stroke:'#14100f','stroke-width':2},s);el('path',{d:'M-8 16L0 26L8 16Z',fill:'#ffd96a',stroke:'#14100f','stroke-width':2},s);const q=el('text',{y:7,'text-anchor':'middle','font-family':'Josefin Sans','font-weight':700,'font-size':19,fill:'#4d1220','letter-spacing':1.5},s);q.textContent='PLAY'}
-   if(l.n==5)el('path',{d:'M-20-60L-12-76-3-64 0-80 3-64 12-76 20-60Z',fill:'#ffd96a',stroke:'#14100f','stroke-width':1.5},g);
+   if(!lock){const s=el('g',{transform:'translate(0,-56)'},g);s.innerHTML=star(-30,0,l.s>=1)+star(0,-8,l.s>=2)+star(30,0,l.s>=3)}
+   if(l.n==chapter.levels.length)el('path',{d:'M-20-100L-12-116-3-104 0-120 3-104 12-116 20-100Z',fill:'#ffd96a',stroke:'#14100f','stroke-width':1.5},g);
   });
   // start flag
   add(24,g=>{const [x,y]=P(...W[0]);el('ellipse',{cx:x,cy:y+4,rx:26,ry:11,fill:'#14100f',stroke:'url(#brass)','stroke-width':4},g);el('line',{x1:x,y1:y,x2:x,y2:y-56,stroke:'#8f6a22','stroke-width':4},g);el('path',{d:`M${x} ${y-56}l32 10-32 10Z`,fill:'#d9435f',stroke:'#14100f','stroke-width':1.5},g)});
-  // next chapter: construction site closing the road
-  add(1e3,g=>{const x0=W[W.length-1][0]+.9,y0=W[W.length-1][1]-1,w=2.6,d=2,fh=34,[sx,sy]=[0,0];
-   poly([P(x0,y0),P(x0+w,y0),P(x0+w,y0+d),P(x0,y0+d)],'#cda877',{stroke:'#8a6a3a','stroke-width':1.5},g);
-   poly([P(x0,y0),P(x0+w,y0),P(x0+w,y0,fh),P(x0,y0,fh)],'#3f8a4a',OUT,g);poly([P(x0,y0),P(x0,y0+d),P(x0,y0+d,fh),P(x0,y0,fh)],'#4f9a52',OUT,g);
-   box(g,x0+.5,y0+.6,.9,.7,18,'#8d94a4',{});box(g,x0+1.5,y0+1,.7,.6,12,'#a2a9b8',{});
-   poly([P(x0,y0+d),P(x0+w,y0+d),P(x0+w,y0+d,fh),P(x0,y0+d,fh)],'#3a7a42',OUT,g);poly([P(x0+w,y0+d),P(x0+w,y0),P(x0+w,y0,fh),P(x0+w,y0+d,fh)],'#4f9a52',OUT,g);
-   el('polyline',{points:pts([P(x0,y0+d,fh),P(x0+w,y0+d,fh),P(x0+w,y0,fh)]),fill:'none',stroke:'#f0cd6a','stroke-width':3},g);
-   const c=P(x0+w/2,y0+d/2,fh+10);
-   el('rect',{x:c[0]-3,y:c[1]-6,width:6,height:92,fill:'#6a4a34'},g);
-   el('rect',{x:c[0]-84,y:c[1]-82,width:168,height:76,fill:'#14100f',stroke:'url(#brass)','stroke-width':5},g);
-   g.insertAdjacentHTML('beforeend',`<g transform="translate(${c[0]},${c[1]-52}) scale(1.3)"><rect x="-8" y="-2" width="16" height="12" rx="2" fill="#c9a24a"/><path d="M-5-2V-8a5 5 0 0 1 10 0V-2" fill="none" stroke="#c9a24a" stroke-width="2.8"/></g><text x="${c[0]}" y="${c[1]-16}" text-anchor="middle" font-family="Limelight,serif" font-size="19" fill="#ffe9a8">${chapter.nextLabel||'NEXT CHAPTER'}</text>`)});
   items.sort((a,b)=>a.key-b.key).forEach(i=>i.fn(S));
-    return {nodes:lv.map(l=>({...l,pos:P(...gridAt(l.a))})),home:P(...gridAt(current?current.arc:chapter.levels[chapter.levels.length-1].arc))};
+    return {nodes:lv.map(l=>({...l,pos:P(...gridAt(l.a))})),board:{x:P(...chapter.path[chapter.path.length-1])[0],y:P(...chapter.path[chapter.path.length-1])[1],dir:1},home:P(...gridAt(current?current.arc:chapter.levels[chapter.levels.length-1].arc))};
 }

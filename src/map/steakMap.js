@@ -122,11 +122,12 @@ export function renderSteak(S, LB, chapter, progress) {
   chair(S, 1060, 860, 1, 0.9); chair(S, 1202, 862, -1, 0.9); chair(S, 1382, 852, 1, 0.9); chair(S, 1522, 850, -1, 0.9);
 
   // stone path
-  const spots = [[330, 1170], [760, 1040], [1180, 1190], [1700, 1230], [2090, 1000]];
+  const YS = [1230, 1140, 1240, 1140, 1240, 1140, 1240, 1150];
+  const spots = YS.map((y, i) => [280 + i * 235, y]);
   const done = (n) => (progress.stars[n] || 0) > 0;
   const current = chapter.levels.find((l) => !done(l.n));
   const lvl = chapter.levels.map((l, i) => ({ n: l.n, name: l.name, s: progress.stars[l.n] || 0, st: done(l.n) ? 'done' : (current && current.n === l.n ? 'now' : 'lock'), pos: spots[i] }));
-  const route = [[560, 790], [560, 930], spots[0], spots[1], spots[2], spots[3], spots[4]];
+  const route = [[560, 790], [560, 930], ...spots];
   let d = `M${route[0].join(' ')}`;
   for (let i = 1; i < route.length; i++) {
     const a = route[i - 1], b = route[i], p0 = route[i - 2] || a, p1 = route[i + 1] || b;
@@ -148,15 +149,14 @@ export function renderSteak(S, LB, chapter, progress) {
   }
 
   // plaza furniture
-  bush(S, 1500, 790, 1.1); bush(S, 1900, 860, 1); bush(S, 2250, 800, 1.1); bush(S, 640, 1250, 1); bush(S, 1000, 1420, 1.1);
-  fountain(S, 1640, 940); boulder(S, 1380, 960, 1); boulder(S, 1900, 1000, 0.9); boulder(S, 1480, 1030, 0.7);
-  gtable(S, 190, 1300, 1.1); chair(S, 80, 1380, 1, 1); chair(S, 300, 1390, -1, 1);
-  gtable(S, 1010, 1260, 1); chair(S, 910, 1330, 1, 1); chair(S, 1120, 1340, -1, 1);
-  lantern(S, 560, 1100, 1.3); lantern(S, 1500, 1140, 1.2); lantern(S, 470, 830, 1.1);
-  barrel(S, 100, 880, 1); barrel(S, 720, 820, 0.9); barrel(S, 1800, 1370, 0.9); barrel(S, 2330, 1240, 1);
-  hay(S, 2200, 700, 0.9);
-  grill(S, 2110, 1380, 1.2);
-  cactus(S, 1330, 1380, 0.9);
+  bush(S, 1500, 790, 1.1); bush(S, 1850, 880, 1); bush(S, 640, 1440, 1); bush(S, 1000, 1450, 1.1);
+  fountain(S, 1640, 940); boulder(S, 1380, 960, 1); boulder(S, 1880, 1010, 0.9); boulder(S, 1480, 1030, 0.7);
+  gtable(S, 230, 990, 0.9); chair(S, 140, 1050, 1, 0.9); chair(S, 322, 1052, -1, 0.9);
+  lantern(S, 700, 1040, 1.3); lantern(S, 1500, 1050, 1.2); lantern(S, 470, 830, 1.1);
+  barrel(S, 100, 880, 1); barrel(S, 720, 820, 0.9); barrel(S, 1700, 1440, 0.9); barrel(S, 2330, 1440, 1);
+  hay(S, 1780, 720, 0.9);
+  grill(S, 2170, 970, 1);
+  cactus(S, 1330, 1445, 0.9);
   lights(S, 40, 760, 640, 40); lights(S, 1700, 2380, 640, 40);
 
   // stops (cream coins)
@@ -172,14 +172,13 @@ export function renderSteak(S, LB, chapter, progress) {
     el('ellipse', { class: 'ring', rx: 48, ry: 23, fill: top, stroke: OL, 'stroke-width': 2.6 }, u);
     el('ellipse', { rx: 38, ry: 17, fill: 'none', stroke: lock ? '#a89c88' : '#e0c070', 'stroke-width': 2, opacity: 0.85, 'stroke-dasharray': '4 5' }, u);
     const t = el('text', { y: 10, 'text-anchor': 'middle', 'font-family': 'Rye,serif', 'font-size': 28, fill: lock ? '#9a907c' : l.st === 'now' ? '#b03a30' : '#8a5a1a', stroke: '#fffbe8', 'stroke-width': 1.2, 'paint-order': 'stroke' }, u); t.textContent = l.n;
-    el('g', { transform: 'translate(0,20)' }, u).innerHTML = [-24, 0, 24].map((q, i) => `<path transform="translate(${q},0) scale(.62)" d="M0-9L2.7-3 9-2.4 4.2 1.8 5.6 8 0 4.8 -5.6 8 -4.2 1.8 -9-2.4 -2.7-3Z" fill="${l.s > i ? '#ffc21a' : '#c8b878'}" stroke="#8a5a1a" stroke-width="1.4"/>`).join('');
     if (lock) el('g', { transform: 'translate(0,-28) scale(1.4)' }, u).innerHTML = '<rect x="-7" y="-2" width="14" height="11" rx="2" fill="#8a8272" stroke="#14100f"/><path d="M-4-2V-6a4 4 0 0 1 8 0V-2" fill="none" stroke="#14100f" stroke-width="2"/>';
     const g = el('g', { transform: `translate(${x},${y})`, 'pointer-events': 'none' }, LB);
     const lab = el('g', { transform: 'translate(0,70)' }, g);
     el('rect', { x: -90, y: -17, width: 180, height: 32, rx: 8, fill: '#4a2c1c', stroke: lock ? '#8a7e72' : '#e0a850', 'stroke-width': 2 }, lab);
     const tt = el('text', { y: 6, 'text-anchor': 'middle', 'font-family': 'Josefin Sans', 'font-weight': 700, 'font-size': 18, fill: lock ? '#c8bcb0' : '#ffe9c0' }, lab); tt.textContent = l.name;
-    if (l.st === 'now') { const s2 = el('g', { transform: 'translate(0,-84)', class: 'bob' }, g); el('rect', { x: -42, y: -16, width: 84, height: 32, rx: 10, fill: '#fff0d8', stroke: OL, 'stroke-width': 2 }, s2); el('path', { d: 'M-8 16L0 26L8 16Z', fill: '#fff0d8', stroke: OL, 'stroke-width': 2 }, s2); el('path', { transform: 'scale(.9)', d: 'M-9-8L9 0L-9 8Z', fill: RED }, s2); }
-    if (l.n === 5) el('path', { transform: 'translate(0,-60)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: '#e0a850', stroke: OL, 'stroke-width': 1.5 }, g);
+    if (!lock) el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
+    if (l.n === chapter.levels.length) el('path', { transform: 'translate(0,-100)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: '#e0a850', stroke: OL, 'stroke-width': 1.5 }, g);
   });
-  return { nodes: lvl, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
+  return { nodes: lvl, board: { x: 2290, y: 1190, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }

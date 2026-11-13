@@ -20,6 +20,7 @@ export function createView(host, g, info, handlers) {
       <button class="hud-btn" data-act="pause" aria-label="Pause">II</button>
       <div class="hud-title"><b>Level ${info.level}</b><span>${info.name}</span></div>
       <div class="objs"></div>
+      <div class="hstars" aria-label="Stars"><svg viewBox="0 0 40 40"><use href="#ic-star"/></svg><svg viewBox="0 0 40 40"><use href="#ic-star"/></svg><svg viewBox="0 0 40 40"><use href="#ic-star"/></svg></div>
       <div class="pill timer"><span class="t">0:00</span></div>
       <div class="pill coins">${use('ic-bill', 24)}<span class="c">0</span></div>
       <button class="hud-btn snd" data-act="sfx" aria-label="Sound effects" title="Sound effects">${use('ic-sfx', 22)}</button>
@@ -194,7 +195,7 @@ export function createView(host, g, info, handlers) {
       const frac = o.type === 'noAngry' ? (o.status === 'open' ? (o.within ? elapsed / o.within : elapsed / g.cfg.duration) : o.status === 'done' ? 1 : 0) : Math.min(1, o.value / o.target);
       el.querySelector('i').style.width = frac * 100 + '%';
       const left = o.within && o.status === 'open' ? Math.max(0, Math.ceil(o.within - elapsed)) : 0;
-      const num = o.type === 'noAngry' ? '' : `${Math.min(o.value, o.target)}/${o.target}`;
+      const num = o.type === 'noAngry' ? '' : `${o.value}/${o.target}`;
       const sig = o.status + '|' + left + '|' + num;
       if (el.dataset.s !== sig) {
         el.dataset.s = sig;
@@ -202,6 +203,9 @@ export function createView(host, g, info, handlers) {
         el.querySelector('.st').innerHTML = o.status === 'done' ? use('ic-check', 20) : o.status === 'failed' ? use('ic-cross', 20) : left ? `<span class="chip">${use('ic-clock', 16)}${left}</span>` : '';
       }
     });
+    const hs = stage.querySelector('.hstars'), keep = g.objectives[0].type === 'noAngry' ? 3 : g.lost === 0 ? 3 : g.lost === 1 ? 2 : 1;
+    hs.classList.toggle('hide', g.objectives[0].type === 'noAngry'); // that level has no star rule: one angry guest simply ends it
+    [...hs.children].forEach((st, i) => st.classList.toggle('off', i >= keep));
     stage.querySelector('[data-act=sfx]').classList.toggle('off', !sound.sfx);
     stage.querySelector('[data-act=music]').classList.toggle('off', !sound.music);
     // events
@@ -211,7 +215,7 @@ export function createView(host, g, info, handlers) {
       else if (ev.type === 'angry') float(use('ic-angry', 26), ev.x - 13, ev.y - 90, 'heart');
       else if (ev.type === 'sparkle' || ev.type === 'ding' || ev.type === 'serve' || ev.type === 'clean') float(use('ic-spark', 26), ev.x - 13, ev.y - 40, 'spark');
       else if (ev.type === 'toast') showToast(ev.icon, ev.bad, ev.text);
-            else if (ev.type === 'goal') showToast('ic-star', false, 'Star!');
+            else if (ev.type === 'goal') showToast('ic-check', false, 'Goal reached!');
       else if (ev.type === 'boost') float('<b>+25%</b>', ev.x - 22, ev.y + 14, 'tip');
       const snd = { coin: ev.tip ? 'tip' : 'coin', ding: 'ding', serve: 'serve', clean: 'clean', angry: 'angry', upgrade: 'upgrade', toast: 'nope', seat: 'seat', order: 'order', arrive: 'arrive', cook: 'sizzle', boost: 'boost', goal: 'upgrade' }[ev.type];
       if (snd) sound.play(snd);

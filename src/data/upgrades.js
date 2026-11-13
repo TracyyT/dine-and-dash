@@ -8,10 +8,12 @@ export const UPGRADES = {
     { id: 'ingredients', group: 'kitchen', label: 'Ingredients',  name: 'Finer ingredients', tiers: [40, 80, 130] },
     { id: 'shoes',       group: 'service', label: 'Quick shoes',  name: 'Quick shoes',       tiers: [30, 60] },
     { id: 'seats',       group: 'service', label: 'Patience',     name: 'Cozy seats',        tiers: [35, 70] },
+    { id: 'cleaning',    group: 'service', label: 'Quick clean',  name: 'Faster cleaning',   tiers: [35, 70] },
     { id: 'tips',        group: 'service', label: 'Tips',         name: 'Tip bonus',         tiers: [45, 90] },
-    { id: 'host',        group: 'staff',   label: 'Host',         name: 'Hire a host',       tiers: [60] },
-    { id: 'busser',      group: 'staff',   label: 'Busser',       name: 'Hire a busser',     tiers: [50] },
-    { id: 'runner',      group: 'staff',   label: 'Runner',       name: 'Hire a runner',     tiers: [80] },
+    { id: 'host',        group: 'staff',   label: 'Host',         name: 'Hire a host',       tiers: [60, 110] },
+    { id: 'busser',      group: 'staff',   label: 'Busser',       name: 'Hire a busser',     tiers: [50, 90] },
+    { id: 'runner',      group: 'staff',   label: 'Runner',       name: 'Hire a runner',     tiers: [80, 140, 200] },
+    { id: 'training',    group: 'staff',   label: 'Training',     name: 'Staff training',    tiers: [70, 130] },
   ],
 };
 // Beach Bistro has its own menu, so its upgrades start fresh (about 40% pricier; the wallet carries over).
