@@ -18,6 +18,16 @@ function beachFront(sign) {
     <rect x="102" y="26" width="116" height="26" rx="8" fill="#7a4f2a" stroke="#4a2f18" stroke-width="2.5"/><text x="160" y="45" text-anchor="middle" font-family="Pacifico,cursive" font-size="17" fill="#fff4e0">${sign}</text></svg>`;
 }
 
+function chineseFront(sign) {
+  return `<svg viewBox="0 0 320 150" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="csk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a58b0"/><stop offset=".5" stop-color="#f08aa6"/><stop offset="1" stop-color="#ffd2a0"/></linearGradient></defs>
+    <rect width="320" height="150" fill="url(#csk)"/><path d="M0 96Q60 60 120 86T240 70T320 84V150H0Z" fill="#7a6aa8"/><path d="M0 112Q80 100 160 110T320 104V150H0Z" fill="#6fa862"/>
+    <circle cx="40" cy="62" r="22" fill="#ffb3c7"/><circle cx="62" cy="50" r="18" fill="#ffc6d6"/><rect x="38" y="70" width="6" height="40" fill="#6a4430"/>
+    <rect x="86" y="62" width="148" height="52" fill="#b02a2a" stroke="#3a1a14" stroke-width="2"/><rect x="98" y="76" width="36" height="28" fill="#ffd98a" stroke="#e8b64a" stroke-width="2.5"/><rect x="190" y="76" width="30" height="28" fill="#ffd98a" stroke="#e8b64a" stroke-width="2.5"/><rect x="146" y="72" width="30" height="42" fill="#4a1212"/><rect x="150" y="76" width="22" height="38" fill="#ffd070"/>
+    <path d="M70 66Q160 36 250 66L236 62Q160 44 104 62Z M60 66h200l-14 -8H74z" fill="#3a2a4a" stroke="#3a1a14" stroke-width="2"/><path d="M82 58Q160 26 238 58" fill="#3a2a4a" stroke="#3a1a14" stroke-width="2"/>
+    <rect x="112" y="20" width="96" height="24" rx="5" fill="#7a1010" stroke="#e8b64a" stroke-width="2.5"/><text x="160" y="38" text-anchor="middle" font-family="Cinzel Decorative,serif" font-weight="700" font-size="13" fill="#ffe39a">${sign}</text>
+    ${[96, 226].map((x) => `<ellipse cx="${x}" cy="78" rx="7" ry="9" fill="#e0382c" stroke="#7a1010" stroke-width="1.5"/>`).join('')}</svg>`;
+}
+
 function storefront(sign) {
   const win = (x) => `<rect x="${x}" y="78" width="26" height="26" rx="3" fill="#ffd98a" stroke="#8f6a22" stroke-width="2"/><path d="M${x + 13} 78v26M${x} 91h26" stroke="#8f6a22" stroke-width="1.5"/>`;
   const sky = Array.from({ length: 14 }, (_, i) => `<rect x="${i * 24 - 4}" y="${38 + (i * 37) % 26}" width="22" height="${70 - (i * 37) % 26}" fill="${i % 2 ? '#2a1f48' : '#3a2a5e'}"/>`).join('');
@@ -38,7 +48,7 @@ export function introHTML(g, info) {
   const dots = [1, 2, 3, 4, 5].map((n) => `<i class="${n === info.level ? 'on' : n < info.level ? 'past' : ''}"></i>`).join('');
   const rows = g.objectives.map((o) => `<div class="orow">${use('ic-star', 26)}<span class="oi">${use(OBJ_ICON[o.type], 34)}</span><b>${objectiveLabel(o)}</b>${clock(o.within)}</div>`).join('');
   return `<div class="popup">
-    <div class="pban">${info.theme === 'beach' ? beachFront(info.sign || 'BEACH') : storefront(info.sign || 'CAFE')}</div>
+    <div class="pban">${{ beach: beachFront, chinese: chineseFront }[info.theme]?.(info.sign || 'TEA') ?? storefront(info.sign || 'CAFE')}</div>
     <h2>${info.name}</h2><div class="dots">${dots}</div>
     <div class="orows">${rows}</div>
     <div class="flow">${flow.map(([ic, t]) => `<span class="step">${use(ic, 28)}<small>${t}</small></span>`).join(use('ic-chev', 14))}</div>
@@ -74,12 +84,13 @@ export function resultsHTML(g, info, hasNext) {
 // Shown after clearing Level 5: the chapter is done and the next one opens.
 export function chapterDoneHTML(chapter, next, starCount) {
   const total = chapter.levels.length * 3;
+  const lanternPreview = `<svg viewBox="0 0 320 150" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cdk2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a58b0"/><stop offset=".55" stop-color="#f08aa6"/><stop offset="1" stop-color="#ffd2a0"/></linearGradient></defs><rect width="320" height="150" fill="url(#cdk2)"/><path d="M0 96Q80 70 160 92T320 84V150H0Z" fill="#7a6aa8"/><path d="M0 112Q80 102 160 112T320 106V150H0Z" fill="#6fa862"/><circle cx="60" cy="66" r="26" fill="#ffb3c7"/><rect x="56" y="80" width="6" height="34" fill="#6a4430"/><rect x="120" y="70" width="110" height="44" fill="#b02a2a" stroke="#3a1a14" stroke-width="2"/><path d="M104 72Q175 38 246 72Z" fill="#3a2a4a" stroke="#3a1a14" stroke-width="2"/>${[132, 175, 218].map((x) => `<ellipse cx="${x}" cy="60" rx="7" ry="9" fill="#e0382c" stroke="#7a1010" stroke-width="1.5"/>`).join('')}</svg>`;
   const preview = `<svg viewBox="0 0 320 150" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cdsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a62b8"/><stop offset=".4" stop-color="#f2889e"/><stop offset=".62" stop-color="#ffd09a"/><stop offset=".63" stop-color="#2a9ab4"/><stop offset="1" stop-color="#1c6a88"/></linearGradient></defs><rect width="320" height="150" fill="url(#cdsk)"/><circle cx="220" cy="78" r="20" fill="#fff3b0"/><path d="M0 112Q80 98 160 110T320 104V150H0Z" fill="#f0d4a0"/><g fill="#4f9a4a" stroke="#2a5f2a" stroke-width="2"><path d="M52 112Q50 80 62 56" stroke="#8a5a2a" stroke-width="6" fill="none"/><path d="M62 56Q36 48 24 66Q46 54 62 56ZM62 56Q88 48 100 66Q78 54 62 56ZM62 56Q52 32 62 24Q72 40 62 56Z"/></g><path d="M236 112V86l30-6 6 8-24 24z" fill="#fff" stroke="#4a2f18" stroke-width="2"/><rect x="120" y="86" width="80" height="26" rx="4" fill="#b8844a" stroke="#4a2f18" stroke-width="2"/>${Array.from({ length: 5 }, (_, i) => `<path d="M${116 + i * 18} 86h18v10q-9 8-18 0z" fill="${i % 2 ? '#fff4e0' : '#3f7fc0'}"/>`).join('')}</svg>`;
   return `<div class="popup">
     <div class="ribbon"><span class="hat">${use('ic-chef', 54)}</span><svg viewBox="0 0 360 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14h40v46H0l16-23zM360 14h-40v46h40l-16-23z" fill="#5a0f20"/><path d="M30 6h300v58H30z" fill="#a52e4a" stroke="#5a0f20" stroke-width="3"/></svg><b>${chapter.name}</b></div>
     <div class="bigstars">${[0, 1, 2].map((i) => `<svg width="70" height="70" viewBox="0 0 40 40" class="${i < Math.ceil((starCount / total) * 3 - 0.01) ? 'on' : ''}" style="animation-delay:${i * 0.25}s"><use href="#ic-star"/></svg>`).join('')}</div>
     <div class="orow ok">${use('ic-star', 26)}<b>${starCount}/${total}</b></div>
-    ${next ? `<div class="pban">${preview}</div><h2>${next.name}</h2>` : ''}
+    ${next ? `<div class="pban">${next.theme === 'chinese' ? lanternPreview : preview}</div><h2>${next.name}</h2>` : ''}
     ${next ? btn('go', 'ic-play', 'Play', 'primary big') : ''}
     <div class="prow">${btn('map', 'ic-pin', 'Map')}</div>
   </div>`;

@@ -1,3 +1,4 @@
+import { chineseKit } from './sceneChinese.js';
 // The room itself: back wall with windows, floor, kitchen, counters. Pure decoration, positioned from the layout.
 import { HUD_H, WALL_BOTTOM } from './layout.js';
 
@@ -50,8 +51,11 @@ const wicker = () => `<svg viewBox="0 0 60 90" width="60" height="90"><path d="M
 const palm = () => `<svg viewBox="0 0 80 110" width="80" height="110"><ellipse cx="40" cy="104" rx="24" ry="5" fill="#000" opacity=".25"/><path d="M36 100Q32 70 40 44" stroke="#8a5a2a" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M40 44Q14 36 4 56Q26 42 40 44ZM40 44Q66 36 76 56Q54 42 40 44ZM40 44Q22 18 8 20Q28 22 40 44ZM40 44Q58 18 72 20Q52 22 40 44ZM40 44Q36 14 40 4Q46 24 40 44Z" fill="#4f9a4a" stroke="#2a5f2a" stroke-width="2" stroke-linejoin="round"/></svg>`;
 const stallBeach = (kind) => { const c = kind === 'drink' ? '#d95f7a' : '#4aa6b4'; return `<svg viewBox="0 0 150 130" width="150" height="130"><rect x="8" y="30" width="134" height="100" rx="10" fill="#c9954a" stroke="#6b4420" stroke-width="4"/><path d="M8 52h134M8 74h134M8 96h134" stroke="#a87a38" stroke-width="2"/><g>${Array.from({ length: 8 }, (_, i) => `<rect x="${8 + i * 17}" y="2" width="17" height="30" fill="${i % 2 ? '#fff4e0' : c}"/>`).join('')}</g><path d="M2 32Q75 54 148 32" fill="none" stroke="#6b4420" stroke-width="3"/><circle cx="75" cy="86" r="19" fill="#fff4e0" stroke="#6b4420" stroke-width="3"/>${kind === 'drink' ? '<path d="M66 76h18l-3 20H69z" fill="#f6a0b8" stroke="#b85a7a" stroke-width="2"/><path d="M80 70l-3 10" stroke="#d6402f" stroke-width="3"/>' : '<circle cx="70" cy="86" r="7" fill="#f6c2d4" stroke="#b85a7a" stroke-width="1.6"/><circle cx="81" cy="86" r="7" fill="#fbe9b8" stroke="#c99a3a" stroke-width="1.6"/><circle cx="75" cy="78" r="6" fill="#c98a4a"/>'}</svg>`; };
 
+const beachKit = { window: seaWindow, jukebox: surfboards, lamp: wicker, plant: palm, stall: stallBeach, sign: 'Beach Bistro' };
+const KITS = { beach: beachKit, chinese: chineseKit };
+
 export function sceneHTML(g, info) {
-  const BEACH = info.theme === 'beach';
+  const K = KITS[info.theme] || null; // null = City diner
   const L = g.L, { W, H } = L;
   const kitchenRight = W - 14;
   let h = '';
@@ -63,12 +67,12 @@ export function sceneHTML(g, info) {
   h += `<div class="sc-awning" style="top:${HUD_H}px"></div>`;
 
   // windows over the dining room
-  for (let c = 0; c < L.cols; c++) h += put('sc-window', L.dineX + c * L.cellW + (L.cellW - 150) / 2, 128, BEACH ? seaWindow(c) : windowSVG(c));
+  for (let c = 0; c < L.cols; c++) h += put('sc-window', L.dineX + c * L.cellW + (L.cellW - 150) / 2, 128, K ? K.window(c) : windowSVG(c));
   // neon sign + jukebox
-  h += put('sc-neon', 22, 130, `<span>${BEACH ? 'Beach Bistro' : (info.sign || 'CAFE')}</span>`, 'width:226px');
-  h += put('sc-jukebox', L.dineX + L.cols * L.cellW - 78, WALL_BOTTOM - 98, BEACH ? surfboards() : jukebox());
-  h += put('sc-plant', L.dineX - 6, WALL_BOTTOM - 70, BEACH ? palm() : plant());
-  h += put('sc-plant', L.kx - 56, H - 100, BEACH ? palm() : plant());
+  h += put('sc-neon', 22, 130, `<span>${K ? K.sign : (info.sign || 'CAFE')}</span>`, 'width:226px');
+  h += put('sc-jukebox', L.dineX + L.cols * L.cellW - 78, WALL_BOTTOM - 98, K ? K.jukebox() : jukebox());
+  h += put('sc-plant', L.dineX - 6, WALL_BOTTOM - 70, K ? K.plant() : plant());
+  h += put('sc-plant', L.kx - 56, H - 100, K ? K.plant() : plant());
 
   // waiting line: carpet, rope, sign
   h += `<div class="sc-carpet" style="left:14px;top:${WALL_BOTTOM + 12}px;width:228px;height:${H - WALL_BOTTOM - 26}px"></div>`;
@@ -81,7 +85,7 @@ export function sceneHTML(g, info) {
 
   // light pools under each table
   g.tables.forEach((t) => { h += put('sc-pool', t.x - 120, t.y - 70, '', 'width:240px;height:170px'); });
-  for (let c = 0; c < L.cols; c++) h += put('sc-lamp', L.dineX + c * L.cellW + L.cellW / 2 - 30, HUD_H, BEACH ? wicker() : lamp());
+  for (let c = 0; c < L.cols; c++) h += put('sc-lamp', L.dineX + c * L.cellW + L.cellW / 2 - 30, HUD_H, K ? K.lamp() : lamp());
 
   // kitchen
   const kx = L.kx, kw = L.kw;
@@ -99,9 +103,9 @@ export function sceneHTML(g, info) {
   h += put('sc-takeplate', kx, H - 82, `<span>TAKE-OUT</span>`, `width:${kw}px;z-index:1`);
   h += `<div class="sc-takefloor" style="left:${kx}px;top:${H - 128}px;width:${kw}px;height:114px"></div>`;
   for (const st of g.L.stalls) {
-    h += put('sc-stall', st.x0, 296, BEACH ? stallBeach(st.kind) : stallSVG(st.kind));
+    h += put('sc-stall', st.x0, 296, K ? K.stall(st.kind) : stallSVG(st.kind));
     h += `<div class="sc-counter small" style="left:${st.x0}px;top:424px;width:${st.w}px"></div>`;
   }
-  if (g.L.stalls.length) h += put('sc-plant', g.L.stalls[1].x0 + g.L.stalls[1].w - 40, H - 100, BEACH ? palm() : plant());
+  if (g.L.stalls.length) h += put('sc-plant', g.L.stalls[1].x0 + g.L.stalls[1].w - 40, H - 100, K ? K.plant() : plant());
   return h;
 }

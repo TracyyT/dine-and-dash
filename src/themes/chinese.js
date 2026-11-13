@@ -1,0 +1,26 @@
+export const chinese = {
+  id: 'chinese',
+  name: 'Lantern Garden',
+  era: 'lantern-lit garden',
+  palette: {
+    wall: '#8a2424',
+    wallDeep: '#4a1212',
+    brass: '#e8b64a',
+    brassLight: '#ffe39a',
+    brassDark: '#8a5a10',
+    burgundy: '#b02a2a',
+    burgundyLight: '#d24a3a',
+    ivory: '#fff0d8',
+    marble: '#2a1418',
+    nightTop: '#4a3a8a',
+    nightMid: '#e87aa0',
+    nightLow: '#ffc890',
+    ink: '#241014',
+    glow: '#ffd890',
+  },
+  fonts: {
+    display: "'Cinzel Decorative', 'Limelight', serif",
+    body: "'Josefin Sans', system-ui, sans-serif",
+  },
+  light: { vignette: 0.4, beam: 0.5 },
+};

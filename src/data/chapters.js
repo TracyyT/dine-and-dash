@@ -29,4 +29,17 @@ export const chapters = [
       { n: 5, name: 'Lighthouse Feast', sign: 'LIGHT' },
     ],
   },
+  {
+    id: 'chinese',
+    name: 'Lantern Garden',
+    theme: 'chinese',
+    map: 'chinese',
+    levels: [
+      { n: 1, name: 'Tea House', sign: 'TEA' },
+      { n: 2, name: 'Dumpling Den', sign: 'DUMPLING' },
+      { n: 3, name: 'Noodle Bar', sign: 'NOODLE' },
+      { n: 4, name: 'Moon Pavilion', sign: 'MOON' },
+      { n: 5, name: 'Dragon Banquet', sign: 'DRAGON' },
+    ],
+  },
 ];
