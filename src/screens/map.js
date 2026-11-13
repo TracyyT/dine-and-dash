@@ -1,10 +1,8 @@
 import '../map/map.css';
 import { go } from '../router.js';
 import { chapters } from '../data/chapters.js';
-import { getProgress, isUnlocked, resetProgress, getWallet, getUpgrades, nextUpgradeCost, buyUpgrade } from '../state/progress.js';
-import { upgradeList } from '../data/upgrades.js';
-import { UPGRADE_ICONS, COIN_ICON } from '../map/upgradeIcons.js';
-import { sound } from '../game/sound.js';
+import { getProgress, isUnlocked, resetProgress, getWallet } from '../state/progress.js';
+import { COIN_ICON } from '../map/upgradeIcons.js';
 import { clearTheme } from '../themes/apply.js';
 import { renderCity } from '../map/cityMap.js';
 import { createPanZoom } from '../map/panzoom.js';
@@ -35,7 +33,6 @@ export function renderMap(app) {
     <div id="vig"></div>
     <div id="hud"><b>${chapter.name}</b><span>CHAPTER ${chapterIndex + 1}</span><div class="pips" aria-label="${doneCount} of ${chapter.levels.length} levels done">${chapter.levels.map((l) => `<i class="${(progress.stars[l.n] || 0) > 0 ? 'on' : ''}"></i>`).join('')}</div></div>
     <div id="wallet" aria-label="Coins">${COIN_ICON}<b></b></div>
-    <div id="up" hidden></div>
     <div id="tools">
       <button id="upb" aria-label="Upgrades" title="Upgrades"><svg viewBox="0 0 48 48" width="26" height="26" aria-hidden="true"><path d="M24 5L38 21H29V43H19V21H10Z" fill="#ffe9a8" stroke="#8f6a22" stroke-width="2" stroke-linejoin="round"/></svg></button>
       <button id="zin" aria-label="Zoom in">+</button>
@@ -53,23 +50,8 @@ export function renderMap(app) {
   const pz = createPanZoom({ view, world, width: WW, height: WH });
   pz.home(...city.home);
 
-  // ---- upgrades: graphics only, bought with banked coins, and they last for this chapter ----
-  const panel = $('up');
-  const drawUpgrades = () => {
-    const owned = getUpgrades(chapter.id), wallet = getWallet();
-    $('wallet').querySelector('b').textContent = wallet;
-    panel.innerHTML = `<div class="up-grid">${upgradeList(chapter.id).map((u) => {
-      const lvl = owned[u.id] || 0, cost = nextUpgradeCost(chapter.id, u.id), max = cost === undefined;
-      const pips = u.tiers.map((_, k) => `<i class="${k < lvl ? 'on' : ''}"></i>`).join('');
-      return `<button class="up-tile ${max ? 'max' : ''}" data-up="${u.id}" ${max || wallet < cost ? 'disabled' : ''} aria-label="${u.name}${max ? ', fully upgraded' : `, costs ${cost} coins`}" title="${u.name}">
-        ${UPGRADE_ICONS[u.id]}<div class="pips">${pips}</div><span class="cost">${max ? '&#10003;' : `${COIN_ICON}${cost}`}</span></button>`;
-    }).join('')}</div>`;
-    panel.querySelectorAll('[data-up]').forEach((b) => {
-      b.onclick = () => { if (buyUpgrade(chapter.id, b.dataset.up)) { sound.unlock(); sound.play('upgrade'); drawUpgrades(); } };
-    });
-  };
-  drawUpgrades();
-  $('upb').onclick = () => panel.toggleAttribute('hidden');
+  $('wallet').querySelector('b').textContent = getWallet();
+  $('upb').onclick = () => go('upgrades', { chapter: chapter.id });
 
   const LOCK = '<span style="margin-right:8px;font-weight:700">Locked</span><svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true"><rect x="8" y="18" width="24" height="18" rx="3" fill="#e8c766" stroke="#8f6a22" stroke-width="2.5"/><path d="M13 18v-5a7 7 0 0 1 14 0v5" fill="none" stroke="#e8c766" stroke-width="4"/><circle cx="20" cy="27" r="3" fill="#6b4a12"/></svg>';
   let toastTimer;

@@ -13,7 +13,7 @@ const WORK = { order: 0.5, bill: 0.4, clean: 1.3, pickup: 0.3, drop: 0.3, delive
 const MOOD_RATE = { queue: 1, wantOrder: 1.3, waitFood: 1, wantBill: 1.5, eating: 0.1 };
 
 export function createGame(baseCfg, owned = {}) {
-  const own = { chefs: 0, kitchen: 0, ingredients: 0, shoes: 0, seats: 0, host: 0, busser: 0, runner: 0, ...owned };
+  const own = { chefs: 0, kitchen: 0, ingredients: 0, shoes: 0, seats: 0, tips: 0, host: 0, busser: 0, runner: 0, ...owned };
   const cfg = { ...baseCfg, stations: Math.min(3, 1 + own.chefs) };
   const L = buildLayout(cfg);
   const g = {
@@ -206,7 +206,7 @@ function addon(g, c, item) {
 
 function collect(g, c) {
   const pay = Math.round(c.bill * (0.7 + 0.3 * c.sat));
-  const tip = Math.round(c.bill * 0.35 * Math.max(0, c.sat - 0.35));
+  const tip = Math.round(c.bill * 0.35 * Math.max(0, c.sat - 0.35) * (1 + 0.3 * g.owned.tips));
   g.earned += pay + tip; g.served++;
   g.stats.satSum += c.sat;
   if (c.sat >= 0.7) g.stats.happy++;
