@@ -7,16 +7,16 @@
 //   target: how many; within: seconds from the start of the level (omit = any time before the level ends)
 //   noAngry: nobody storms out (during the first `within` seconds, or the whole level).
 export const LEVELS = {
-  'city:1': { duration: 90,  cols: 3, rows: 1, tables: 3, dishes: ['croissant', 'sandwich'],                      arrival: 10, take: 0.15, patience: 62, orders: [0.6, 0.3, 0.1],   stalls: false,
-    objectives: [{ type: 'guests', target: 4 }, { type: 'coins', target: 50, within: 60 }, { type: 'noAngry' }] },
-  'city:2': { duration: 100, cols: 3, rows: 2, tables: 4, dishes: ['croissant', 'sandwich', 'cheesecake'],        arrival: 9,  take: 0.2,  patience: 58, orders: [0.45, 0.35, 0.2], stalls: false,
-    objectives: [{ type: 'dishes', target: 6, within: 65 }, { type: 'coins', target: 90 }, { type: 'happy', target: 4 }] },
-  'city:3': { duration: 110, cols: 3, rows: 2, tables: 6, dishes: ['sandwich', 'pasta', 'cheesecake'],            arrival: 8,  take: 0.25, patience: 55, orders: [0.35, 0.4, 0.25], stalls: false,
-    objectives: [{ type: 'guests', target: 7 }, { type: 'takeout', target: 3 }, { type: 'noAngry' }] },
-  'city:4': { duration: 120, cols: 4, rows: 2, tables: 7, dishes: ['sandwich', 'pasta', 'steak', 'cheesecake'],   arrival: 7,  take: 0.25, patience: 52, orders: [0.3, 0.4, 0.3],   stalls: true,
-    objectives: [{ type: 'items', target: 14, within: 75 }, { type: 'coins', target: 140 }, { type: 'happy', target: 6 }] },
-  'city:5': { duration: 130, cols: 4, rows: 2, tables: 8, dishes: ['croissant', 'pasta', 'steak', 'cheesecake'],  arrival: 6,  take: 0.3,  patience: 48, orders: [0.2, 0.4, 0.4],   stalls: true,
-    objectives: [{ type: 'guests', target: 10 }, { type: 'coins', target: 110, within: 75 }, { type: 'noAngry', within: 110 }] },
+  'city:1': { duration: 100, cols: 3, rows: 1, tables: 3, dishes: ['croissant', 'sandwich'],                      arrival: 13, take: 0.1,  patience: 90, orders: [0.7, 0.25, 0.05], stalls: false,
+    objectives: [{ type: 'guests', target: 3 }, { type: 'coins', target: 30 }, { type: 'noAngry' }] },
+  'city:2': { duration: 110, cols: 3, rows: 2, tables: 4, dishes: ['croissant', 'sandwich', 'cheesecake'],        arrival: 12, take: 0.15, patience: 85, orders: [0.55, 0.3, 0.15], stalls: false,
+    objectives: [{ type: 'dishes', target: 5 }, { type: 'coins', target: 60 }, { type: 'happy', target: 3 }] },
+  'city:3': { duration: 120, cols: 3, rows: 2, tables: 6, dishes: ['sandwich', 'pasta', 'cheesecake'],            arrival: 11, take: 0.35, patience: 80, orders: [0.45, 0.35, 0.2], stalls: false,
+    objectives: [{ type: 'guests', target: 5 }, { type: 'takeout', target: 2 }, { type: 'noAngry', within: 80 }] },
+  'city:4': { duration: 130, cols: 4, rows: 2, tables: 7, dishes: ['sandwich', 'pasta', 'steak', 'cheesecake'],   arrival: 10, take: 0.25, patience: 76, orders: [0.4, 0.35, 0.25], stalls: true,
+    objectives: [{ type: 'items', target: 10 }, { type: 'coins', target: 100 }, { type: 'happy', target: 3 }] },
+  'city:5': { duration: 140, cols: 4, rows: 2, tables: 8, dishes: ['croissant', 'pasta', 'steak', 'cheesecake'],  arrival: 9,  take: 0.3,  patience: 72, orders: [0.3, 0.4, 0.3],   stalls: true,
+    objectives: [{ type: 'guests', target: 5 }, { type: 'coins', target: 100 }, { type: 'noAngry', within: 90 }] },
 };
 export const levelConfig = (chapterId, n) => LEVELS[`${chapterId}:${n}`] || LEVELS['city:1'];
 
