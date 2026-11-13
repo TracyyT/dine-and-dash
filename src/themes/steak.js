@@ -1,0 +1,26 @@
+export const steak = {
+  id: 'steak',
+  name: 'Big Sky Steakhouse',
+  era: 'prairie sunset',
+  palette: {
+    wall: '#4a2c1c',
+    wallDeep: '#2a160c',
+    brass: '#e0a850',
+    brassLight: '#ffd890',
+    brassDark: '#8a5a1a',
+    burgundy: '#8a2a2a',
+    burgundyLight: '#b03a30',
+    ivory: '#fff0d8',
+    marble: '#241410',
+    nightTop: '#4a4a8a',
+    nightMid: '#e87a5a',
+    nightLow: '#ffc07a',
+    ink: '#1c100c',
+    glow: '#ffc870',
+  },
+  fonts: {
+    display: "'Rye', 'Limelight', serif",
+    body: "'Josefin Sans', system-ui, sans-serif",
+  },
+  light: { vignette: 0.45, beam: 0.55 },
+};

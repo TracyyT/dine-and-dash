@@ -32,14 +32,14 @@ export function createView(host, g, info, handlers) {
 
   // static pieces
   const tableEls = g.tables.map((t) => {
-    const chair = mk('ent chair', chairSVG()); place(chair, t.x, t.y - 36); chair.style.zIndex = Math.round(t.y - 60);
-    const el = mk('ent table', `${tableSVG(t.id)}<div class="mess"></div><div class="bubble tb">${use('ic-spark', 24)}</div><div class="qn"></div>`);
+    const chair = mk('ent chair' + (info.theme === 'steak' ? ' booth' : ''), chairSVG(info.theme === 'steak')); place(chair, t.x, t.y - 36); chair.style.zIndex = Math.round(t.y - 60);
+    const el = mk('ent table', `${tableSVG(t.id, info.theme === 'steak')}<div class="mess"></div><div class="bubble tb">${use('ic-spark', 24)}</div><div class="qn"></div>`);
     el.dataset.t = t.id; place(el, t.x, t.y);
     ents.append(chair, el);
     return { t, el };
   });
   const stationEls = g.stations.map((s) => {
-    const el = mk('ent station', `<div class="chef">${chefSVG()}</div>${stoveSVG()}<div class="cooking-dish"></div><div class="steam"><i></i><i></i><i></i></div><div class="meter"><div></div></div>`);
+    const el = mk('ent station', `<div class="chef">${chefSVG()}</div>${stoveSVG(info.theme === 'steak')}<div class="cooking-dish"></div><div class="steam"><i></i><i></i><i></i></div><div class="meter"><div></div></div>`);
     place(el, s.x, s.y); ents.append(el); return { s, el };
   });
   L.take.forEach((s) => { const el = mk('take-mat'); el.style.left = s.x - 60 + 'px'; el.style.top = s.y - 14 + 'px'; stage.insertBefore(el, ents); });

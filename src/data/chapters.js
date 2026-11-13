@@ -55,4 +55,17 @@ export const chapters = [
       { n: 5, name: 'Royal Gala', sign: 'GALA' },
     ],
   },
+  {
+    id: 'steak',
+    name: 'Big Sky Steakhouse',
+    theme: 'steak',
+    map: 'steak',
+    levels: [
+      { n: 1, name: 'Front Porch', sign: 'PORCH' },
+      { n: 2, name: 'Smokehouse', sign: 'SMOKE' },
+      { n: 3, name: 'Grill Pit', sign: 'GRILL' },
+      { n: 4, name: 'Wagon Wheel', sign: 'WHEEL' },
+      { n: 5, name: 'Rodeo Night', sign: 'RODEO' },
+    ],
+  },
 ];

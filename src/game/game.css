@@ -321,3 +321,47 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .qn.first{background:#ff5a4a;color:#fff;box-shadow:0 0 0 3px #ff5a4a55,0 3px 0 #0006}
 .table .qn{left:12px;top:-114px}
 .dish .qn{left:-30px;top:-52px}
+
+/* ---- Big Sky Steakhouse look (Chapter 5 levels): dark timber, stone, leather red, candle glow ---- */
+[data-theme=steak] .game-root{background:radial-gradient(ellipse at center,#3a2014,#120804)}
+[data-theme=steak] .sc-floor{background:repeating-linear-gradient(90deg,#0000 0 118px,#0005 118px 120px),repeating-linear-gradient(0deg,#0000 0 38px,#0002 38px 40px),linear-gradient(#7a4a2a,#5a3418)}
+[data-theme=steak] .sc-wall .paper{background:repeating-linear-gradient(90deg,#0000 0 78px,#0004 78px 80px),linear-gradient(#5a3a24,#3a2214);box-shadow:inset 0 -30px 40px #0006}
+[data-theme=steak] .sc-wall .checker{background:repeating-linear-gradient(90deg,#8a7a6a 0 34px,#6a5a4a 34px 38px);height:14px}
+[data-theme=steak] .sc-wall .wains{background:repeating-linear-gradient(0deg,#0000 0 24px,#0004 24px 26px),repeating-linear-gradient(90deg,#8a2a2a 0 58px,#702020 58px 60px);border-top:5px solid var(--brass)}
+[data-theme=steak] .sc-awning{background:repeating-linear-gradient(90deg,#b03a30 0 34px,#fff0d8 34px 68px);border-bottom:8px solid #1c3a6a;height:42px}
+[data-theme=steak] .sc-window svg{border-color:#8a5a2a}
+[data-theme=steak] .sc-neon{font:400 22px/1 'Rye',serif;white-space:nowrap;color:#ffe0b0;text-shadow:0 0 8px #ff6a2a,0 0 18px #ff3a1a;animation:none;background:#2a160c;border:3px solid #ff6a3a;border-radius:8px;padding:15px 0;box-shadow:0 0 14px #ff4a1a88,inset 0 0 12px #ff4a1a55,0 5px 0 #0006;width:226px}
+[data-theme=steak] .sc-neon::before{display:none}
+[data-theme=steak] .sc-carpet{background:repeating-linear-gradient(90deg,#8a2a2a 0 22px,#702020 22px 24px);border-color:#e0a850;box-shadow:inset 0 0 30px #2a0a0a88,0 0 0 5px #0005}
+[data-theme=steak] .sc-sign{background:#4a2c1c;color:#ffd890;border-color:#e0a850}
+[data-theme=steak] .sc-rope{border-left-color:#e0a850}
+[data-theme=steak] .sc-door{background:#2a160c;border-color:#e0a850}
+[data-theme=steak] .sc-pool{background:radial-gradient(ellipse,#ffa84877,#ffa84800 70%)}
+[data-theme=steak] .sc-kitchen,[data-theme=steak] .sc-kitchen.k1{background:repeating-linear-gradient(90deg,#0000 0 41px,#0003 41px 43px),linear-gradient(#8a7a6a,#6a5a4a)}
+[data-theme=steak] .sc-kitchen.k2{background:repeating-linear-gradient(90deg,#0000 0 41px,#0003 41px 43px),linear-gradient(#a8957a,#8a7658);border-left-color:var(--brass-light)}
+[data-theme=steak] .sc-kitchen.k3{background:repeating-linear-gradient(90deg,#0000 0 41px,#e0a85044 41px 43px),linear-gradient(#3a2214,#1c0e06);border-left:6px solid var(--brass-light)}
+[data-theme=steak] .sc-takefloor{background:linear-gradient(#7a4a2a,#5a3418)}
+[data-theme=steak] .sc-counter{background:linear-gradient(var(--brass-light) 0 14px,#6a3a1c 14px)}
+[data-theme=steak] .sc-pillar{background:linear-gradient(90deg,#4a2a14,#8a5a2a,#4a2a14)}
+[data-theme=steak] .sc-rail{background:linear-gradient(#a8743a,#8a5a2a 45%,#5a3418)}
+[data-theme=steak] .goal-fill,[data-theme=steak] .obj .bar i{background:linear-gradient(#ffd890,#e0a850)}
+
+/* ---- Steakhouse look v2: closer to the reference (brick + timber, leather booths, open grill) ---- */
+[data-theme=steak] .sc-wall .paper{background:repeating-linear-gradient(0deg,#0000 0 17px,#0006 17px 19px),repeating-linear-gradient(90deg,#0000 0 44px,#0004 44px 46px),linear-gradient(#7a4a36,#5a3426);box-shadow:inset 0 -30px 40px #0007}
+[data-theme=steak] .sc-wall .checker{background:linear-gradient(#a8743a,#6a4420);height:10px;border-top:3px solid #e0a850}
+[data-theme=steak] .sc-wall .wains{background:repeating-linear-gradient(90deg,#4a2a16 0 56px,#2a160c 56px 58px),#4a2a16;border-top:0;box-shadow:inset 0 10px 14px #0007}
+[data-theme=steak] .sc-awning{background:repeating-linear-gradient(90deg,#4a2a16 0 120px,#2a160c 120px 124px);border-bottom:8px solid #2a160c;height:40px;box-shadow:0 6px 10px #0008}
+[data-theme=steak] .sc-awning::after{content:"";position:absolute;left:0;right:0;bottom:-30px;height:4px;background:repeating-linear-gradient(90deg,#0000 0 24px,#ffd890 24px 28px);opacity:.0}
+[data-theme=steak] .sc-wine,[data-theme=steak] .sc-painting{filter:drop-shadow(0 4px 5px #000a);z-index:2}
+[data-theme=steak] .sc-kitchen,[data-theme=steak] .sc-kitchen.k1{background:repeating-linear-gradient(0deg,#0000 0 23px,#0005 23px 25px),repeating-linear-gradient(90deg,#0000 0 47px,#0004 47px 49px),linear-gradient(#5a3a2c,#3a2218)}
+[data-theme=steak] .sc-kitchen.k2{background:repeating-linear-gradient(0deg,#0000 0 23px,#0005 23px 25px),repeating-linear-gradient(90deg,#0000 0 47px,#0004 47px 49px),linear-gradient(#6a4636,#46281c);border-left-color:var(--brass-light)}
+[data-theme=steak] .sc-kitchen.k3{background:repeating-linear-gradient(0deg,#0000 0 23px,#e0a85033 23px 25px),repeating-linear-gradient(90deg,#0000 0 47px,#0005 47px 49px),linear-gradient(#2a160c,#120804);border-left:6px solid var(--brass-light)}
+[data-theme=steak] .sc-hood{filter:drop-shadow(0 6px 8px #000a)}
+[data-theme=steak] .sc-fridge{display:none}
+[data-theme=steak] .sc-counter{background:linear-gradient(#e0a850 0 12px,#5a3418 12px 54px,#9ad0e8cc 54px 62px,#3a2214 62px);box-shadow:0 6px 10px #000a,inset 0 -6px 0 #0004}
+[data-theme=steak] .sc-counter.small{background:linear-gradient(#e0a850 0 12px,#5a3418 12px)}
+[data-theme=steak] .sc-counter span{background:#2a160c}
+[data-theme=steak] .sc-pool{background:radial-gradient(ellipse,#ffb85877,#ffb85800 70%)}
+[data-theme=steak] .chair.booth svg{left:-85px;top:-46px}
+[data-theme=steak] .station .flame,[data-theme=steak] .station svg .flame{animation:flk .5s steps(2) infinite alternate;transform-origin:50% 100%}
+@keyframes flk{from{transform:scaleY(1)}to{transform:scaleY(1.18)}}
