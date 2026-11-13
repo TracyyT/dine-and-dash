@@ -16,5 +16,11 @@ export const DISHES = {
   noodles:    { name: 'Noodle Bowl',    time: 8,  price: 18 },
   duck:       { name: 'Roast Duck',     time: 11, price: 25 },
   dimsum:     { name: 'Dim Sum Tower',  time: 14, price: 32 },
+  // Maison d'Or menu
+  caviar:     { name: 'Caviar Blini',   time: 4,  price: 14 },
+  bisque:     { name: 'Lobster Bisque', time: 6,  price: 20 },
+  truffle:    { name: 'Truffle Pasta',  time: 8,  price: 26 },
+  wagyu:      { name: 'Wagyu Steak',    time: 11, price: 38 },
+  souffle:    { name: 'Gold Souffle',   time: 14, price: 46 },
   lobster:    { name: 'Lobster Plate',  time: 13, price: 30 },
 };

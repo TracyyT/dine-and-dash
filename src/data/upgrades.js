@@ -17,4 +17,5 @@ export const UPGRADES = {
 // Beach Bistro has its own menu, so its upgrades start fresh (about 40% pricier; the wallet carries over).
 UPGRADES.beach = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 1.4) / 5) * 5) }));
 UPGRADES.chinese = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 1.8) / 5) * 5) }));
+UPGRADES.fine = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.4) / 5) * 5) }));
 export const upgradeList = (chapterId) => UPGRADES[chapterId] || [];

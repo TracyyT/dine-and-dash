@@ -1,4 +1,5 @@
 import { chineseKit } from './sceneChinese.js';
+import { fineKit } from './sceneFine.js';
 // The room itself: back wall with windows, floor, kitchen, counters. Pure decoration, positioned from the layout.
 import { HUD_H, WALL_BOTTOM } from './layout.js';
 
@@ -52,7 +53,7 @@ const palm = () => `<svg viewBox="0 0 80 110" width="80" height="110"><ellipse c
 const stallBeach = (kind) => { const c = kind === 'drink' ? '#d95f7a' : '#4aa6b4'; return `<svg viewBox="0 0 150 130" width="150" height="130"><rect x="8" y="30" width="134" height="100" rx="10" fill="#c9954a" stroke="#6b4420" stroke-width="4"/><path d="M8 52h134M8 74h134M8 96h134" stroke="#a87a38" stroke-width="2"/><g>${Array.from({ length: 8 }, (_, i) => `<rect x="${8 + i * 17}" y="2" width="17" height="30" fill="${i % 2 ? '#fff4e0' : c}"/>`).join('')}</g><path d="M2 32Q75 54 148 32" fill="none" stroke="#6b4420" stroke-width="3"/><circle cx="75" cy="86" r="19" fill="#fff4e0" stroke="#6b4420" stroke-width="3"/>${kind === 'drink' ? '<path d="M66 76h18l-3 20H69z" fill="#f6a0b8" stroke="#b85a7a" stroke-width="2"/><path d="M80 70l-3 10" stroke="#d6402f" stroke-width="3"/>' : '<circle cx="70" cy="86" r="7" fill="#f6c2d4" stroke="#b85a7a" stroke-width="1.6"/><circle cx="81" cy="86" r="7" fill="#fbe9b8" stroke="#c99a3a" stroke-width="1.6"/><circle cx="75" cy="78" r="6" fill="#c98a4a"/>'}</svg>`; };
 
 const beachKit = { window: seaWindow, jukebox: surfboards, lamp: wicker, plant: palm, stall: stallBeach, sign: 'Beach Bistro' };
-const KITS = { beach: beachKit, chinese: chineseKit };
+const KITS = { beach: beachKit, chinese: chineseKit, fine: fineKit };
 
 export function sceneHTML(g, info) {
   const K = KITS[info.theme] || null; // null = City diner

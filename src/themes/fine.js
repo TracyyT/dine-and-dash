@@ -1,0 +1,26 @@
+export const fine = {
+  id: 'fine',
+  name: "Maison d'Or",
+  era: 'black-tie evening',
+  palette: {
+    wall: '#232a52',
+    wallDeep: '#0e1228',
+    brass: '#d9b66a',
+    brassLight: '#f6e2a8',
+    brassDark: '#8a6a2a',
+    burgundy: '#6a1a38',
+    burgundyLight: '#8a2a4c',
+    ivory: '#fbf3e2',
+    marble: '#15131c',
+    nightTop: '#2a2a5a',
+    nightMid: '#8a5a9a',
+    nightLow: '#e8b0a0',
+    ink: '#151220',
+    glow: '#ffe4a8',
+  },
+  fonts: {
+    display: "'Playfair Display', 'Limelight', serif",
+    body: "'Josefin Sans', system-ui, sans-serif",
+  },
+  light: { vignette: 0.45, beam: 0.6 },
+};

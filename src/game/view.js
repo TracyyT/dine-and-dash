@@ -80,7 +80,7 @@ export function createView(host, g, info, handlers) {
       live.add(c.id);
       let e = guests.get(c.id);
       if (!e) {
-        const el = mk('ent guest', `${customerSVG(c.look)}<div class="bar"><div></div></div><div class="bubble"></div><div class="addons"></div>`);
+        const el = mk('ent guest', `${customerSVG(c.look, info.theme === 'fine')}<div class="bar"><div></div></div><div class="bubble"></div><div class="addons"></div>`);
         el.dataset.c = c.id; ents.appendChild(el); e = { el, sig: '', ad: '', addons: el.querySelector('.addons'), bubble: el.querySelector('.bubble'), fill: el.querySelector('.bar div'), svg: el.querySelector('svg.cust') };
         guests.set(c.id, e);
       }

@@ -39,6 +39,17 @@ export const LEVELS = {
     objectives: [{ type: 'items', target: 12 }, { type: 'coins', target: 115 }, { type: 'happy', target: 3 }] },
   'chinese:5': { duration: 150, cols: 4, rows: 2, tables: 8, dishes: ['dumpling', 'noodles', 'duck', 'dimsum'],  arrival: 8,  take: 0.3,  patience: 70, orders: [0.25, 0.4, 0.35], stalls: true,
     objectives: [{ type: 'guests', target: 5 }, { type: 'coins', target: 140 }, { type: 'noAngry', within: 100 }] },
+  // Chapter 4: Maison d'Or (fine dining). Bigger bills, pickier guests.
+  'fine:1': { duration: 110, cols: 3, rows: 1, tables: 3, dishes: ['caviar', 'bisque'],                       arrival: 12, take: 0.05, patience: 85, orders: [0.6, 0.3, 0.1],   stalls: false,
+    objectives: [{ type: 'guests', target: 4 }, { type: 'coins', target: 70 }, { type: 'noAngry' }] },
+  'fine:2': { duration: 120, cols: 3, rows: 2, tables: 4, dishes: ['caviar', 'bisque', 'truffle'],             arrival: 11, take: 0.1,  patience: 80, orders: [0.5, 0.3, 0.2],   stalls: false,
+    objectives: [{ type: 'dishes', target: 6 }, { type: 'coins', target: 130 }, { type: 'happy', target: 3 }] },
+  'fine:3': { duration: 130, cols: 3, rows: 2, tables: 6, dishes: ['bisque', 'truffle', 'wagyu'],              arrival: 10, take: 0.3, patience: 76, orders: [0.4, 0.35, 0.25], stalls: false,
+    objectives: [{ type: 'guests', target: 6 }, { type: 'takeout', target: 2 }, { type: 'noAngry', within: 80 }] },
+  'fine:4': { duration: 140, cols: 4, rows: 2, tables: 7, dishes: ['caviar', 'truffle', 'wagyu', 'bisque'],   arrival: 9,  take: 0.15, patience: 72, orders: [0.35, 0.35, 0.3], stalls: true,
+    objectives: [{ type: 'items', target: 12 }, { type: 'coins', target: 190 }, { type: 'happy', target: 3 }] },
+  'fine:5': { duration: 150, cols: 4, rows: 2, tables: 8, dishes: ['caviar', 'truffle', 'wagyu', 'souffle'], arrival: 8,  take: 0.2,  patience: 70, orders: [0.25, 0.4, 0.35], stalls: true,
+    objectives: [{ type: 'guests', target: 4 }, { type: 'coins', target: 220 }, { type: 'noAngry', within: 100 }] },
 };
 export const levelConfig = (chapterId, n) => LEVELS[`${chapterId}:${n}`] || LEVELS['city:1'];
 

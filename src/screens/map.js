@@ -7,6 +7,7 @@ import { clearTheme } from '../themes/apply.js';
 import { renderCity } from '../map/cityMap.js';
 import { renderBeach, BEACH_DEFS } from '../map/beachMap.js';
 import { renderChinese, CHINESE_DEFS } from '../map/chineseMap.js';
+import { renderFine, FINE_DEFS } from '../map/fineMap.js';
 import { createPanZoom } from '../map/panzoom.js';
 import { MAP_DEFS } from '../map/defs.js';
 import { WW, WH } from '../map/iso.js';
@@ -29,7 +30,7 @@ export function renderMap(app, params = {}) {
     <div id="view" tabindex="0" aria-label="${chapter.name} map. Drag or use the arrow keys to move around.">
       <div id="world">
         <svg id="map" viewBox="0 0 ${WW} ${WH}" role="img" aria-label="${chapter.name} map with a path through ${chapter.levels.length} level stops">
-          ${{ beach: BEACH_DEFS, chinese: CHINESE_DEFS }[chapter.map] || MAP_DEFS}
+          ${{ beach: BEACH_DEFS, chinese: CHINESE_DEFS, fine: FINE_DEFS }[chapter.map] || MAP_DEFS}
           <rect width="${WW}" height="${WH}" fill="url(#sky)"/>
           <g id="scene"></g>
           <g id="labels"></g>
@@ -56,7 +57,7 @@ export function renderMap(app, params = {}) {
 
   const $ = (id) => app.querySelector('#' + id);
   const view = $('view'), world = $('world');
-  const city = ({ beach: renderBeach, chinese: renderChinese }[chapter.map] || renderCity)($('scene'), $('labels'), chapter, progress);
+  const city = ({ beach: renderBeach, chinese: renderChinese, fine: renderFine }[chapter.map] || renderCity)($('scene'), $('labels'), chapter, progress);
   document.body.dataset.map = chapter.map;
   $('cp').onclick = () => go('map', { chapter: chapters[chapterIndex - 1].id });
   $('cn').onclick = () => go('map', { chapter: chapters[chapterIndex + 1].id });
