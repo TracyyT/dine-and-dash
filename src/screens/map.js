@@ -33,7 +33,7 @@ export function renderMap(app) {
       </div>
     </div>
     <div id="vig"></div>
-    <div id="hud"><b>${chapter.name}</b><div class="pips" aria-label="${doneCount} of ${chapter.levels.length} levels done">${chapter.levels.map((l) => `<i class="${(progress.stars[l.n] || 0) > 0 ? 'on' : ''}"></i>`).join('')}</div></div>
+    <div id="hud"><b>${chapter.name}</b><span>CHAPTER ${chapterIndex + 1}</span><div class="pips" aria-label="${doneCount} of ${chapter.levels.length} levels done">${chapter.levels.map((l) => `<i class="${(progress.stars[l.n] || 0) > 0 ? 'on' : ''}"></i>`).join('')}</div></div>
     <div id="wallet" aria-label="Coins">${COIN_ICON}<b></b></div>
     <div id="up" hidden></div>
     <div id="tools">
@@ -44,7 +44,7 @@ export function renderMap(app) {
       <button id="fs" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><path d="M6 15V6h9M25 6h9v9M34 25v9h-9M15 34H6v-9" fill="none" stroke="#ffe9a8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <button id="rst" aria-label="Reset progress" title="Reset progress (testing)"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><path d="M8 12h24M15 12V7h10v5M11 12l2 24h14l2-24" fill="none" stroke="#ffe9a8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
-    <div id="hint" aria-label="Drag to look around, scroll to zoom"><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M13 22V9a2.5 2.5 0 0 1 5 0v9m0-3V7a2.5 2.5 0 0 1 5 0v8m0-4a2.5 2.5 0 0 1 5 0v9c0 8-4 13-10 13-5 0-8-3-10-8l-3-6a2.4 2.4 0 0 1 4-2.5l3 4" fill="#fff" stroke="#14100f" stroke-width="2" stroke-linejoin="round"/></svg><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><circle cx="17" cy="17" r="10" fill="none" stroke="#ffe9a8" stroke-width="3.5"/><path d="M25 25l11 11" stroke="#ffe9a8" stroke-width="4.5" stroke-linecap="round"/></svg></div>
+    <div id="hint" aria-label="Drag to look around, scroll to zoom"><span>Drag · Scroll</span><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M13 22V9a2.5 2.5 0 0 1 5 0v9m0-3V7a2.5 2.5 0 0 1 5 0v8m0-4a2.5 2.5 0 0 1 5 0v9c0 8-4 13-10 13-5 0-8-3-10-8l-3-6a2.4 2.4 0 0 1 4-2.5l3 4" fill="#fff" stroke="#14100f" stroke-width="2" stroke-linejoin="round"/></svg><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><circle cx="17" cy="17" r="10" fill="none" stroke="#ffe9a8" stroke-width="3.5"/><path d="M25 25l11 11" stroke="#ffe9a8" stroke-width="4.5" stroke-linecap="round"/></svg></div>
     <div id="toast" role="status"></div>`;
 
   const $ = (id) => app.querySelector('#' + id);
@@ -71,7 +71,7 @@ export function renderMap(app) {
   drawUpgrades();
   $('upb').onclick = () => panel.toggleAttribute('hidden');
 
-  const LOCK = '<svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true"><rect x="8" y="18" width="24" height="18" rx="3" fill="#e8c766" stroke="#8f6a22" stroke-width="2.5"/><path d="M13 18v-5a7 7 0 0 1 14 0v5" fill="none" stroke="#e8c766" stroke-width="4"/><circle cx="20" cy="27" r="3" fill="#6b4a12"/></svg>';
+  const LOCK = '<span style="margin-right:8px;font-weight:700">Locked</span><svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true"><rect x="8" y="18" width="24" height="18" rx="3" fill="#e8c766" stroke="#8f6a22" stroke-width="2.5"/><path d="M13 18v-5a7 7 0 0 1 14 0v5" fill="none" stroke="#e8c766" stroke-width="4"/><circle cx="20" cy="27" r="3" fill="#6b4a12"/></svg>';
   let toastTimer;
   const toast = (msg) => {
     const t = $('toast');

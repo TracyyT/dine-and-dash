@@ -219,7 +219,7 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .pbtn.big{height:64px;width:100%}
 .prow{display:flex;justify-content:center;gap:12px}.prow.wide .pbtn{min-width:84px}
 .ribbon{position:relative;height:70px;margin:30px -34px 0;display:grid;place-items:center}
-.ribbon svg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 5px 0 #0003)}
+.ribbon>svg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 5px 0 #0003)}
 .ribbon b{position:relative;font:400 26px var(--font-display);color:#fff3d6;text-shadow:0 2px 0 #5a0f20}
 .ribbon .hat{position:absolute;left:50%;top:-44px;transform:translateX(-50%);z-index:2;filter:drop-shadow(0 3px 0 #0003)}
 .bigstars{display:flex;justify-content:center;gap:6px;margin-top:-4px}
@@ -230,3 +230,15 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .stats2 span{display:flex;align-items:center;gap:6px}.stats2 b{font:700 22px var(--font-body)}
 .pile{align-self:center;margin:-2px 0}
 .popup.lose .stats2 svg{filter:grayscale(.5)}
+
+.pbtn{display:flex;align-items:center;justify-content:center;gap:8px;font:700 17px var(--font-body);color:#7d1d33}
+.pbtn.primary{color:#fff}
+.pbtn.big{font-size:22px;letter-spacing:.04em}
+.orow b{flex:1;font:700 18px var(--font-body);min-width:0}
+.orow em{font:700 16px var(--font-body);font-style:normal;color:#7d1d33;opacity:.8}
+.orow .chip{margin-left:0}.orow .mark{margin-left:4px}
+.flow .step{display:flex;flex-direction:column;align-items:center;gap:1px}
+.flow small{font:700 11px var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:#7d1d33;opacity:.8}
+.stats2 div{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+.stats2 small{font:700 11px var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:#7d1d33;opacity:.75;margin-top:3px}
+.toast span{font:700 16px var(--font-body)}
