@@ -83,13 +83,13 @@ export function renderFine(S, LB, chapter, progress) {
   shop(S, 1980, 'ATELIER', '#6a4a1a', `${mannequin('#2a3a7a', 120, 290)}${mannequin('#fbf3e2', 220, 290)}${mannequin('#7a1d3a', 320, 290)}`);
 
   // red-carpet path
-  const spots = [[400, 1160], [800, 1030], [1190, 1200], [1740, 1250], [2060, 1050]];
+  const YS = [1260, 1190, 1270, 1190, 1270, 1190, 1270, 1190];
+  const spots = YS.map((y, i) => [280 + i * 235, y]);
   const done = (n) => (progress.stars[n] || 0) > 0;
   const current = chapter.levels.find((l) => !done(l.n));
   const lvl = chapter.levels.map((l, i) => ({ n: l.n, name: l.name, s: progress.stars[l.n] || 0, st: done(l.n) ? 'done' : (current && current.n === l.n ? 'now' : 'lock'), pos: spots[i] }));
-  const route = [[1060, 880], [820, 930], ...spots.slice(0, 2), spots[2], spots[3], spots[4]];
   // start the carpet at the restaurant door, then wind through the stops (level 1 first)
-  const order = [[1200, 880], [1000, 960], spots[0], spots[1], spots[2], spots[3], spots[4]];
+  const order = [[100, 1330], ...spots];
   let d = `M${order[0].join(' ')}`;
   for (let i = 1; i < order.length; i++) {
     const a = order[i - 1], b = order[i], p0 = order[i - 2] || a, p1 = order[i + 1] || b;
@@ -111,10 +111,10 @@ export function renderFine(S, LB, chapter, progress) {
   }
 
   // street furniture
-  fountain(S, 1500, 1040);
+  fountain(S, 1500, 1010);
   [90, 600, 840, 1560, 1820, 2300].forEach((x) => lamp(S, x, 860));
   [[300, 880], [720, 900], [1460, 880], [1900, 900]].forEach(([x, y]) => planter(S, x, y, 0.9));
-  [[150, 1290], [2260, 1230], [640, 1330], [1330, 1340]].forEach(([x, y]) => planter(S, x, y, 0.8));
+  [[110, 1210], [2380, 1340]].forEach(([x, y]) => planter(S, x, y, 0.8));
   car(S, 240, 1420, '#15131c', true); car(S, 900, 1424, '#9a1d3a'); car(S, 1500, 1420, '#f3ecdc', true); car(S, 2060, 1424, '#2a3a7a');
   G(S, 1000, 880, `${bag('#7a1d3a', 0, 0)}${bag('#d9b66a', 22, 8)}`); G(S, 2290, 1290, `${bag('#1d4a5a', 0, 0)}${bag('#fbf3e2', 20, 6)}`);
 
@@ -136,9 +136,8 @@ export function renderFine(S, LB, chapter, progress) {
     const lab = el('g', { transform: 'translate(0,64)' }, g);
     el('rect', { x: -90, y: -17, width: 180, height: 32, rx: 8, fill: '#15131c', stroke: lock ? '#6a6678' : GOLD, 'stroke-width': 2 }, lab);
     const tt = el('text', { y: 6, 'text-anchor': 'middle', 'font-family': 'Josefin Sans', 'font-weight': 700, 'font-size': 18, fill: lock ? '#a8a4b8' : GOLD_L }, lab); tt.textContent = l.name;
-    if (l.st === 'done') el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
-    if (l.st === 'now') { const s = el('g', { transform: 'translate(0,-84)', class: 'bob' }, g); el('rect', { x: -42, y: -16, width: 84, height: 32, rx: 10, fill: '#fbf3e2', stroke: OL, 'stroke-width': 2 }, s); el('path', { d: 'M-8 16L0 26L8 16Z', fill: '#fbf3e2', stroke: OL, 'stroke-width': 2 }, s); el('path', { transform: 'scale(.9)', d: 'M-9-8L9 0L-9 8Z', fill: '#9a1d3a' }, s); }
-    if (l.n === 5) el('path', { transform: 'translate(0,-60)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: GOLD, stroke: OL, 'stroke-width': 1.5 }, g);
+    if (!lock) el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
+    if (l.n === chapter.levels.length) el('path', { transform: 'translate(0,-100)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: GOLD, stroke: OL, 'stroke-width': 1.5 }, g);
   });
-  return { nodes: lvl, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
+  return { nodes: lvl, board: { x: 2290, y: 1200, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }

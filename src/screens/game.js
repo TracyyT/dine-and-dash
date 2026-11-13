@@ -4,7 +4,7 @@ import { chapters } from '../data/chapters.js';
 import { levelConfig } from '../data/levels.js';
 import { themes } from '../themes/index.js';
 import { applyTheme } from '../themes/apply.js';
-import { recordResult, getUpgrades, bankCoins, chapterStars } from '../state/progress.js';
+import { recordResult, getUpgrades, bankCoins, chapterStars, getLives, loseLife, nextLifeIn } from '../state/progress.js';
 import { createGame, tick, tapCustomer, tapTable, tapDish, stars } from '../game/engine.js';
 import { createView } from '../game/view.js';
 import { introHTML, pauseHTML, resultsHTML, chapterDoneHTML } from '../game/popups.js';
@@ -14,7 +14,7 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   const chapter = chapters.find((c) => c.id === chapterId);
   applyTheme(themes[chapter.theme]); // the restaurant look applies inside a level only
   document.body.classList.add('game-open');
-  const info = { ...chapter.levels.find((l) => l.n === level), level, theme: chapter.theme };
+  const info = { ...chapter.levels.find((l) => l.n === level), level, theme: chapter.theme, total: chapter.levels.length };
   const g = createGame(levelConfig(chapterId, level), getUpgrades(chapterId));
 
   const root = document.createElement('div');
@@ -55,8 +55,13 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   const toMap = () => go('map', { chapter: chapterId });
   const replay = () => go('game', { chapter: chapterId, level });
 
+  let introTimer = 0;
   function openIntro() {
-    show(introHTML(g, info), { map: toMap, go: () => { sound.unlock(); sound.startMusic(); sound.play('click'); close(); mode = 'play'; } });
+    const lives = getLives();
+    show(introHTML(g, info, lives, nextLifeIn()), { map: toMap, ...(lives > 0 ? { go: () => { sound.unlock(); sound.startMusic(); sound.play('click'); close(); mode = 'play'; } } : {}) });
+    if (lives <= 0) { // count down to the next life, then let the player in
+      introTimer = setInterval(() => { if (mode === 'intro' && getLives() > 0) { clearInterval(introTimer); openIntro(); } else if (mode === 'intro') { const sm = overlay?.querySelector('.lives small'); if (sm) sm.textContent = `Next life ${Math.floor(nextLifeIn() / 60)}:${String(nextLifeIn() % 60).padStart(2, '0')}`; } }, 1000);
+    }
   }
   function openPause() {
     mode = 'pause'; sound.stopMusic();
@@ -67,9 +72,10 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     const n = stars(g);
     sound.play(n === 3 ? 'win3' : n === 2 ? 'win2' : n === 1 ? 'win1' : 'lose');
     recordResult(chapterId, level, n); // saved once; a worse replay never lowers the best score
+    if (g.result !== 'pass') loseLife(); // failing costs one life, passing never does
     bankCoins(g.earned); // coins carry over to the map, where you spend them on upgrades
-    const win = n > 0;
-    show(resultsHTML(g, info, !!next || !!nextChapter), { map: toMap, again: replay, ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}), ...(win && nextChapter ? { next: openChapterDone } : {}) });
+    const win = g.result === 'pass';
+    show(resultsHTML(g, info, !!next || !!nextChapter, getLives()), { map: toMap, again: replay, ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}), ...(win && nextChapter ? { next: openChapterDone } : {}) });
   }
 
   function openChapterDone() {
@@ -105,7 +111,7 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
 
   return () => {
     cancelAnimationFrame(raf);
-    sound.stopMusic();
+    sound.stopMusic(); clearInterval(introTimer);
     portrait.removeEventListener('change', onTurn);
     window.removeEventListener('resize', fit);
     window.removeEventListener('keydown', onKey);

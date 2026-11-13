@@ -1,6 +1,7 @@
 // The cards shown before and after a level. Pictures first, as few words as possible.
 import { use } from './sprites.js';
 import { objectiveLabel } from '../data/levels.js';
+import { stars } from './engine.js';
 
 export const OBJ_ICON = { coins: 'ic-bill', guests: 'ic-people', dishes: 'd-sandwich', items: 'ic-chef', happy: 'ic-smile', takeout: 'ic-bag', noAngry: 'ic-noangry' };
 const clock = (s) => (s ? `<span class="chip">${use('ic-clock', 18)}${s}s</span>` : '');
@@ -66,15 +67,22 @@ function storefront(sign) {
 
 const flow = [['ic-dine', 'Seat'], ['ic-order', 'Order'], ['d-sandwich', 'Serve'], ['ic-bill', 'Pay'], ['ic-broom', 'Clean']];
 
-export function introHTML(g, info) {
-  const dots = [1, 2, 3, 4, 5].map((n) => `<i class="${n === info.level ? 'on' : n < info.level ? 'past' : ''}"></i>`).join('');
-  const rows = g.objectives.map((o) => `<div class="orow">${use('ic-star', 26)}<span class="oi">${use(OBJ_ICON[o.type], 34)}</span><b>${objectiveLabel(o)}</b>${clock(o.within)}</div>`).join('');
+const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+const hearts = (n, max = 5) => Array.from({ length: max }, (_, i) => `<svg width="22" height="22" viewBox="0 0 40 40" class="${i < n ? 'on' : 'off'}"><use href="#ic-heart"/></svg>`).join('');
+// Star rule shown on the intro: stars only count guests who stormed out angry.
+const starRule = (o) => (o.type === 'noAngry' ? '' : `<div class="srule" aria-label="Stars: no angry guests 3, one angry guest 2, two or more 1">${[3, 2, 1].map((n, i) => `<span class="sr"><u>${Array.from({ length: n }, () => `<svg width="18" height="18" viewBox="0 0 40 40"><use href="#ic-star"/></svg>`).join('')}</u><i>${use('ic-angry', 20)}<b>${['0', '1', '2+'][i]}</b></i></span>`).join('')}</div>`);
+
+export function introHTML(g, info, lives = 5, nextLife = 0) {
+  const dots = Array.from({ length: info.total || 8 }, (_, i) => i + 1).map((n) => `<i class="${n === info.level ? 'on' : n < info.level ? 'past' : ''}"></i>`).join('');
+  const o = g.objectives[0];
+  const row = `<div class="orow main"><span class="oi">${use(OBJ_ICON[o.type], 40)}</span><b>${objectiveLabel(o)}</b><span class="chip">${use('ic-clock', 18)}${fmt(g.cfg.duration)}</span></div>`;
+  const dead = lives <= 0;
   return `<div class="popup">
     <div class="pban">${{ beach: beachFront, chinese: chineseFront, fine: fineFront, steak: steakFront }[info.theme]?.(info.sign || 'TEA') ?? storefront(info.sign || 'CAFE')}</div>
     <h2>${info.name}</h2><div class="dots">${dots}</div>
-    <div class="orows">${rows}</div>
-    <div class="flow">${flow.map(([ic, t]) => `<span class="step">${use(ic, 28)}<small>${t}</small></span>`).join(use('ic-chev', 14))}</div>
-    ${btn('go', 'ic-play', 'Play', 'primary big')}
+    <div class="orows">${row}${o.type === 'noAngry' ? `<div class="srule note">${use('ic-angry', 20)}<span>One angry guest ends the level</span></div>` : starRule(o)}</div>
+    <div class="lives" aria-label="${lives} lives left">${hearts(lives)}<small>${dead ? `Next life ${fmt(nextLife)}` : 'Fail = \u22121'}</small></div>
+    ${dead ? `<button class="pbtn primary big" disabled aria-label="No lives left"><span>No lives</span></button>` : btn('go', 'ic-play', 'Play', 'primary big')}
     <div class="prow">${btn('map', 'ic-pin', 'Map')}</div>
   </div>`;
 }
@@ -85,25 +93,22 @@ export function pauseHTML() {
 
 const coinPile = `<svg class="pile" viewBox="0 0 160 50" width="160" height="50" aria-hidden="true">${[[30, 36], [56, 40], [84, 36], [110, 40], [132, 36], [44, 26], [72, 28], [100, 26], [58, 16], [86, 16], [72, 6]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="17" ry="7" fill="#e8c766" stroke="#8f6a22" stroke-width="2"/><ellipse cx="${x}" cy="${y - 2}" rx="12" ry="4" fill="#f4dd8e"/>`).join('')}</svg>`;
 
-export function resultsHTML(g, info, hasNext) {
-  const n = g.objectives.filter((o) => o.status === 'done').length;
-  const win = n > 0;
+export function resultsHTML(g, info, hasNext, lives = 5) {
+  const o = g.objectives[0], win = g.result === 'pass', n = stars(g);
   const avg = g.stats.satSum && g.served ? Math.round((g.stats.satSum / g.served) * 100) : 0;
-  const rows = g.objectives.map((o) => {
-    const ok = o.status === 'done';
-    return `<div class="orow ${ok ? 'ok' : 'no'}">${use(ok ? 'ic-star' : 'ic-star', 26)}<span class="oi">${use(OBJ_ICON[o.type], 34)}</span><b>${objectiveLabel(o)}</b>${o.type === 'noAngry' ? '' : `<em>${Math.min(o.value, o.target)}/${o.target}</em>`}${clock(o.within)}<span class="mark">${use(ok ? 'ic-check' : 'ic-cross', 26)}</span></div>`;
-  }).join('');
+  const row = `<div class="orow main ${win ? 'ok' : 'no'}"><span class="oi">${use(OBJ_ICON[o.type], 40)}</span><b>${objectiveLabel(o)}</b>${o.type === 'noAngry' ? '' : `<em>${o.value}/${o.target}</em>`}<span class="mark">${use(win ? 'ic-check' : 'ic-cross', 26)}</span></div>`;
+  const angry = g.lost ? `<div class="orow"><span class="oi">${use('ic-angry', 34)}</span><b>${g.lost} angry guest${g.lost > 1 ? 's' : ''} left</b></div>` : '';
   return `<div class="popup ${win ? '' : 'lose'}">
-    <div class="ribbon"><span class="hat">${use('ic-chef', 54)}</span><svg viewBox="0 0 360 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14h40v46H0l16-23zM360 14h-40v46h40l-16-23z" fill="${win ? '#5a0f20' : '#444'}"/><path d="M28 4h304v52H28z" fill="${win ? '#a52e4a' : '#6a6a6a'}" stroke="${win ? '#5a0f20' : '#333'}" stroke-width="3"/><path d="M28 10h304" stroke="#fff" stroke-opacity=".25" stroke-width="3"/></svg><b>${info.name}</b></div>
-    <div class="bigstars">${[0, 1, 2].map((i) => `<svg width="70" height="70" viewBox="0 0 40 40" class="${i < n ? 'on' : ''}" style="animation-delay:${i * 0.25}s"><use href="#ic-star"/></svg>`).join('')}</div>
-    <div class="orows">${rows}</div>
+    <div class="ribbon"><span class="hat">${use('ic-chef', 54)}</span><svg viewBox="0 0 360 70" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14h40v46H0l16-23zM360 14h-40v46h40l-16-23z" fill="${win ? '#5a0f20' : '#444'}"/><path d="M28 4h304v52H28z" fill="${win ? '#a52e4a' : '#6a6a6a'}" stroke="${win ? '#5a0f20' : '#333'}" stroke-width="3"/><path d="M28 10h304" stroke="#fff" stroke-opacity=".25" stroke-width="3"/></svg><b>${win ? 'Passed!' : 'Failed'}</b></div>
+    ${win ? `<div class="bigstars">${[0, 1, 2].map((i) => `<svg width="70" height="70" viewBox="0 0 40 40" class="${i < n ? 'on' : ''}" style="animation-delay:${i * 0.25}s"><use href="#ic-star"/></svg>`).join('')}</div>` : `<div class="lifelost"><svg width="46" height="46" viewBox="0 0 40 40"><use href="#ic-heart"/></svg><b>\u22121</b><div class="lives">${hearts(lives)}</div></div>`}
+    <div class="orows">${row}${angry}</div>
     <div class="stats2"><span>${use('ic-people', 34)}<div><b>${g.served}</b><small>Guests</small></div></span><span>${use('ic-smile', 34)}<div><b>${avg}%</b><small>Mood</small></div></span><span>${use('ic-bill', 34)}<div><b>+${g.earned}</b><small>Coins</small></div></span></div>
     ${coinPile}
     <div class="prow wide">${btn('map', 'ic-map', 'Map')}${btn('again', 'ic-replay', 'Retry')}${win && hasNext ? btn('next', 'ic-next', 'Next', 'primary') : ''}</div>
   </div>`;
 }
 
-// Shown after clearing Level 5: the chapter is done and the next one opens.
+// Shown after clearing the last level: the chapter is done and the next one opens.
 export function chapterDoneHTML(chapter, next, starCount) {
   const total = chapter.levels.length * 3;
   const lanternPreview = `<svg viewBox="0 0 320 150" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cdk2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a58b0"/><stop offset=".55" stop-color="#f08aa6"/><stop offset="1" stop-color="#ffd2a0"/></linearGradient></defs><rect width="320" height="150" fill="url(#cdk2)"/><path d="M0 96Q80 70 160 92T320 84V150H0Z" fill="#7a6aa8"/><path d="M0 112Q80 102 160 112T320 106V150H0Z" fill="#6fa862"/><circle cx="60" cy="66" r="26" fill="#ffb3c7"/><rect x="56" y="80" width="6" height="34" fill="#6a4430"/><rect x="120" y="70" width="110" height="44" fill="#b02a2a" stroke="#3a1a14" stroke-width="2"/><path d="M104 72Q175 38 246 72Z" fill="#3a2a4a" stroke="#3a1a14" stroke-width="2"/>${[132, 175, 218].map((x) => `<ellipse cx="${x}" cy="60" rx="7" ry="9" fill="#e0382c" stroke="#7a1010" stroke-width="1.5"/>`).join('')}</svg>`;

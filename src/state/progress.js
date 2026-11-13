@@ -1,13 +1,16 @@
 // Player progress, saved in the browser (localStorage) so it survives a refresh.
 import { upgradeList } from '../data/upgrades.js';
 const KEY = 'dine-and-dash:progress:v1';
+// Lives: failing a level costs one. They come back one at a time.
+export const MAX_LIVES = 5;
+export const LIFE_SECONDS = 300;
 
 function load() {
   try {
     const data = JSON.parse(localStorage.getItem(KEY));
-    if (data && typeof data.stars === 'object' && data.stars) return { stars: data.stars, wallet: +data.wallet || 0, upgrades: data.upgrades && typeof data.upgrades === 'object' ? data.upgrades : {} };
+    if (data && typeof data.stars === 'object' && data.stars) return { stars: data.stars, wallet: +data.wallet || 0, lives: Number.isFinite(+data.lives) ? +data.lives : MAX_LIVES, lifeAt: +data.lifeAt || 0, upgrades: data.upgrades && typeof data.upgrades === 'object' ? data.upgrades : {} };
   } catch { /* missing or corrupted save: start fresh */ }
-  return { stars: {}, wallet: 0, upgrades: {} };
+  return { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {} };
 }
 
 let state = load();
@@ -63,14 +66,38 @@ export function buyUpgrade(chapterId, id) {
   return true;
 }
 
+// Gives back lives that have regrown since the last check.
+function regen() {
+  if (state.lives >= MAX_LIVES) { state.lifeAt = 0; return; }
+  const now = Date.now();
+  if (!state.lifeAt) { state.lifeAt = now; return; }
+  const gained = Math.floor((now - state.lifeAt) / (LIFE_SECONDS * 1000));
+  if (gained > 0) {
+    state.lives = Math.min(MAX_LIVES, state.lives + gained);
+    state.lifeAt = state.lives >= MAX_LIVES ? 0 : state.lifeAt + gained * LIFE_SECONDS * 1000;
+    save();
+  }
+}
+export function getLives() { regen(); return state.lives; }
+// Seconds until the next life, or 0 when full.
+export function nextLifeIn() { regen(); return state.lives >= MAX_LIVES ? 0 : Math.max(0, Math.ceil((state.lifeAt + LIFE_SECONDS * 1000 - Date.now()) / 1000)); }
+export function loseLife() {
+  regen();
+  if (state.lives >= MAX_LIVES) state.lifeAt = Date.now();
+  state.lives = Math.max(0, state.lives - 1);
+  save();
+  return state.lives;
+}
+
 export function resetProgress() {
-  state = { stars: {}, wallet: 0, upgrades: {} };
+  state = { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {} };
   save();
 }
 
 // Dev-only shortcut for testing (see main.js). ?unlock=all | beach:3 (everything before that level cleared), ?coins=500, ?reset
 export function devSetup(chapters, params) {
-  if (params.has('reset')) state = { stars: {}, wallet: 0, upgrades: {} };
+  if (params.has('reset')) state = { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {} };
+  if (params.has('lives')) { state.lives = Math.max(0, Math.min(MAX_LIVES, +params.get('lives') || 0)); state.lifeAt = state.lives >= MAX_LIVES ? 0 : Date.now(); }
   const u = params.get('unlock');
   if (u) {
     const [cid, ln] = u.split(':');
