@@ -46,13 +46,13 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
               <button class="ubuy ${can ? 'can' : ''}" data-up="${u.id}" ${can ? '' : 'disabled'} aria-label="${u.name}${max ? ', maxed' : `, ${cost} coins`}">${max ? '&#10003;' : `${COIN_ICON}<span>${cost}</span>`}</button>
             </article>`; }).join('')}</div>
         </section>`).join('')}</div>`;
-    root.querySelector('.back').onclick = () => go('map');
+    root.querySelector('.back').onclick = () => go('map', { chapter: chapterId });
     root.querySelectorAll('[data-up]').forEach((b) => {
       b.onclick = () => { if (buyUpgrade(chapterId, b.dataset.up)) { sound.unlock(); sound.play('upgrade'); draw(b.dataset.up); } };
     });
   };
   draw();
-  const onKey = (e) => { if (e.key === 'Escape') go('map'); };
+  const onKey = (e) => { if (e.key === 'Escape') go('map', { chapter: chapterId }); };
   window.addEventListener('keydown', onKey);
   return () => { window.removeEventListener('keydown', onKey); document.body.classList.remove('upg-open'); };
 }

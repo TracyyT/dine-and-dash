@@ -17,6 +17,17 @@ export const LEVELS = {
     objectives: [{ type: 'items', target: 10 }, { type: 'coins', target: 100 }, { type: 'happy', target: 3 }] },
   'city:5': { duration: 140, cols: 4, rows: 2, tables: 8, dishes: ['croissant', 'pasta', 'steak', 'cheesecake'],  arrival: 9,  take: 0.3,  patience: 72, orders: [0.3, 0.4, 0.3],   stalls: true,
     objectives: [{ type: 'guests', target: 5 }, { type: 'coins', target: 100 }, { type: 'noAngry', within: 90 }] },
+  // Chapter 2: Beach Bistro. Levels 1-2 stay basic, drinks & dessert stalls arrive on level 4.
+  'beach:1': { duration: 110, cols: 3, rows: 1, tables: 3, dishes: ['salad', 'fishtaco'],                        arrival: 12, take: 0.1,  patience: 85, orders: [0.65, 0.25, 0.1],  stalls: false,
+    objectives: [{ type: 'guests', target: 4 }, { type: 'coins', target: 45 }, { type: 'noAngry' }] },
+  'beach:2': { duration: 120, cols: 3, rows: 2, tables: 4, dishes: ['salad', 'fishtaco', 'burger'],              arrival: 11, take: 0.2,  patience: 80, orders: [0.5, 0.3, 0.2],    stalls: false,
+    objectives: [{ type: 'dishes', target: 6 }, { type: 'coins', target: 80 }, { type: 'happy', target: 3 }] },
+  'beach:3': { duration: 130, cols: 3, rows: 2, tables: 6, dishes: ['fishtaco', 'burger', 'shrimp'],            arrival: 10, take: 0.35, patience: 76, orders: [0.4, 0.35, 0.25], stalls: false,
+    objectives: [{ type: 'guests', target: 6 }, { type: 'takeout', target: 3 }, { type: 'noAngry', within: 80 }] },
+  'beach:4': { duration: 140, cols: 4, rows: 2, tables: 7, dishes: ['salad', 'burger', 'shrimp', 'fishtaco'],  arrival: 9,  take: 0.25, patience: 72, orders: [0.35, 0.35, 0.3], stalls: true,
+    objectives: [{ type: 'items', target: 12 }, { type: 'coins', target: 120 }, { type: 'happy', target: 4 }] },
+  'beach:5': { duration: 150, cols: 4, rows: 2, tables: 8, dishes: ['salad', 'burger', 'shrimp', 'lobster'],   arrival: 8,  take: 0.3,  patience: 70, orders: [0.25, 0.4, 0.35], stalls: true,
+    objectives: [{ type: 'guests', target: 5 }, { type: 'coins', target: 130 }, { type: 'noAngry', within: 100 }] },
 };
 export const levelConfig = (chapterId, n) => LEVELS[`${chapterId}:${n}`] || LEVELS['city:1'];
 

@@ -242,3 +242,28 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .stats2 div{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
 .stats2 small{font:700 11px var(--font-body);letter-spacing:.06em;text-transform:uppercase;color:#7d1d33;opacity:.75;margin-top:3px}
 .toast span{font:700 16px var(--font-body)}
+
+/* ---- Beach Bistro look (only applies inside Chapter 2 levels) ---- */
+[data-theme=beach] .game-root{background:radial-gradient(ellipse at center,#1a4f66,#0a1e2c)}
+[data-theme=beach] .sc-floor{background:repeating-linear-gradient(90deg,#0000 0 78px,#0002 78px 80px),repeating-linear-gradient(0deg,#0000 0 78px,#0002 78px 80px),linear-gradient(#cdb69a,#b89c82);filter:none}
+[data-theme=beach] .sc-wall .paper{background:linear-gradient(#f2a2a8 0,#ffd1a0 38%,#7fc4cf 38%,#2a7a90 100%);box-shadow:inset 0 -30px 40px #0003}
+[data-theme=beach] .sc-wall .checker{background:repeating-linear-gradient(90deg,#9a6a3a 0 60px,#8a5a2a 60px 62px);height:14px}
+[data-theme=beach] .sc-wall .wains{background:repeating-linear-gradient(90deg,var(--burgundy) 0 58px,var(--burgundy-light) 58px 60px);border-top:5px solid var(--brass)}
+[data-theme=beach] .sc-awning{background:repeating-linear-gradient(90deg,#3f7fc0 0 36px,#fff4e0 36px 72px);border-bottom:6px solid #8a5a2a}
+[data-theme=beach] .sc-window svg{border-color:#a87a38}
+[data-theme=beach] .sc-neon{font-size:40px;color:#fff4e0;text-shadow:0 2px 0 #5a3a1e;animation:none;background:linear-gradient(#b8844a,#9a6a3a);border:4px solid #6b4420;border-radius:10px;padding:10px 0;box-shadow:0 5px 0 #0005;width:226px}
+[data-theme=beach] .sc-neon::before{display:none}
+[data-theme=beach] .sc-carpet{background:repeating-linear-gradient(90deg,#d9b47a 0 22px,#c9a064 22px 24px);border-color:#8a5a2a;box-shadow:inset 0 0 30px #5a3a1e66,0 0 0 5px #0004}
+[data-theme=beach] .sc-sign{background:#7a4f2a;color:#fff4e0;border-color:#4a2f18}
+[data-theme=beach] .sc-rope{border-left-color:#e8d9b0}
+[data-theme=beach] .sc-door{background:#5a3a1e;border-color:#8a5a2a}
+[data-theme=beach] .sc-pool{background:radial-gradient(ellipse,#ffd8a066,#ffd8a000 70%)}
+[data-theme=beach] .sc-kitchen,[data-theme=beach] .sc-kitchen.k1{background:repeating-linear-gradient(90deg,#0000 0 41px,#0002 41px 43px),linear-gradient(#e6f0ea,#c4d6d0)}
+[data-theme=beach] .sc-kitchen.k2{background:repeating-linear-gradient(90deg,#0000 0 41px,#0003 41px 43px),linear-gradient(#f6ecd8,#dcc89c);border-left-color:var(--brass-light)}
+[data-theme=beach] .sc-kitchen.k3{background:repeating-linear-gradient(90deg,#0000 0 41px,#e0b07055 41px 43px),linear-gradient(#1a4f66,#0e2c40);border-left:6px solid var(--brass-light)}
+[data-theme=beach] .sc-takefloor{background:linear-gradient(#cdb69a,#b89c82)}
+[data-theme=beach] .sc-counter{background:linear-gradient(var(--brass-light) 0 14px,var(--burgundy) 14px)}
+[data-theme=beach] .sc-pillar{background:linear-gradient(90deg,#6b4420,#c9954a,#6b4420)}
+[data-theme=beach] .sc-rail{background:linear-gradient(#d9a868,#b8844a 45%,#8a5a2a)}
+[data-theme=beach] .goal-fill,[data-theme=beach] .obj .bar i{background:linear-gradient(#ffe6b0,#e0b070)}
+[data-theme=beach] .sc-neon{font-size:31px;white-space:nowrap;padding:14px 0}

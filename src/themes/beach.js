@@ -1,0 +1,26 @@
+export const beach = {
+  id: 'beach',
+  name: 'Beach Bistro',
+  era: 'seaside sunset',
+  palette: {
+    wall: '#2a7a90',
+    wallDeep: '#1a4f66',
+    brass: '#e0b070',
+    brassLight: '#ffe6b0',
+    brassDark: '#8a5a2a',
+    burgundy: '#2d8a86',
+    burgundyLight: '#43a8a0',
+    ivory: '#fff4e0',
+    marble: '#26283e',
+    nightTop: '#5a5fb0',
+    nightMid: '#f08aa0',
+    nightLow: '#ffc890',
+    ink: '#1f1a2e',
+    glow: '#ffe0a0',
+  },
+  fonts: {
+    display: "'Pacifico', 'Brush Script MT', cursive",
+    body: "'Josefin Sans', system-ui, sans-serif",
+  },
+  light: { vignette: 0.35, beam: 0.5 },
+};

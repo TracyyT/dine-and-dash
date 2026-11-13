@@ -46,3 +46,13 @@ body.map-open{overflow:hidden}
 #hint{display:flex;align-items:center;gap:10px;padding:6px 14px}
 #toast{display:flex;align-items:center}
 #tools button{display:grid;place-items:center}
+
+#tools button:disabled{opacity:.35;cursor:default}
+#tools button:disabled:hover{background:#14100f}
+/* Beach map chrome */
+body[data-map=beach] #hud,body[data-map=beach] #wallet,body[data-map=beach] #tools button,body[data-map=beach] #hint,body[data-map=beach] #toast{background:#6b4420;border-color:#ffe6b0;color:#fff4e0}
+body[data-map=beach] #hud{outline-color:#ffe6b0;border-radius:14px}
+body[data-map=beach] #hud b{font-family:Pacifico,cursive;font-weight:400}
+body[data-map=beach] #tools button:hover:not(:disabled){background:#b8442f}
+body[data-map=beach] #vig{background:radial-gradient(ellipse at center,transparent 62%,rgba(40,20,10,.35))}
+body[data-map=beach] #wallet{top:120px}
