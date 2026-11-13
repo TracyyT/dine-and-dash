@@ -34,3 +34,17 @@ export function objectiveText(o) {
     default: return '';
   }
 }
+
+// Short label without the time limit (that is shown separately as a clock chip).
+export function objectiveLabel(o) {
+  switch (o.type) {
+    case 'coins': return `Earn ${o.target} coins`;
+    case 'guests': return `Serve ${o.target} guests`;
+    case 'dishes': return `Deliver ${o.target} items`;
+    case 'items': return `Make ${o.target} items`;
+    case 'happy': return `${o.target} happy guests`;
+    case 'takeout': return `${o.target} take-out orders`;
+    case 'noAngry': return 'No angry guests';
+    default: return '';
+  }
+}

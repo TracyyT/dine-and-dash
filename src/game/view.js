@@ -49,7 +49,7 @@ export function createView(host, g, info, handlers) {
   const guests = new Map(), dishes = new Map(), staffEls = new Map();
   let toastT = 0;
 
-  const showToast = (icon, bad) => { toast.innerHTML = use(icon, 28) + (bad ? '<b class="x">&#10005;</b>' : ''); toast.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('on'), 1600); };
+  const showToast = (icon, bad, text = '') => { toast.innerHTML = use(icon, 28) + (bad ? '<b class="x">&#10005;</b>' : '') + (text ? `<span>${text}</span>` : ''); toast.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('on'), 1600); };
   const float = (html, x, y, cls = '') => { const f = mk('float ' + cls, html); f.style.left = x + 'px'; f.style.top = y + 'px'; fx.appendChild(f); f.addEventListener('animationend', () => f.remove()); };
 
   function bubbleFor(c) {
@@ -190,8 +190,8 @@ export function createView(host, g, info, handlers) {
       else if (ev.type === 'heart') float(use('ic-heart', 22), ev.x + 12, ev.y + 10, 'heart');
       else if (ev.type === 'angry') float(use('ic-angry', 26), ev.x - 13, ev.y - 90, 'heart');
       else if (ev.type === 'sparkle' || ev.type === 'ding' || ev.type === 'serve' || ev.type === 'clean') float(use('ic-spark', 26), ev.x - 13, ev.y - 40, 'spark');
-      else if (ev.type === 'toast') showToast(ev.icon, ev.bad);
-            else if (ev.type === 'goal') showToast('ic-star', false);
+      else if (ev.type === 'toast') showToast(ev.icon, ev.bad, ev.text);
+            else if (ev.type === 'goal') showToast('ic-star', false, 'Star!');
       else if (ev.type === 'boost') float('<b>+25%</b>', ev.x - 22, ev.y + 14, 'tip');
       const snd = { coin: ev.tip ? 'tip' : 'coin', ding: 'ding', serve: 'serve', clean: 'clean', angry: 'angry', upgrade: 'upgrade', toast: 'nope', seat: 'seat', order: 'order', arrive: 'arrive', cook: 'sizzle', boost: 'boost', goal: 'upgrade' }[ev.type];
       if (snd) sound.play(snd);

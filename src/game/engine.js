@@ -71,7 +71,7 @@ const OUTFITS = ['#a52e4a', '#c9a24a', '#3d7f86', '#6a4c93', '#d9733a', '#4f8a5b
 
 function spawn(g) {
   const waiting = g.customers.filter((c) => c.state === 'queue').length;
-  if (waiting >= g.L.queue.length) { g.turnedAway++; emit(g, { type: 'toast', icon: 'ic-people', bad: true }); return; }
+  if (waiting >= g.L.queue.length) { g.turnedAway++; emit(g, { type: 'toast', icon: 'ic-people', text: 'Line full', bad: true }); return; }
   const w = g.cfg.orders, r = Math.random();
   const planned = r < w[0] ? 1 : r < w[0] + w[1] ? 2 : 3;
   const take = Math.random() < g.cfg.take;
@@ -112,7 +112,7 @@ function leave(g, c, happy) {
 }
 
 function enqueue(g, type, id) {
-  if (g.tasks.length >= 4) { emit(g, { type: 'toast', icon: 'ic-waiter', bad: true }); return; }
+  if (g.tasks.length >= 4) { emit(g, { type: 'toast', icon: 'ic-waiter', text: 'Busy', bad: true }); return; }
   const cur = g.waiter.task;
   if ((cur && cur.type === type && cur.id === id) || g.tasks.some((t) => t.type === type && t.id === id)) return;
   g.tasks.push({ type, id });
@@ -381,12 +381,12 @@ export function tapCustomer(g, id) {
   if (c.state === 'queue') {
     if (c.kind === 'dine') {
       const t = g.tables.find((x) => x.state === 'free');
-      if (!t) return emit(g, { type: 'toast', icon: g.tables.some((x) => x.state === 'dirty') ? 'ic-broom' : 'ic-table', bad: !g.tables.some((x) => x.state === 'dirty') });
+      if (!t) return emit(g, { type: 'toast', icon: g.tables.some((x) => x.state === 'dirty') ? 'ic-broom' : 'ic-table', text: g.tables.some((x) => x.state === 'dirty') ? 'Clean a table' : 'No table', bad: !g.tables.some((x) => x.state === 'dirty') });
       t.state = 'taken'; t.guest = c.id; c.table = t.id; emit(g, { type: 'seat' });
       sendTo(c, t.x, t.y - 22, 'wantOrder'); layoutQueue(g);
     } else {
       const s = g.takeSlots.find((x) => !x.guest);
-      if (!s) return emit(g, { type: 'toast', icon: 'ic-bag', bad: true });
+      if (!s) return emit(g, { type: 'toast', icon: 'ic-bag', text: 'Window full', bad: true });
       s.guest = c.id; c.slot = s.id; emit(g, { type: 'seat' }); sendTo(c, s.x, s.y, 'wantOrder'); layoutQueue(g);
     }
   } else if (c.state === 'wantOrder') enqueue(g, 'order', c.id);
