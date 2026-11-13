@@ -54,6 +54,7 @@ function spawn(g) {
     look: { skin: pick(SKINS), hair: pick(HAIRS), style: Math.floor(rand(0, 3)), outfit: pick(OUTFITS), hat: Math.random() < 0.35 ? Math.floor(rand(1, 3)) : 0 },
   };
   g.customers.push(c);
+  emit(g, { type: 'arrive' });
   layoutQueue(g);
 }
 
@@ -119,7 +120,7 @@ function finish(g, task) {
   if (['order', 'bill', 'pickup', 'clean'].includes(task.type) && !valid(g, task)) { w.task = null; return; }
   if (task.type === 'order') {
     const c = byId(g.customers, task.id);
-    c.dish = pick(g.cfg.dishes); c.state = 'waitFood';
+    c.dish = pick(g.cfg.dishes); c.state = 'waitFood'; emit(g, { type: 'order' });
     w.carry = { kind: 'ticket' };
     w.task = { type: 'drop', id: c.id, dish: c.dish, phase: 'walk', t: 0 }; return;
   }
@@ -143,13 +144,13 @@ function finish(g, task) {
     if (c && c.state === 'waitFood') serve(g, c, dish);
   }
   if (task.type === 'bill') collect(g, byId(g.customers, task.id));
-  if (task.type === 'clean') { byId(g.tables, task.id).state = 'free'; emit(g, { type: 'sparkle', x: byId(g.tables, task.id).x, y: byId(g.tables, task.id).y }); }
+  if (task.type === 'clean') { byId(g.tables, task.id).state = 'free'; emit(g, { type: 'clean', x: byId(g.tables, task.id).x, y: byId(g.tables, task.id).y }); }
   w.task = null;
 }
 
 function serve(g, c, dish) {
   c.bill += DISHES[dish].price; c.done++;
-  emit(g, { type: 'sparkle', x: c.x, y: c.y - 30 });
+  emit(g, { type: 'serve', x: c.x, y: c.y - 30 });
   if (c.kind === 'take') { collect(g, c); return; }
   c.state = 'eating'; c.eatT = rand(3, 5);
 }
@@ -187,7 +188,7 @@ function updateWaiter(g, dt) {
 function updateKitchen(g, dt) {
   for (const s of g.stations) {
     if (!s.ticket && g.tickets.length) {
-      s.ticket = g.tickets.shift(); s.progress = 0; s.hold = false;
+      s.ticket = g.tickets.shift(); s.progress = 0; s.hold = false; emit(g, { type: 'cook' });
       s.dur = DISHES[s.ticket.dish].time / (1 + 0.4 * g.cookLevel);
     } else if (s.ticket) {
       if (!s.hold) { s.progress += dt; if (s.progress >= s.dur) s.hold = true; }
@@ -238,12 +239,12 @@ export function tapCustomer(g, id) {
     if (c.kind === 'dine') {
       const t = g.tables.find((x) => x.state === 'free');
       if (!t) return emit(g, { type: 'toast', text: t === undefined && g.tables.some((x) => x.state === 'dirty') ? 'Clean a table first!' : 'No free table yet' });
-      t.state = 'taken'; t.guest = c.id; c.table = t.id;
+      t.state = 'taken'; t.guest = c.id; c.table = t.id; emit(g, { type: 'seat' });
       sendTo(c, t.x, t.y - 22, 'wantOrder'); layoutQueue(g);
     } else {
       const s = g.takeSlots.find((x) => !x.guest);
       if (!s) return emit(g, { type: 'toast', text: 'Take-out window is busy' });
-      s.guest = c.id; c.slot = s.id; sendTo(c, s.x, s.y, 'wantOrder'); layoutQueue(g);
+      s.guest = c.id; c.slot = s.id; emit(g, { type: 'seat' }); sendTo(c, s.x, s.y, 'wantOrder'); layoutQueue(g);
     }
   } else if (c.state === 'wantOrder') enqueue(g, 'order', c.id);
   else if (c.state === 'wantBill') enqueue(g, 'bill', c.id);

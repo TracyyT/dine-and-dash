@@ -141,3 +141,7 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .stats{display:flex;justify-content:center;gap:24px;font-size:15px;opacity:.95}
 .stats b{display:block;font-size:24px;color:var(--brass-light)}
 .take-mat{position:absolute;width:120px;height:26px;border-radius:50%;background:#0007;border:2px dashed var(--brass-light);z-index:2}
+
+.hud-btn.snd{padding:6px 8px;display:grid;place-items:center;position:relative}
+.hud-btn.snd.off{opacity:.55}
+.hud-btn.snd.off::after{content:"";position:absolute;left:8px;right:8px;top:50%;height:3px;background:#ff8a7a;border-radius:2px;transform:rotate(-40deg)}
