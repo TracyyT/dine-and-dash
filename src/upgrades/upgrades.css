@@ -3,7 +3,7 @@ body.upg-open #app{max-width:none;margin:0;padding:0}
 .upg-root{position:fixed;inset:0;overflow:auto;background:linear-gradient(#f0e4cb,#e3d3b0);font-family:var(--font-body);color:#4a0f1d}
 .upg-wall{position:relative;height:250px;background:repeating-linear-gradient(90deg,var(--wall,#14625a) 0 38px,#13584f 38px 40px);border-bottom:6px solid var(--brass,#c9a24a);box-shadow:0 8px 20px #0005}
 .upg-wall::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:repeating-conic-gradient(#1c1620 0 25%,#f1e6cf 0 50%) 0 0/16px 16px}
-.awn{position:absolute;left:0;right:0;top:0;height:40px;background:repeating-linear-gradient(90deg,#a52e4a 0 40px,#f1e6cf 40px 80px);border-bottom:6px solid var(--brass-dark,#8f6a22);box-shadow:0 5px 8px #0006}
+.awn{position:absolute;left:0;right:0;top:0;height:40px;background:repeating-linear-gradient(90deg,var(--burgundy-light,#a52e4a) 0 40px,var(--ivory,#f1e6cf) 40px 80px);border-bottom:6px solid var(--brass-dark,#8f6a22);box-shadow:0 5px 8px #0006}
 .win{position:absolute;top:70px;width:190px;height:120px;border:6px solid var(--brass,#c9a24a);border-radius:6px;overflow:hidden;box-shadow:0 5px 10px #0007}
 .win::after{content:"";position:absolute;inset:0;background:linear-gradient(#0000 49%,var(--brass,#c9a24a) 49% 51%,#0000 51%),linear-gradient(90deg,#0000 49%,var(--brass,#c9a24a) 49% 51%,#0000 51%)}
 .w1{left:6%}.w2{right:6%}

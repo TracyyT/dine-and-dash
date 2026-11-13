@@ -1,27 +1,34 @@
 import '../map/map.css';
 import { go } from '../router.js';
 import { chapters } from '../data/chapters.js';
-import { getProgress, isUnlocked, resetProgress, getWallet } from '../state/progress.js';
+import { getProgress, isUnlocked, resetProgress, getWallet, isChapterDone } from '../state/progress.js';
 import { COIN_ICON } from '../map/upgradeIcons.js';
 import { clearTheme } from '../themes/apply.js';
 import { renderCity } from '../map/cityMap.js';
+import { renderBeach, BEACH_DEFS } from '../map/beachMap.js';
 import { createPanZoom } from '../map/panzoom.js';
 import { MAP_DEFS } from '../map/defs.js';
 import { WW, WH } from '../map/iso.js';
 
-export function renderMap(app) {
+let lastChapter = null;
+
+export function renderMap(app, params = {}) {
   clearTheme(); // the restaurant theme belongs to the game screen only
   document.body.classList.add('map-open');
-  const chapterIndex = 0;
+  const open = (i) => chapters.every((c, k) => k >= i || isChapterDone(c)); // chapter i opens when every earlier one is cleared
+  const furthest = chapters.reduce((m, c, i) => (open(i) ? i : m), 0);
+  let chapterIndex = params.chapter ? chapters.findIndex((c) => c.id === params.chapter) : lastChapter ?? furthest;
+  if (chapterIndex < 0 || !open(chapterIndex)) chapterIndex = furthest;
+  lastChapter = chapterIndex;
   const chapter = chapters[chapterIndex];
   const progress = getProgress(chapter.id);
   const doneCount = chapter.levels.filter((l) => (progress.stars[l.n] || 0) > 0).length;
 
   app.innerHTML = `
-    <div id="view" tabindex="0" aria-label="City map. Drag or use the arrow keys to move around.">
+    <div id="view" tabindex="0" aria-label="${chapter.name} map. Drag or use the arrow keys to move around.">
       <div id="world">
-        <svg id="map" viewBox="0 0 ${WW} ${WH}" role="img" aria-label="Isometric city map with a path through ${chapter.levels.length} level stops">
-          ${MAP_DEFS}
+        <svg id="map" viewBox="0 0 ${WW} ${WH}" role="img" aria-label="${chapter.name} map with a path through ${chapter.levels.length} level stops">
+          ${chapter.map === 'beach' ? BEACH_DEFS : MAP_DEFS}
           <rect width="${WW}" height="${WH}" fill="url(#sky)"/>
           <g id="scene"></g>
           <g id="labels"></g>
@@ -34,6 +41,8 @@ export function renderMap(app) {
     <div id="hud"><b>${chapter.name}</b><span>CHAPTER ${chapterIndex + 1}</span><div class="pips" aria-label="${doneCount} of ${chapter.levels.length} levels done">${chapter.levels.map((l) => `<i class="${(progress.stars[l.n] || 0) > 0 ? 'on' : ''}"></i>`).join('')}</div></div>
     <div id="wallet" aria-label="Coins">${COIN_ICON}<b></b></div>
     <div id="tools">
+      <button id="cp" aria-label="Previous chapter" title="Previous chapter"${chapterIndex > 0 ? '' : ' disabled'}>&#9664;</button>
+      <button id="cn" aria-label="Next chapter" title="Next chapter"${chapterIndex < chapters.length - 1 && open(chapterIndex + 1) ? '' : ' disabled'}>&#9654;</button>
       <button id="upb" aria-label="Upgrades" title="Upgrades"><svg viewBox="0 0 48 48" width="26" height="26" aria-hidden="true"><path d="M24 5L38 21H29V43H19V21H10Z" fill="#ffe9a8" stroke="#8f6a22" stroke-width="2" stroke-linejoin="round"/></svg></button>
       <button id="zin" aria-label="Zoom in">+</button>
       <button id="zout" aria-label="Zoom out">&minus;</button>
@@ -46,7 +55,10 @@ export function renderMap(app) {
 
   const $ = (id) => app.querySelector('#' + id);
   const view = $('view'), world = $('world');
-  const city = renderCity($('scene'), $('labels'), chapter, progress);
+  const city = (chapter.map === 'beach' ? renderBeach : renderCity)($('scene'), $('labels'), chapter, progress);
+  document.body.dataset.map = chapter.map;
+  $('cp').onclick = () => go('map', { chapter: chapters[chapterIndex - 1].id });
+  $('cn').onclick = () => go('map', { chapter: chapters[chapterIndex + 1].id });
   const pz = createPanZoom({ view, world, width: WW, height: WH });
   pz.home(...city.home);
 
@@ -80,6 +92,6 @@ export function renderMap(app) {
 
   return () => { // cleanup when leaving the map
     clearTimeout(hintTimer); clearTimeout(toastTimer); pz.destroy();
-    document.body.classList.remove('map-open');
+    document.body.classList.remove('map-open'); delete document.body.dataset.map;
   };
 }

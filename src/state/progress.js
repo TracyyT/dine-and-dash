@@ -39,6 +39,10 @@ export function isUnlocked(chapterId, n) {
   return n === 1 || (state.stars[keyOf(chapterId, n - 1)] || 0) > 0;
 }
 
+// A chapter opens once the last level of the chapter before it has at least one star.
+export const isChapterDone = (chapter) => (state.stars[keyOf(chapter.id, chapter.levels[chapter.levels.length - 1].n)] || 0) > 0;
+export const chapterStars = (chapter) => chapter.levels.reduce((s, l) => s + (state.stars[keyOf(chapter.id, l.n)] || 0), 0);
+
 // Coins carry over between chapters. Upgrades belong to one chapter only.
 export const getWallet = () => state.wallet;
 export function bankCoins(n) {

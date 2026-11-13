@@ -4,17 +4,17 @@ import { chapters } from '../data/chapters.js';
 import { levelConfig } from '../data/levels.js';
 import { themes } from '../themes/index.js';
 import { applyTheme } from '../themes/apply.js';
-import { recordResult, getUpgrades, bankCoins } from '../state/progress.js';
+import { recordResult, getUpgrades, bankCoins, chapterStars } from '../state/progress.js';
 import { createGame, tick, tapCustomer, tapTable, tapDish, stars } from '../game/engine.js';
 import { createView } from '../game/view.js';
-import { introHTML, pauseHTML, resultsHTML } from '../game/popups.js';
+import { introHTML, pauseHTML, resultsHTML, chapterDoneHTML } from '../game/popups.js';
 import { sound } from '../game/sound.js';
 
 export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {}) {
   const chapter = chapters.find((c) => c.id === chapterId);
   applyTheme(themes[chapter.theme]); // the restaurant look applies inside a level only
   document.body.classList.add('game-open');
-  const info = { ...chapter.levels.find((l) => l.n === level), level };
+  const info = { ...chapter.levels.find((l) => l.n === level), level, theme: chapter.theme };
   const g = createGame(levelConfig(chapterId, level), getUpgrades(chapterId));
 
   const root = document.createElement('div');
@@ -47,7 +47,8 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   };
 
   const next = chapter.levels.find((l) => l.n === level + 1);
-  const toMap = () => go('map');
+  const nextChapter = next ? null : chapters[chapters.indexOf(chapter) + 1];
+  const toMap = () => go('map', { chapter: chapterId });
   const replay = () => go('game', { chapter: chapterId, level });
 
   function openIntro() {
@@ -64,7 +65,12 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     recordResult(chapterId, level, n); // saved once; a worse replay never lowers the best score
     bankCoins(g.earned); // coins carry over to the map, where you spend them on upgrades
     const win = n > 0;
-    show(resultsHTML(g, info, !!next), { map: toMap, again: replay, ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}) });
+    show(resultsHTML(g, info, !!next || !!nextChapter), { map: toMap, again: replay, ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}), ...(win && nextChapter ? { next: openChapterDone } : {}) });
+  }
+
+  function openChapterDone() {
+    sound.play('win3');
+    show(chapterDoneHTML(chapter, nextChapter, chapterStars(chapter)), { map: toMap, go: () => go('map', { chapter: nextChapter.id }) });
   }
 
   const onKey = (e) => { if (e.key === 'Escape') { if (mode === 'play') openPause(); else if (mode === 'pause') { sound.startMusic(); close(); mode = 'play'; } } };

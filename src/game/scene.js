@@ -34,7 +34,24 @@ const stallSVG = (kind) => kind === 'drink'
   ? `<svg viewBox="0 0 150 130" width="150" height="130"><rect x="8" y="30" width="134" height="100" rx="10" fill="#14625a" stroke="#c9a24a" stroke-width="4"/><g>${Array.from({ length: 8 }, (_, i) => `<rect x="${8 + i * 17}" y="2" width="17" height="30" fill="${i % 2 ? '#f1e6cf' : '#a52e4a'}"/>`).join('')}<path d="M8 32h134" stroke="#8f6a22" stroke-width="3"/></g><rect x="28" y="48" width="94" height="40" rx="6" fill="#0e3d38"/><rect x="40" y="52" width="10" height="30" rx="3" fill="#f6c2d4"/><rect x="60" y="52" width="10" height="30" rx="3" fill="#fbe9b8"/><rect x="80" y="52" width="10" height="30" rx="3" fill="#8fd0d8"/><rect x="100" y="52" width="10" height="30" rx="3" fill="#e8892f"/><circle cx="75" cy="102" r="9" fill="#e8c766" stroke="#8f6a22" stroke-width="2"/><text x="75" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#6b4a12" font-family="Josefin Sans,sans-serif">DRINKS</text></svg>`
   : `<svg viewBox="0 0 150 130" width="150" height="130"><rect x="8" y="30" width="134" height="100" rx="10" fill="#7d1d33" stroke="#c9a24a" stroke-width="4"/><g>${Array.from({ length: 8 }, (_, i) => `<rect x="${8 + i * 17}" y="2" width="17" height="30" fill="${i % 2 ? '#f1e6cf' : '#2f7f86'}"/>`).join('')}<path d="M8 32h134" stroke="#8f6a22" stroke-width="3"/></g><rect x="24" y="44" width="102" height="48" rx="8" fill="#fff" opacity=".18" stroke="#f1e6cf" stroke-width="2"/><circle cx="46" cy="76" r="10" fill="#f6c2d4"/><circle cx="75" cy="76" r="10" fill="#c98a4a"/><circle cx="104" cy="76" r="10" fill="#fbe9b8"/><circle cx="46" cy="64" r="4" fill="#d6304a"/><circle cx="75" cy="64" r="4" fill="#d6304a"/><circle cx="104" cy="64" r="4" fill="#d6304a"/><circle cx="75" cy="106" r="9" fill="#e8c766" stroke="#8f6a22" stroke-width="2"/><text x="75" y="111" text-anchor="middle" font-size="9" font-weight="700" fill="#6b4a12" font-family="Josefin Sans,sans-serif">SWEETS</text></svg>`;
 
+// ---- Beach Bistro variants ----
+function seaWindow(i) {
+  const r = rng(5 + i * 3);
+  const sun = 30 + r() * 90, boat = 20 + r() * 90;
+  const waves = Array.from({ length: 9 }, (_, k) => `<path d="M${(k * 19 + i * 7) % 140} ${64 + (k % 3) * 11}q6-4 12 0" fill="none" stroke="#fff" stroke-width="1.6" opacity=".55"/>`).join('');
+  return `<svg viewBox="0 0 150 100" width="150" height="100"><defs><linearGradient id="bsk${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a62b8"/><stop offset=".5" stop-color="#f2889e"/><stop offset="1" stop-color="#ffd09a"/></linearGradient><linearGradient id="bsea${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4a890"/><stop offset=".25" stop-color="#3aa0b4"/><stop offset="1" stop-color="#1c6a88"/></linearGradient></defs>
+    <rect width="150" height="100" fill="url(#bsk${i})"/><circle cx="${sun}" cy="52" r="13" fill="#fff3b0"/><rect y="56" width="150" height="44" fill="url(#bsea${i})"/>
+    <rect x="${sun - 6}" y="56" width="12" height="40" fill="#fff0b8" opacity=".35"/>${waves}
+    <path d="M${boat} 56V38l12 14z" fill="#fff"/><path d="M${boat - 6} 56h20l-4 5h-12z" fill="#7a4a2a"/>
+    <path d="M0 0L55 0L0 60Z" fill="#fff" opacity=".08"/><path d="M75 0v100M0 50h150" stroke="#e0b070" stroke-width="3"/></svg>`;
+}
+const surfboards = () => `<svg viewBox="0 0 90 130" width="90" height="130"><path d="M26 124Q10 70 28 6Q44 66 40 124Z" fill="#e9f3f6" stroke="#2f5d7a" stroke-width="3"/><path d="M28 14v108" stroke="#2f7fb0" stroke-width="4"/><path d="M52 126Q38 76 56 14Q74 70 68 126Z" fill="#ff9a4a" stroke="#8a3a10" stroke-width="3"/><path d="M56 22v100" stroke="#fff" stroke-width="4"/></svg>`;
+const wicker = () => `<svg viewBox="0 0 60 90" width="60" height="90"><path d="M30 0V36" stroke="#5a3a1e" stroke-width="3"/><path d="M6 70Q4 36 30 34Q56 36 54 70Z" fill="#c9954a" stroke="#6b4420" stroke-width="2.5"/><path d="M10 52h40M8 62h44M16 42l-4 26M30 38v32M44 42l4 26" stroke="#8a5f2c" stroke-width="2" fill="none"/><ellipse cx="30" cy="71" rx="22" ry="6" fill="#ffe6a8" opacity=".9"/></svg>`;
+const palm = () => `<svg viewBox="0 0 80 110" width="80" height="110"><ellipse cx="40" cy="104" rx="24" ry="5" fill="#000" opacity=".25"/><path d="M36 100Q32 70 40 44" stroke="#8a5a2a" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M40 44Q14 36 4 56Q26 42 40 44ZM40 44Q66 36 76 56Q54 42 40 44ZM40 44Q22 18 8 20Q28 22 40 44ZM40 44Q58 18 72 20Q52 22 40 44ZM40 44Q36 14 40 4Q46 24 40 44Z" fill="#4f9a4a" stroke="#2a5f2a" stroke-width="2" stroke-linejoin="round"/></svg>`;
+const stallBeach = (kind) => { const c = kind === 'drink' ? '#d95f7a' : '#4aa6b4'; return `<svg viewBox="0 0 150 130" width="150" height="130"><rect x="8" y="30" width="134" height="100" rx="10" fill="#c9954a" stroke="#6b4420" stroke-width="4"/><path d="M8 52h134M8 74h134M8 96h134" stroke="#a87a38" stroke-width="2"/><g>${Array.from({ length: 8 }, (_, i) => `<rect x="${8 + i * 17}" y="2" width="17" height="30" fill="${i % 2 ? '#fff4e0' : c}"/>`).join('')}</g><path d="M2 32Q75 54 148 32" fill="none" stroke="#6b4420" stroke-width="3"/><circle cx="75" cy="86" r="19" fill="#fff4e0" stroke="#6b4420" stroke-width="3"/>${kind === 'drink' ? '<path d="M66 76h18l-3 20H69z" fill="#f6a0b8" stroke="#b85a7a" stroke-width="2"/><path d="M80 70l-3 10" stroke="#d6402f" stroke-width="3"/>' : '<circle cx="70" cy="86" r="7" fill="#f6c2d4" stroke="#b85a7a" stroke-width="1.6"/><circle cx="81" cy="86" r="7" fill="#fbe9b8" stroke="#c99a3a" stroke-width="1.6"/><circle cx="75" cy="78" r="6" fill="#c98a4a"/>'}</svg>`; };
+
 export function sceneHTML(g, info) {
+  const BEACH = info.theme === 'beach';
   const L = g.L, { W, H } = L;
   const kitchenRight = W - 14;
   let h = '';
@@ -46,12 +63,12 @@ export function sceneHTML(g, info) {
   h += `<div class="sc-awning" style="top:${HUD_H}px"></div>`;
 
   // windows over the dining room
-  for (let c = 0; c < L.cols; c++) h += put('sc-window', L.dineX + c * L.cellW + (L.cellW - 150) / 2, 128, windowSVG(c));
+  for (let c = 0; c < L.cols; c++) h += put('sc-window', L.dineX + c * L.cellW + (L.cellW - 150) / 2, 128, BEACH ? seaWindow(c) : windowSVG(c));
   // neon sign + jukebox
-  h += put('sc-neon', 22, 130, `<span>${info.sign || 'CAFE'}</span>`, 'width:226px');
-  h += put('sc-jukebox', L.dineX + L.cols * L.cellW - 78, WALL_BOTTOM - 98, jukebox());
-  h += put('sc-plant', L.dineX - 6, WALL_BOTTOM - 70, plant());
-  h += put('sc-plant', L.kx - 56, H - 100, plant());
+  h += put('sc-neon', 22, 130, `<span>${BEACH ? 'Beach Bistro' : (info.sign || 'CAFE')}</span>`, 'width:226px');
+  h += put('sc-jukebox', L.dineX + L.cols * L.cellW - 78, WALL_BOTTOM - 98, BEACH ? surfboards() : jukebox());
+  h += put('sc-plant', L.dineX - 6, WALL_BOTTOM - 70, BEACH ? palm() : plant());
+  h += put('sc-plant', L.kx - 56, H - 100, BEACH ? palm() : plant());
 
   // waiting line: carpet, rope, sign
   h += `<div class="sc-carpet" style="left:14px;top:${WALL_BOTTOM + 12}px;width:228px;height:${H - WALL_BOTTOM - 26}px"></div>`;
@@ -64,7 +81,7 @@ export function sceneHTML(g, info) {
 
   // light pools under each table
   g.tables.forEach((t) => { h += put('sc-pool', t.x - 120, t.y - 70, '', 'width:240px;height:170px'); });
-  for (let c = 0; c < L.cols; c++) h += put('sc-lamp', L.dineX + c * L.cellW + L.cellW / 2 - 30, HUD_H, lamp());
+  for (let c = 0; c < L.cols; c++) h += put('sc-lamp', L.dineX + c * L.cellW + L.cellW / 2 - 30, HUD_H, BEACH ? wicker() : lamp());
 
   // kitchen
   const kx = L.kx, kw = L.kw;
@@ -82,9 +99,9 @@ export function sceneHTML(g, info) {
   h += put('sc-takeplate', kx, H - 82, `<span>TAKE-OUT</span>`, `width:${kw}px;z-index:1`);
   h += `<div class="sc-takefloor" style="left:${kx}px;top:${H - 128}px;width:${kw}px;height:114px"></div>`;
   for (const st of g.L.stalls) {
-    h += put('sc-stall', st.x0, 296, stallSVG(st.kind));
+    h += put('sc-stall', st.x0, 296, BEACH ? stallBeach(st.kind) : stallSVG(st.kind));
     h += `<div class="sc-counter small" style="left:${st.x0}px;top:424px;width:${st.w}px"></div>`;
   }
-  if (g.L.stalls.length) h += put('sc-plant', g.L.stalls[1].x0 + g.L.stalls[1].w - 40, H - 100, plant());
+  if (g.L.stalls.length) h += put('sc-plant', g.L.stalls[1].x0 + g.L.stalls[1].w - 40, H - 100, BEACH ? palm() : plant());
   return h;
 }
