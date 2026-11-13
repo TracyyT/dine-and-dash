@@ -20,6 +20,10 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   const root = document.createElement('div');
   root.className = 'game-root';
   app.appendChild(root);
+  const rot = document.createElement('div');
+  rot.className = 'rotate-hint';
+  rot.innerHTML = '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="20" y="6" width="24" height="46" rx="5" fill="#fff4e0" stroke="#e0b070" stroke-width="3"/><circle cx="32" cy="45" r="2.5" fill="#e0b070"/></svg><span>Turn your phone</span>';
+  root.appendChild(rot);
 
   let mode = 'intro'; // intro | play | pause | over
   let overlay = null;
@@ -73,6 +77,11 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     show(chapterDoneHTML(chapter, nextChapter, chapterStars(chapter)), { map: toMap, go: () => go('map', { chapter: nextChapter.id }) });
   }
 
+  // Turning a phone upright covers the room with a "turn your phone" message, so pause the shift meanwhile.
+  const portrait = matchMedia('(orientation: portrait) and (max-width: 820px)');
+  const onTurn = () => { if (portrait.matches && mode === 'play') openPause(); };
+  portrait.addEventListener('change', onTurn);
+
   const onKey = (e) => { if (e.key === 'Escape') { if (mode === 'play') openPause(); else if (mode === 'pause') { sound.startMusic(); close(); mode = 'play'; } } };
   window.addEventListener('keydown', onKey);
 
@@ -97,6 +106,7 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   return () => {
     cancelAnimationFrame(raf);
     sound.stopMusic();
+    portrait.removeEventListener('change', onTurn);
     window.removeEventListener('resize', fit);
     window.removeEventListener('keydown', onKey);
     document.body.classList.remove('game-open');

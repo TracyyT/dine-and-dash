@@ -1,8 +1,18 @@
 :root { font-family: var(--font-body, system-ui, sans-serif); color: var(--ivory, #f1e6cf); background: var(--wall-deep, #0e3d38); }
-body { margin: 0; min-height: 100vh; }
+body { margin: 0; min-height: 100vh; min-height: 100dvh; overscroll-behavior: none; -webkit-tap-highlight-color: transparent; }
+button, .node, [data-b] { touch-action: manipulation; }
 #app { max-width: 1100px; margin: 0 auto; padding: 24px; }
 h1, h2 { font-family: var(--font-display, serif); font-weight: 400; color: var(--brass-light, #f4dd8e); }
 button { font: inherit; padding: 10px 18px; border: 2px solid var(--brass, #c9a24a); background: var(--marble, #1c1620); color: var(--brass-light, #f4dd8e); cursor: pointer; }
 button:hover { background: var(--burgundy, #7d1d33); }
 button:focus-visible { outline: 3px solid var(--brass-light, #f4dd8e); outline-offset: 2px; }
 .results { display: flex; flex-wrap: wrap; gap: 10px; }
+
+/* Phones: bigger touch targets */
+@media (pointer: coarse) { button { min-height: 44px; } }
+
+/* The restaurant is a landscape room. In portrait, ask for a turn instead of showing a tiny scene. */
+.rotate-hint { position: fixed; inset: 0; z-index: 2000000; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: rgba(20, 12, 10, .94); color: #fff4e0; text-align: center; font: 700 20px var(--font-body, system-ui); }
+.rotate-hint svg { width: 96px; height: 96px; animation: turn 2.2s ease-in-out infinite; }
+@keyframes turn { 0%, 25% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+@media (orientation: portrait) and (max-width: 820px) { body.game-open .rotate-hint { display: flex; } }
