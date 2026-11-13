@@ -67,3 +67,19 @@ export function resetProgress() {
   state = { stars: {}, wallet: 0, upgrades: {} };
   save();
 }
+
+// Dev-only shortcut for testing (see main.js). ?unlock=all | beach:3 (everything before that level cleared), ?coins=500, ?reset
+export function devSetup(chapters, params) {
+  if (params.has('reset')) state = { stars: {}, wallet: 0, upgrades: {} };
+  const u = params.get('unlock');
+  if (u) {
+    const [cid, ln] = u.split(':');
+    const stop = u === 'all' ? null : { cid, n: +ln || 1 };
+    outer: for (const c of chapters) for (const l of c.levels) {
+      if (stop && c.id === stop.cid && l.n >= stop.n) break outer;
+      state.stars[keyOf(c.id, l.n)] = 3;
+    }
+  }
+  if (params.has('coins')) state.wallet = Math.max(0, +params.get('coins') || 0);
+  save();
+}
