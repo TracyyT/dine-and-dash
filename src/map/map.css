@@ -56,3 +56,14 @@ body[data-map=beach] #hud b{font-family:Pacifico,cursive;font-weight:400}
 body[data-map=beach] #tools button:hover:not(:disabled){background:#b8442f}
 body[data-map=beach] #vig{background:radial-gradient(ellipse at center,transparent 62%,rgba(40,20,10,.35))}
 body[data-map=beach] #wallet{top:120px}
+
+/* Phones */
+#view{overscroll-behavior:none}
+@media (max-width:820px),(max-height:520px){
+  #hud{left:10px;top:10px;padding:6px 10px}#hud b{font-size:14px}#hud span{font-size:10px}
+  #wallet{left:10px;top:70px;font-size:15px}body[data-map=beach] #wallet{top:96px}
+  #tools{right:10px;bottom:10px;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:60vw}
+  #tools button{min-width:44px;height:44px}
+  #hint{display:none}
+}
+@media (pointer:coarse){#zin,#zout{display:none}} /* pinch to zoom on touch */

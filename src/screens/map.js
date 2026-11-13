@@ -48,7 +48,7 @@ export function renderMap(app, params = {}) {
       <button id="zout" aria-label="Zoom out">&minus;</button>
       <button id="ctr" aria-label="Current level" title="Current level"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="none" stroke="#ffe9a8" stroke-width="3.5"/><circle cx="20" cy="20" r="4" fill="#ffe9a8"/><path d="M20 2v7M20 31v7M2 20h7M31 20h7" stroke="#ffe9a8" stroke-width="3.5" stroke-linecap="round"/></svg></button>
       <button id="fs" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><path d="M6 15V6h9M25 6h9v9M34 25v9h-9M15 34H6v-9" fill="none" stroke="#ffe9a8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button id="rst" aria-label="Reset progress" title="Reset progress (testing)"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><path d="M8 12h24M15 12V7h10v5M11 12l2 24h14l2-24" fill="none" stroke="#ffe9a8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      ${import.meta.env.DEV ? '<button id="rst" aria-label="Reset progress" title="Reset progress (dev only)"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><path d="M8 12h24M15 12V7h10v5M11 12l2 24h14l2-24" fill="none" stroke="#ffe9a8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' : ''}
     </div>
     <div id="hint" aria-label="Drag to look around, scroll to zoom"><span>Drag · Scroll</span><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M13 22V9a2.5 2.5 0 0 1 5 0v9m0-3V7a2.5 2.5 0 0 1 5 0v8m0-4a2.5 2.5 0 0 1 5 0v9c0 8-4 13-10 13-5 0-8-3-10-8l-3-6a2.4 2.4 0 0 1 4-2.5l3 4" fill="#fff" stroke="#14100f" stroke-width="2" stroke-linejoin="round"/></svg><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><circle cx="17" cy="17" r="10" fill="none" stroke="#ffe9a8" stroke-width="3.5"/><path d="M25 25l11 11" stroke="#ffe9a8" stroke-width="4.5" stroke-linecap="round"/></svg></div>
     <div id="toast" role="status"></div>`;
@@ -86,7 +86,7 @@ export function renderMap(app, params = {}) {
   $('zin').onclick = () => pz.zoomBy(1.2);
   $('zout').onclick = () => pz.zoomBy(1 / 1.2);
   $('ctr').onclick = () => pz.home(...city.home);
-  $('rst').onclick = () => { resetProgress(); go('map'); }; // temporary: handy while testing
+  if ($('rst')) $('rst').onclick = () => { resetProgress(); go('map'); }; // dev builds only
   $('fs').onclick = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.());
   const hintTimer = setTimeout(() => { $('hint').style.opacity = 0; }, 5000);
 

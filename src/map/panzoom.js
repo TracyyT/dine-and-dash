@@ -1,6 +1,7 @@
+// Drag to pan, wheel / buttons / keys to zoom. The world is a fixed-size layer inside a full-screen view.
 // How close the camera sits when it centers on the current level (1 = full size, smaller = farther out).
 const HOME_ZOOM = 0.8;
-// Drag to pan, wheel / buttons / keys to zoom. The world is a fixed-size layer inside a full-screen view.
+
 export function createPanZoom({ view, world, width, height }) {
   const st = { x: 0, y: 0, s: 1 };
   let dragged = false, down = null, last = null, vel = { x: 0, y: 0 }, raf = 0;
@@ -17,12 +18,28 @@ export function createPanZoom({ view, world, width, height }) {
     const ox = (cx - st.x) / st.s, oy = (cy - st.y) / st.s;
     st.s *= f; clamp(); st.x = cx - ox * st.s; st.y = cy - oy * st.s; apply();
   };
+  const ptrs = new Map(); // active touch/mouse pointers, for two-finger pinch
+  let pinch = null;
+  const spread = () => { const [a, b] = [...ptrs.values()]; return { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }; };
   const onDown = (e) => {
+    ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (ptrs.size === 2) { // second finger: switch from dragging to pinching
+      pinch = spread(); dragged = true; down = null; view.classList.add('drag');
+      view.dispatchEvent(new CustomEvent('panstart'));
+      return;
+    }
     if (e.button) return;
     cancelAnimationFrame(raf);
     down = { x: e.clientX, y: e.clientY }; last = { x: e.clientX, y: e.clientY }; dragged = false; vel = { x: 0, y: 0 };
   };
   const onMove = (e) => {
+    if (ptrs.has(e.pointerId)) ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinch && ptrs.size >= 2) {
+      const now = spread();
+      zoomAt(now.x, now.y, now.d / pinch.d);
+      st.x += now.x - pinch.x; st.y += now.y - pinch.y; apply();
+      pinch = now; return;
+    }
     if (!down) return;
     const dx = e.clientX - last.x, dy = e.clientY - last.y;
     if (!dragged && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) {
@@ -32,7 +49,12 @@ export function createPanZoom({ view, world, width, height }) {
     if (dragged) { st.x += dx; st.y += dy; vel = { x: dx, y: dy }; apply(); }
     last = { x: e.clientX, y: e.clientY };
   };
-  const onUp = () => {
+  const onUp = (e) => {
+    ptrs.delete(e.pointerId);
+    if (pinch) { // let go of one finger: stop pinching, no jump
+      if (ptrs.size < 2) { pinch = null; view.classList.remove('drag'); setTimeout(() => { dragged = false; }, 0); }
+      return;
+    }
     if (!down) return;
     down = null; view.classList.remove('drag');
     if (dragged && !reduce) {
