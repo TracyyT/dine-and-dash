@@ -8,6 +8,7 @@ import { recordResult } from '../state/progress.js';
 import { createGame, tick, tapCustomer, tapTable, tapDish, buyUpgrade, stars } from '../game/engine.js';
 import { createView } from '../game/view.js';
 import { use } from '../game/sprites.js';
+import { sound } from '../game/sound.js';
 
 export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {}) {
   const chapter = chapters.find((c) => c.id === chapterId);
@@ -28,6 +29,8 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     dish: (id) => mode === 'play' && tapDish(g, id),
     upgrade: () => mode === 'play' && buyUpgrade(g),
     pause: () => mode === 'play' && openPause(),
+    sfx: () => sound.setSfx(!sound.sfx),
+    music: () => sound.setMusic(!sound.music),
   });
 
   const fit = () => {
@@ -59,16 +62,17 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
       </div>
       <p>Watch the bar above each head: green is happy, red means they are about to leave.</p>
       <div class="row"><button data-b="map">Back to map</button><button class="primary" data-b="go">Open the doors</button></div>`,
-    { map: toMap, go: () => { close(); mode = 'play'; } });
+    { map: toMap, go: () => { sound.unlock(); sound.startMusic(); sound.play('click'); close(); mode = 'play'; } });
   }
   function openPause() {
-    mode = 'pause';
+    mode = 'pause'; sound.stopMusic();
     show(`<h2>Paused</h2><div class="row"><button data-b="quit">Quit to map</button><button data-b="again">Restart level</button><button class="primary" data-b="resume">Resume</button></div>`,
-      { quit: toMap, again: replay, resume: () => { close(); mode = 'play'; } });
+      { quit: toMap, again: replay, resume: () => { sound.startMusic(); close(); mode = 'play'; } });
   }
   function openResults() {
-    mode = 'over';
+    mode = 'over'; sound.stopMusic();
     const n = stars(g);
+    sound.play(n === 3 ? 'win3' : n === 2 ? 'win2' : n === 1 ? 'win1' : 'lose');
     recordResult(chapterId, level, n); // saved once; a worse replay never lowers the best score
     const win = n > 0;
     show(`<h2>${win ? (n === 3 ? 'Standing ovation!' : 'Well served') : 'Closed for the night'}</h2>
@@ -79,14 +83,16 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     { map: toMap, again: replay, ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}) });
   }
 
-  const onKey = (e) => { if (e.key === 'Escape') { if (mode === 'play') openPause(); else if (mode === 'pause') { close(); mode = 'play'; } } };
+  const onKey = (e) => { if (e.key === 'Escape') { if (mode === 'play') openPause(); else if (mode === 'pause') { sound.startMusic(); close(); mode = 'play'; } } };
   window.addEventListener('keydown', onKey);
 
   let raf = 0, last = performance.now();
   const loop = (now) => {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     if (mode === 'play') {
+      const before = Math.ceil(g.timeLeft);
       tick(g, dt);
+      if (g.timeLeft < 10 && Math.ceil(g.timeLeft) !== before && g.timeLeft > 0) sound.play('tick');
       if (g.over) openResults();
     }
     view.sync();
@@ -100,6 +106,7 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
 
   return () => {
     cancelAnimationFrame(raf);
+    sound.stopMusic();
     window.removeEventListener('resize', fit);
     window.removeEventListener('keydown', onKey);
     document.body.classList.remove('game-open');

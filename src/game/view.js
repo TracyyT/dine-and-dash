@@ -3,6 +3,7 @@ import { ICONS, use, customerSVG, waiterSVG, tableSVG, chairSVG, stoveSVG, chefS
 import { DISHES } from '../data/dishes.js';
 import { moodOf, upgradeCost } from './engine.js';
 import { sceneHTML } from './scene.js';
+import { sound } from './sound.js';
 
 const mk = (cls, html = '') => { const d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; };
 const place = (el, x, y) => { el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`; el.style.zIndex = Math.round(y); };
@@ -22,6 +23,8 @@ export function createView(host, g, info, handlers) {
       </div>
       <div class="pill timer"><span class="t">0:00</span></div>
       <div class="pill coins">${use('ic-bill', 24)}<span class="c">0</span></div>
+      <button class="hud-btn snd" data-act="sfx" aria-label="Sound effects" title="Sound effects">${use('ic-sfx', 22)}</button>
+      <button class="hud-btn snd" data-act="music" aria-label="Music" title="Music">${use('ic-music', 22)}</button>
       <button class="hud-btn upg" data-act="upgrade"><span>Faster stoves</span><b class="cost"></b></button>
     </div>
     <div class="toast" role="status"></div>`;
@@ -69,6 +72,8 @@ export function createView(host, g, info, handlers) {
     else if (t.dataset.d) handlers.dish(+t.dataset.d);
     else if (t.dataset.act === 'pause') handlers.pause();
     else if (t.dataset.act === 'upgrade') handlers.upgrade();
+    else if (t.dataset.act === 'sfx') handlers.sfx();
+    else if (t.dataset.act === 'music') handlers.music();
   });
 
   function sync() {
@@ -154,14 +159,18 @@ export function createView(host, g, info, handlers) {
     ub.classList.toggle('can', cost !== undefined && g.wallet >= cost);
     $('.cost').textContent = cost === undefined ? 'MAX' : `${cost}`;
 
+    stage.querySelector('[data-act=sfx]').classList.toggle('off', !sound.sfx);
+    stage.querySelector('[data-act=music]').classList.toggle('off', !sound.music);
     // events
     for (const ev of g.events.splice(0)) {
       if (ev.type === 'coin') float(`${use('ic-bill', 22)}<b>${ev.text}</b>`, ev.x - 24, ev.y, ev.tip ? 'tip' : '');
       else if (ev.type === 'heart') float(use('ic-heart', 22), ev.x + 12, ev.y + 10, 'heart');
       else if (ev.type === 'angry') float(use('ic-angry', 26), ev.x - 13, ev.y - 90, 'heart');
-      else if (ev.type === 'sparkle' || ev.type === 'ding') float(use('ic-spark', 26), ev.x - 13, ev.y - 40, 'spark');
+      else if (ev.type === 'sparkle' || ev.type === 'ding' || ev.type === 'serve' || ev.type === 'clean') float(use('ic-spark', 26), ev.x - 13, ev.y - 40, 'spark');
       else if (ev.type === 'toast') showToast(ev.text);
       else if (ev.type === 'upgrade') showToast('Stoves upgraded — cooking is faster!');
+      const snd = { coin: ev.tip ? 'tip' : 'coin', ding: 'ding', serve: 'serve', clean: 'clean', angry: 'angry', upgrade: 'upgrade', toast: 'nope', seat: 'seat', order: 'order', arrive: 'arrive', cook: 'sizzle' }[ev.type];
+      if (snd) sound.play(snd);
     }
   }
 
