@@ -42,4 +42,17 @@ export const chapters = [
       { n: 5, name: 'Dragon Banquet', sign: 'DRAGON' },
     ],
   },
+  {
+    id: 'fine',
+    name: "Maison d'Or",
+    theme: 'fine',
+    map: 'fine',
+    levels: [
+      { n: 1, name: 'Champagne Bar', sign: 'BAR' },
+      { n: 2, name: 'Velvet Lounge', sign: 'LOUNGE' },
+      { n: 3, name: "Chef's Table", sign: 'TABLE' },
+      { n: 4, name: 'Crystal Salon', sign: 'SALON' },
+      { n: 5, name: 'Royal Gala', sign: 'GALA' },
+    ],
+  },
 ];

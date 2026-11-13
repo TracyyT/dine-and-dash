@@ -1,0 +1,27 @@
+// Chapter 4 (Maison d'Or) decorations: crystal chandeliers, a grand piano, topiary urns, a view of the shopping street and champagne carts.
+const rng = (seed) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+function streetWindow(i) {
+  const r = rng(31 + i * 7);
+  const shops = Array.from({ length: 5 }, (_, k) => {
+    const h = 34 + r() * 26, x = k * 30 - 4;
+    return `<rect x="${x}" y="${92 - h}" width="28" height="${h}" fill="${k % 2 ? '#2a2548' : '#1f1b3a'}"/><rect x="${x + 4}" y="${92 - 22}" width="20" height="16" fill="#ffd98a" opacity=".9"/><rect x="${x + 2}" y="${92 - 26}" width="24" height="4" fill="${['#8a1d3a', '#d9b66a', '#2a6a5a'][k % 3]}"/>`;
+  }).join('');
+  const bokeh = Array.from({ length: 8 }, () => `<circle cx="${r() * 150}" cy="${20 + r() * 50}" r="${2 + r() * 3}" fill="#ffe6a8" opacity="${0.25 + r() * 0.4}"/>`).join('');
+  return `<svg viewBox="0 0 150 100" width="150" height="100"><defs><linearGradient id="fsk${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1a46"/><stop offset=".6" stop-color="#6a4a8a"/><stop offset="1" stop-color="#e8a888"/></linearGradient></defs>
+    <rect width="150" height="100" fill="url(#fsk${i})"/>${bokeh}${shops}
+    <rect y="90" width="150" height="10" fill="#2a2236"/><path d="M20 90h110" stroke="#d9b66a" stroke-width="1" opacity=".6"/>
+    <path d="M30 90V46M110 90V46" stroke="#d9b66a" stroke-width="2.5"/><circle cx="30" cy="42" r="5" fill="#fff0c0"/><circle cx="110" cy="42" r="5" fill="#fff0c0"/>
+    <path d="M75 0v100M0 50h150" stroke="#d9b66a" stroke-width="3"/></svg>`;
+}
+const piano = () => `<svg viewBox="0 0 96 100" width="96" height="100"><ellipse cx="48" cy="94" rx="40" ry="6" fill="#000" opacity=".28"/><path d="M8 56Q6 22 44 20Q86 22 90 52L88 62H10Z" fill="#14121c" stroke="#d9b66a" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 54Q16 30 44 28" stroke="#fff" stroke-width="2" opacity=".25" fill="none"/><rect x="8" y="60" width="82" height="9" fill="#fbf3e2" stroke="#14121c" stroke-width="1.5"/>${Array.from({ length: 11 }, (_, i) => `<path d="M${14 + i * 7} 60v9" stroke="#14121c" stroke-width="1"/>`).join('')}${[18, 25, 39, 46, 53, 67, 74].map((x) => `<rect x="${x}" y="60" width="4" height="5.5" fill="#14121c"/>`).join('')}<rect x="14" y="69" width="6" height="22" fill="#14121c"/><rect x="76" y="69" width="6" height="22" fill="#14121c"/><rect x="38" y="76" width="22" height="9" rx="2" fill="#7a1d3a" stroke="#d9b66a" stroke-width="1.4"/></svg>`;
+const chandelier = () => `<svg viewBox="0 0 120 110" width="120" height="110" style="margin-left:-30px"><path d="M60 0V24" stroke="#d9b66a" stroke-width="3"/><ellipse cx="60" cy="52" rx="56" ry="26" fill="#ffe6a8" opacity=".12"/>
+  <path d="M60 24Q58 36 18 44M60 24Q62 36 102 44M60 24V50" stroke="#d9b66a" stroke-width="3.2" fill="none"/>
+  <path d="M10 46h100q-6 14-50 14T10 46z" fill="#d9b66a" stroke="#8a6a2a" stroke-width="2"/>
+  ${[16, 38, 60, 82, 104].map((x) => `<rect x="${x - 2}" y="30" width="4" height="${x === 60 ? 14 : 12}" fill="#f6e2a8"/><path d="M${x} 24Q${x - 4} 30 ${x} 34Q${x + 4} 30 ${x} 24Z" fill="#fff0b0"/>`).join('')}
+  ${[18, 34, 50, 66, 82, 98].map((x, k) => `<path d="M${x} 58v${10 + (k % 3) * 8}" stroke="#d9b66a" stroke-width="1.4"/><path d="M${x} ${68 + (k % 3) * 8}l-4 6 4 8 4-8z" fill="#e8f4ff" stroke="#9ab8d0" stroke-width="1" opacity=".95"/>`).join('')}
+  <path d="M60 60v26" stroke="#d9b66a" stroke-width="1.6"/><path d="M60 86l-6 10 6 12 6-12z" fill="#fff" stroke="#9ab8d0" stroke-width="1.2"/></svg>`;
+const urn = () => `<svg viewBox="0 0 70 110" width="70" height="110"><ellipse cx="35" cy="104" rx="24" ry="5" fill="#000" opacity=".25"/><path d="M16 104h38l-4-8Q60 84 52 70H18Q10 84 20 96Z" fill="#e9e2d2" stroke="#8a7a5a" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 70h42" stroke="#d9b66a" stroke-width="4" stroke-linecap="round"/><circle cx="35" cy="40" r="26" fill="#3f8a5a" stroke="#1f5a30" stroke-width="2.5"/><circle cx="26" cy="32" r="9" fill="#5fae7a" opacity=".6"/><circle cx="35" cy="14" r="7" fill="#3f8a5a" stroke="#1f5a30" stroke-width="2"/><path d="M35 66v6" stroke="#6a4a2a" stroke-width="4"/></svg>`;
+const stall = (kind) => `<svg viewBox="0 0 150 130" width="150" height="130"><path d="M10 46h130l-6 80H16z" fill="#2a1a3a" stroke="#d9b66a" stroke-width="3.5" stroke-linejoin="round"/><path d="M22 62h106M20 86h110" stroke="#d9b66a" stroke-width="1.6" opacity=".6"/><path d="M0 46Q75 -6 150 46Z" fill="${kind === 'drink' ? '#7a1d3a' : '#1d4a5a'}" stroke="#d9b66a" stroke-width="3.5" stroke-linejoin="round"/><path d="M0 46q19 12 37 0t38 0 38 0 37 0" fill="${kind === 'drink' ? '#7a1d3a' : '#1d4a5a'}" stroke="#d9b66a" stroke-width="2.5"/><circle cx="75" cy="96" r="21" fill="#fbf3e2" stroke="#d9b66a" stroke-width="3"/>${kind === 'drink' ? '<path d="M66 82h10l-2 10q-3 4-6 0z" fill="#f6e2a8" stroke="#8a6a2a" stroke-width="1.6"/><path d="M78 80h10l-2 10q-3 4-6 0z" fill="#f6e2a8" stroke="#8a6a2a" stroke-width="1.6"/><path d="M71 92v12M83 90v14" stroke="#8a6a2a" stroke-width="2"/><circle cx="73" cy="78" r="1.6" fill="#fff"/>' : '<path d="M62 100h26q-2 -16 -13 -16T62 100z" fill="#f2c2d4" stroke="#b85a7a" stroke-width="2"/><circle cx="75" cy="80" r="3.4" fill="#d9302a"/><path d="M60 102h30" stroke="#8a6a2a" stroke-width="3"/>'}</svg>`;
+
+export const fineKit = { window: streetWindow, jukebox: piano, lamp: chandelier, plant: urn, stall, sign: "Maison d'Or" };

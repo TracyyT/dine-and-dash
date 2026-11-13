@@ -74,3 +74,10 @@ body[data-map=chinese] #hud{outline-color:#e8b64a}
 body[data-map=chinese] #hud b{font-family:'Cinzel Decorative',serif}
 body[data-map=chinese] #tools button:hover:not(:disabled){background:#d9302a}
 body[data-map=chinese] #wallet{top:120px}
+
+/* Fine dining map chrome */
+body[data-map=fine] #hud,body[data-map=fine] #wallet,body[data-map=fine] #tools button,body[data-map=fine] #hint,body[data-map=fine] #toast{background:#15131c;border-color:#d9b66a;color:#f6e2a8}
+body[data-map=fine] #hud{outline-color:#d9b66a}
+body[data-map=fine] #hud b{font-family:'Playfair Display',serif}
+body[data-map=fine] #tools button:hover:not(:disabled){background:#7a1d3a}
+body[data-map=fine] #wallet{top:120px}
