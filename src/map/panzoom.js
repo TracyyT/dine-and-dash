@@ -1,3 +1,5 @@
+// How close the camera sits when it centers on the current level (1 = full size, smaller = farther out).
+const HOME_ZOOM = 0.8;
 // Drag to pan, wheel / buttons / keys to zoom. The world is a fixed-size layer inside a full-screen view.
 export function createPanZoom({ view, world, width, height }) {
   const st = { x: 0, y: 0, s: 1 };
@@ -60,7 +62,7 @@ export function createPanZoom({ view, world, width, height }) {
   return {
     isDragging: () => dragged,
     focusOn,
-    home: (wx, wy) => focusOn(wx, wy, Math.max(minScale(), 1.15)),
+    home: (wx, wy) => focusOn(wx, wy, Math.max(minScale(), HOME_ZOOM)),
     zoomBy: (f) => zoomAt(innerWidth / 2, innerHeight / 2, f),
     destroy() { cancelAnimationFrame(raf); removeEventListener('resize', apply); },
   };
