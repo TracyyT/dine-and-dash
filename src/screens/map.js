@@ -1,7 +1,7 @@
 import '../map/map.css';
 import { go } from '../router.js';
 import { chapters } from '../data/chapters.js';
-import { getProgress } from '../state/progress.js';
+import { getProgress, isUnlocked, resetProgress } from '../state/progress.js';
 import { clearTheme } from '../themes/apply.js';
 import { renderCity } from '../map/cityMap.js';
 import { createPanZoom } from '../map/panzoom.js';
@@ -13,7 +13,7 @@ export function renderMap(app) {
   document.body.classList.add('map-open');
   const chapterIndex = 0;
   const chapter = chapters[chapterIndex];
-  const progress = getProgress();
+  const progress = getProgress(chapter.id);
   const doneCount = chapter.levels.filter((l) => (progress.stars[l.n] || 0) > 0).length;
 
   app.innerHTML = `
@@ -36,6 +36,7 @@ export function renderMap(app) {
       <button id="zout" aria-label="Zoom out">&minus;</button>
       <button id="ctr">Current level</button>
       <button id="fs">Full screen</button>
+      <button id="rst">Reset progress</button>
     </div>
     <div id="hint">Drag to look around · scroll to zoom</div>
     <div id="toast" role="status"></div>`;
@@ -54,8 +55,7 @@ export function renderMap(app) {
   };
   const choose = (n) => {
     if (pz.isDragging()) return; // a drag is not a click
-    const lvl = city.nodes.find((l) => l.n === n);
-    if (lvl.st === 'lock') toast(`Level ${n} is locked. Finish level ${n - 1} first.`);
+    if (!isUnlocked(chapter.id, n)) toast(`Level ${n} is locked. Finish level ${n - 1} first.`);
     else go('game', { chapter: chapter.id, level: n });
   };
   app.querySelectorAll('.node').forEach((node) => {
@@ -67,6 +67,7 @@ export function renderMap(app) {
   $('zin').onclick = () => pz.zoomBy(1.2);
   $('zout').onclick = () => pz.zoomBy(1 / 1.2);
   $('ctr').onclick = () => pz.home(...city.home);
+  $('rst').onclick = () => { resetProgress(); go('map'); }; // temporary: handy while testing
   $('fs').onclick = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.());
   const hintTimer = setTimeout(() => { $('hint').style.opacity = 0; }, 5000);
 

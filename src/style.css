@@ -5,3 +5,4 @@ h1, h2 { font-family: var(--font-display, serif); font-weight: 400; color: var(-
 button { font: inherit; padding: 10px 18px; border: 2px solid var(--brass, #c9a24a); background: var(--marble, #1c1620); color: var(--brass-light, #f4dd8e); cursor: pointer; }
 button:hover { background: var(--burgundy, #7d1d33); }
 button:focus-visible { outline: 3px solid var(--brass-light, #f4dd8e); outline-offset: 2px; }
+.results { display: flex; flex-wrap: wrap; gap: 10px; }
