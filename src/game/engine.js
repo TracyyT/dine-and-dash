@@ -111,8 +111,17 @@ function leave(g, c, happy) {
   layoutQueue(g);
 }
 
+// The waiter's to-do list in the order it will be done, for the numbers shown in the room.
+// The current job counts as 1 when it has something to point at (a carry-to-kitchen walk does not).
+export const QUEUE_MAX = 10;
+export function taskOrder(g) {
+  const cur = g.waiter.task;
+  const list = cur && ['order', 'bill', 'pickup', 'clean', 'deliver'].includes(cur.type) ? [cur] : [];
+  return list.concat(g.tasks).slice(0, QUEUE_MAX);
+}
+
 function enqueue(g, type, id) {
-  if (g.tasks.length >= 4) { emit(g, { type: 'toast', icon: 'ic-waiter', text: 'Busy', bad: true }); return; }
+  if (taskOrder(g).length >= QUEUE_MAX) { emit(g, { type: 'toast', icon: 'ic-waiter', text: 'Busy', bad: true }); return; }
   const cur = g.waiter.task;
   if ((cur && cur.type === type && cur.id === id) || g.tasks.some((t) => t.type === type && t.id === id)) return;
   g.tasks.push({ type, id });
@@ -395,7 +404,7 @@ export function tapCustomer(g, id) {
 export function tapTable(g, id) {
   const t = byId(g.tables, id);
   if (!t || g.over) return;
-  if (t.state === 'dirty' && !t.claimed) enqueue(g, 'clean', t.id);
+  if (t.state === 'dirty' && !t.claimed) { if (!g.owned.busser) enqueue(g, 'clean', t.id); } // a hired busser handles cleaning, so it is not in the waiter's queue
   else if (t.guest) tapCustomer(g, t.guest);
 }
 export function tapDish(g, id) { const d = byId(g.pickup, id); if (d && !d.claimed && !g.over) enqueue(g, 'pickup', id); }
