@@ -81,3 +81,10 @@ body[data-map=fine] #hud{outline-color:#d9b66a}
 body[data-map=fine] #hud b{font-family:'Playfair Display',serif}
 body[data-map=fine] #tools button:hover:not(:disabled){background:#7a1d3a}
 body[data-map=fine] #wallet{top:120px}
+
+/* Steakhouse map chrome */
+body[data-map=steak] #hud,body[data-map=steak] #wallet,body[data-map=steak] #tools button,body[data-map=steak] #hint,body[data-map=steak] #toast{background:#4a2c1c;border-color:#e0a850;color:#ffe9c0}
+body[data-map=steak] #hud{outline-color:#e0a850}
+body[data-map=steak] #hud b{font-family:'Rye',serif;font-weight:400}
+body[data-map=steak] #tools button:hover:not(:disabled){background:#b03a30}
+body[data-map=steak] #wallet{top:120px}

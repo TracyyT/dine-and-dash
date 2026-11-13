@@ -50,6 +50,17 @@ export const LEVELS = {
     objectives: [{ type: 'items', target: 12 }, { type: 'coins', target: 190 }, { type: 'happy', target: 3 }] },
   'fine:5': { duration: 150, cols: 4, rows: 2, tables: 8, dishes: ['caviar', 'truffle', 'wagyu', 'souffle'], arrival: 8,  take: 0.2,  patience: 70, orders: [0.25, 0.4, 0.35], stalls: true,
     objectives: [{ type: 'guests', target: 4 }, { type: 'coins', target: 220 }, { type: 'noAngry', within: 100 }] },
+  // Chapter 5: Big Sky Steakhouse. Hearty plates, long grill times.
+  'steak:1': { duration: 110, cols: 3, rows: 1, tables: 3, dishes: ['fries', 'wings'],                         arrival: 12, take: 0.1,  patience: 85, orders: [0.6, 0.3, 0.1],   stalls: false,
+    objectives: [{ type: 'guests', target: 4 }, { type: 'coins', target: 60 }, { type: 'noAngry' }] },
+  'steak:2': { duration: 120, cols: 3, rows: 2, tables: 4, dishes: ['fries', 'wings', 'ribs'],                 arrival: 11, take: 0.15, patience: 80, orders: [0.5, 0.3, 0.2],   stalls: false,
+    objectives: [{ type: 'dishes', target: 6 }, { type: 'coins', target: 110 }, { type: 'happy', target: 3 }] },
+  'steak:3': { duration: 130, cols: 3, rows: 2, tables: 6, dishes: ['wings', 'ribs', 'ribeye'],                arrival: 10, take: 0.3,  patience: 76, orders: [0.4, 0.35, 0.25], stalls: false,
+    objectives: [{ type: 'guests', target: 6 }, { type: 'takeout', target: 2 }, { type: 'noAngry', within: 80 }] },
+  'steak:4': { duration: 140, cols: 4, rows: 2, tables: 7, dishes: ['fries', 'ribs', 'ribeye', 'wings'],      arrival: 9,  take: 0.2,  patience: 72, orders: [0.35, 0.35, 0.3], stalls: true,
+    objectives: [{ type: 'items', target: 12 }, { type: 'coins', target: 160 }, { type: 'happy', target: 3 }] },
+  'steak:5': { duration: 150, cols: 4, rows: 2, tables: 8, dishes: ['fries', 'ribs', 'ribeye', 'tomahawk'],   arrival: 8,  take: 0.2,  patience: 70, orders: [0.25, 0.4, 0.35], stalls: true,
+    objectives: [{ type: 'guests', target: 4 }, { type: 'coins', target: 190 }, { type: 'noAngry', within: 100 }] },
 };
 export const levelConfig = (chapterId, n) => LEVELS[`${chapterId}:${n}`] || LEVELS['city:1'];
 

@@ -22,5 +22,11 @@ export const DISHES = {
   truffle:    { name: 'Truffle Pasta',  time: 8,  price: 26 },
   wagyu:      { name: 'Wagyu Steak',    time: 11, price: 38 },
   souffle:    { name: 'Gold Souffle',   time: 14, price: 46 },
+  // Big Sky Steakhouse menu
+  fries:      { name: 'Fries',          time: 4,  price: 10 },
+  wings:      { name: 'BBQ Wings',      time: 6,  price: 16 },
+  ribs:       { name: 'Smoked Ribs',    time: 9,  price: 26 },
+  ribeye:     { name: 'Ribeye',         time: 11, price: 34 },
+  tomahawk:   { name: 'Tomahawk',       time: 14, price: 44 },
   lobster:    { name: 'Lobster Plate',  time: 13, price: 30 },
 };

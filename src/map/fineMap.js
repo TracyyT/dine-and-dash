@@ -140,7 +140,5 @@ export function renderFine(S, LB, chapter, progress) {
     if (l.st === 'now') { const s = el('g', { transform: 'translate(0,-84)', class: 'bob' }, g); el('rect', { x: -42, y: -16, width: 84, height: 32, rx: 10, fill: '#fbf3e2', stroke: OL, 'stroke-width': 2 }, s); el('path', { d: 'M-8 16L0 26L8 16Z', fill: '#fbf3e2', stroke: OL, 'stroke-width': 2 }, s); el('path', { transform: 'scale(.9)', d: 'M-9-8L9 0L-9 8Z', fill: '#9a1d3a' }, s); }
     if (l.n === 5) el('path', { transform: 'translate(0,-60)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: GOLD, stroke: OL, 'stroke-width': 1.5 }, g);
   });
-  // velvet-rope "coming soon" gate at the end
-  G(S, 2290, 1110, `<ellipse cy="6" rx="40" ry="12" fill="#000" opacity=".3"/><rect x="-5" y="-110" width="10" height="114" fill="${GOLD}"/><rect x="-70" y="-150" width="140" height="64" rx="10" fill="#15131c" stroke="${GOLD}" stroke-width="3"/><g transform="translate(0,-118) scale(1.3)"><rect x="-8" y="-2" width="16" height="12" rx="2" fill="${GOLD}"/><path d="M-5-2V-8a5 5 0 0 1 10 0V-2" fill="none" stroke="${GOLD}" stroke-width="2.5"/></g>`);
   return { nodes: lvl, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }

@@ -18,4 +18,5 @@ export const UPGRADES = {
 UPGRADES.beach = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 1.4) / 5) * 5) }));
 UPGRADES.chinese = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 1.8) / 5) * 5) }));
 UPGRADES.fine = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.4) / 5) * 5) }));
+UPGRADES.steak = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.8) / 5) * 5) }));
 export const upgradeList = (chapterId) => UPGRADES[chapterId] || [];
