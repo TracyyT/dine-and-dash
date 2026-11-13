@@ -33,6 +33,7 @@ export function makeSynth(ctx, sfxOut, musicOut) {
     ding: (t) => bell(1568, t),                         // food is ready
     serve: (t) => { tone(sfxOut, 523, t, 0.12, { type: 'triangle', vol: 0.22 }); tone(sfxOut, 784, t + 0.08, 0.2, { type: 'triangle', vol: 0.22 }); },
     order: (t) => { noise(sfxOut, t, 0.08, { vol: 0.12, f: 4000, q: 2 }); noise(sfxOut, t + 0.09, 0.08, { vol: 0.1, f: 5000, q: 2 }); tone(sfxOut, 392, t + 0.16, 0.12, { type: 'triangle', vol: 0.2 }); },
+    boost: (t) => { tone(sfxOut, 880, t, 0.1, { type: 'sine', vol: 0.14 }); tone(sfxOut, 1175, t + 0.07, 0.18, { type: 'sine', vol: 0.14 }); },
     seat: (t) => tone(sfxOut, 380, t, 0.14, { vol: 0.3, to: 760 }),
     clean: (t) => noise(sfxOut, t, 0.4, { vol: 0.22, f: 800, to: 5000, q: 0.8 }),
     arrive: (t) => { bell(880, t, 0.1, 0.5); bell(659, t + 0.16, 0.1, 0.6); },

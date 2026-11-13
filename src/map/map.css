@@ -23,3 +23,26 @@ body.map-open{overflow:hidden}
 #hint{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#14100fcc;color:#f2e2b8;border:1px solid #c9a24a;padding:6px 14px;font-size:13px;pointer-events:none;transition:opacity .6s}
 #toast{position:fixed;left:50%;top:24px;transform:translateX(-50%);background:#14100f;color:#ffe9a8;border:2px solid #c9a24a;padding:8px 18px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s}
 @media(prefers-reduced-motion:reduce){.pulse,.bob{animation:none}.node .lift,#hint,#toast{transition:none}}
+
+#wallet{position:fixed;left:20px;top:96px;display:flex;align-items:center;gap:8px;background:#14100f;border:2px solid #c9a24a;border-radius:20px;padding:5px 14px 5px 10px;color:#ffe9a8;font:700 18px 'Josefin Sans',sans-serif;pointer-events:none}
+#wallet svg{width:22px;height:22px}
+#up{position:fixed;right:20px;bottom:76px;background:#14100f;border:3px solid #c9a24a;outline:1px solid #c9a24a;outline-offset:-8px;padding:16px;z-index:5;box-shadow:0 10px 30px #000a}
+#up[hidden]{display:none}
+.up-grid{display:grid;grid-template-columns:repeat(4,72px);gap:8px}
+.up-tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px 6px;background:#241a1a;border:2px solid #c9a24a;color:#ffe9a8;cursor:pointer;font:700 12px 'Josefin Sans',sans-serif;border-radius:10px}
+.up-tile:hover:not(:disabled){background:#7d1d33}
+.up-tile:disabled{cursor:default}
+.up-tile:disabled:not(.max){opacity:.45;filter:grayscale(.6)}
+.up-tile.max{border-color:#7be08a;background:#143f2a}
+.up-tile .pips{display:flex;gap:3px;min-height:6px}
+.up-tile .pips i{width:11px;height:5px;border-radius:3px;background:#000a;border:1px solid #c9a24a}
+.up-tile .pips i.on{background:#ffe9a8}
+.up-tile .cost{display:flex;align-items:center;gap:3px;min-height:18px}
+.up-tile .cost svg{width:14px;height:14px}
+
+#hud .pips{display:flex;gap:6px;margin-top:6px}
+#hud .pips i{width:14px;height:14px;border-radius:50%;background:#000a;border:2px solid #c9a24a}
+#hud .pips i.on{background:radial-gradient(circle at 35% 30%,#fff3b8,#e8c766)}
+#hint{display:flex;align-items:center;gap:10px;padding:6px 14px}
+#toast{display:flex;align-items:center}
+#tools button{display:grid;place-items:center}
