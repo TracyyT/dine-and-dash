@@ -9,6 +9,27 @@ export const ICONS = `
  <symbol id="ic-angry" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#e0533f" stroke="#8c2418" stroke-width="2"/><path d="M10 13l9 4M30 13l-9 4" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="14" cy="21" r="2" fill="#fff"/><circle cx="26" cy="21" r="2" fill="#fff"/><path d="M13 30Q20 24 27 30" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
  <symbol id="ic-sfx" viewBox="0 0 40 40"><path d="M6 15h7l9-8v26l-9-8H6z" fill="#f4dd8e" stroke="#8f6a22" stroke-width="2" stroke-linejoin="round"/><path d="M27 14q5 6 0 12M31 10q9 10 0 20" fill="none" stroke="#f4dd8e" stroke-width="2.6" stroke-linecap="round"/></symbol>
  <symbol id="ic-music" viewBox="0 0 40 40"><path d="M15 30V10l16-4v20" fill="none" stroke="#f4dd8e" stroke-width="3" stroke-linejoin="round"/><ellipse cx="11" cy="31" rx="5" ry="4" fill="#f4dd8e"/><ellipse cx="27" cy="27" rx="5" ry="4" fill="#f4dd8e"/></symbol>
+ <symbol id="d-drink" viewBox="0 0 40 40"><ellipse cx="20" cy="35" rx="11" ry="3" fill="#0003"/><path d="M10 10h20l-3 24H13z" fill="#f6c2d4" stroke="#b85a7a" stroke-width="2" stroke-linejoin="round"/><path d="M11 10h18l-.6 5H11.6z" fill="#fff"/><path d="M24 2l-3 14" stroke="#d6402f" stroke-width="3" stroke-linecap="round"/><circle cx="20" cy="22" r="2" fill="#fff" opacity=".7"/><circle cx="24" cy="28" r="1.6" fill="#fff" opacity=".7"/></symbol>
+ <symbol id="d-dessert" viewBox="0 0 40 40"><ellipse cx="20" cy="35" rx="13" ry="3" fill="#0003"/><path d="M8 20h24l-4 14H12z" fill="#f1e6cf" stroke="#c9a24a" stroke-width="2" stroke-linejoin="round"/><circle cx="14" cy="17" r="7" fill="#f6c2d4" stroke="#b85a7a" stroke-width="1.6"/><circle cx="26" cy="17" r="7" fill="#c98a4a" stroke="#6b3f18" stroke-width="1.6"/><circle cx="20" cy="11" r="7" fill="#fbe9b8" stroke="#c99a3a" stroke-width="1.6"/><circle cx="20" cy="3.5" r="3" fill="#d6304a"/></symbol>
+
+ <symbol id="ic-table" viewBox="0 0 40 40"><ellipse cx="20" cy="34" rx="12" ry="3" fill="#0003"/><rect x="18" y="20" width="4" height="13" fill="#8f6a22"/><ellipse cx="20" cy="18" rx="16" ry="8" fill="#f6ecd2" stroke="#c9a24a" stroke-width="2.5"/><rect x="11" y="5" width="18" height="9" rx="4" fill="#7d1d33" stroke="#4a0f1d" stroke-width="1.5"/></symbol>
+ <symbol id="ic-broom" viewBox="0 0 40 40"><path d="M27 4L18 24" stroke="#8a5a22" stroke-width="4" stroke-linecap="round"/><path d="M9 24h18l4 13H6z" fill="#e8c766" stroke="#8f6a22" stroke-width="2" stroke-linejoin="round"/><path d="M11 37l1-9M17 37l.5-9M23 37l-.5-9M28 37l-1-9" stroke="#8f6a22" stroke-width="1.4"/></symbol>
+ <symbol id="ic-waiter" viewBox="0 0 40 40"><circle cx="20" cy="12" r="8" fill="#f6d3b3" stroke="#2a1a12" stroke-width="2"/><path d="M12 9Q13 2 20 2Q27 2 28 9Q24 6 20 6Q16 6 12 9Z" fill="#1b1220"/><path d="M9 38Q9 22 20 22Q31 22 31 38Z" fill="#1c1620" stroke="#000" stroke-width="1.5"/><path d="M16 23l4 7 4-7z" fill="#f1e6cf"/><path d="M18 24l2 2 2-2-1 3h-2z" fill="#7d1d33"/></symbol>
+ <symbol id="ic-guest" viewBox="0 0 40 40"><circle cx="20" cy="13" r="8" fill="#e8b58a" stroke="#2a1a12" stroke-width="2"/><path d="M12 11Q12 3 20 3Q28 3 28 11Q24 8 20 8Q16 8 12 11Z" fill="#5a3a22"/><path d="M8 38Q8 22 20 22Q32 22 32 38Z" fill="#3d7f86" stroke="#1d4a50" stroke-width="1.5"/></symbol>
+ <symbol id="ic-people" viewBox="0 0 40 40"><circle cx="13" cy="13" r="6.5" fill="#e8b58a" stroke="#2a1a12" stroke-width="1.8"/><path d="M2 36Q2 22 13 22Q24 22 24 36Z" fill="#a52e4a" stroke="#4a0f1d" stroke-width="1.5"/><circle cx="27" cy="15" r="6.5" fill="#f6d3b3" stroke="#2a1a12" stroke-width="1.8"/><path d="M16 38Q16 24 27 24Q38 24 38 38Z" fill="#3d7f86" stroke="#1d4a50" stroke-width="1.5"/></symbol>
+ <symbol id="ic-smile" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="#ffd25a" stroke="#8f6a22" stroke-width="2.5"/><circle cx="14" cy="16" r="2.2" fill="#2a1a12"/><circle cx="26" cy="16" r="2.2" fill="#2a1a12"/><path d="M11 23Q20 33 29 23" stroke="#2a1a12" stroke-width="2.8" fill="none" stroke-linecap="round"/></symbol>
+ <symbol id="ic-noangry" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#e0533f" stroke="#8c2418" stroke-width="2"/><path d="M10 13l9 4M30 13l-9 4" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="14" cy="21" r="2" fill="#fff"/><circle cx="26" cy="21" r="2" fill="#fff"/><path d="M13 30Q20 24 27 30" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M5 35L35 5" stroke="#1c1620" stroke-width="5" stroke-linecap="round"/><path d="M5 35L35 5" stroke="#fff" stroke-width="2" stroke-linecap="round"/></symbol>
+ <symbol id="ic-chef" viewBox="0 0 40 40"><path d="M9 20Q3 18 5 11Q7 5 14 7Q16 1 22 3Q28 1 30 7Q37 6 37 13Q38 19 31 20V32H9Z" fill="#fff" stroke="#5a0f20" stroke-width="2.4" stroke-linejoin="round"/><rect x="9" y="28" width="22" height="6" rx="2" fill="#f1e6cf" stroke="#5a0f20" stroke-width="2"/></symbol>
+ <symbol id="ic-star" viewBox="0 0 40 40"><path d="M20 3l5 11.5 12.5 1.2-9.4 8.3 2.8 12.2L20 29.6 9.1 36.2l2.8-12.2-9.4-8.3L15 14.5z" fill="#ffd25a" stroke="#b8812a" stroke-width="2" stroke-linejoin="round"/></symbol>
+ <symbol id="ic-clock" viewBox="0 0 40 40"><circle cx="20" cy="21" r="14" fill="#fff" stroke="#7d1d33" stroke-width="3"/><path d="M20 12v10l6 4" stroke="#7d1d33" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="16" y="2" width="8" height="4" rx="1.5" fill="#7d1d33"/></symbol>
+ <symbol id="ic-play" viewBox="0 0 40 40"><path d="M11 6l24 14-24 14z" fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></symbol>
+ <symbol id="ic-next" viewBox="0 0 40 40"><path d="M5 7l16 13L5 33zM20 7l16 13-16 13z" fill="#fff" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></symbol>
+ <symbol id="ic-map" viewBox="0 0 40 40"><path d="M4 9l11-4 10 4 11-4v26l-11 4-10-4-11 4z" fill="#f2e2b0" stroke="#8f6a22" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 5v26M25 9v26" stroke="#8f6a22" stroke-width="1.8"/><path d="M28 17l-5 7h3.6l-1 5 6-8h-4z" fill="#d6402f"/></symbol>
+ <symbol id="ic-pin" viewBox="0 0 40 40"><path d="M20 38C10 26 7 21 7 15a13 13 0 0 1 26 0c0 6-3 11-13 23z" fill="#d6402f" stroke="#7d1d33" stroke-width="2.5" stroke-linejoin="round"/><circle cx="20" cy="15" r="5" fill="#fff"/></symbol>
+ <symbol id="ic-replay" viewBox="0 0 40 40"><path d="M32 20a12 12 0 1 1-4-9" fill="none" stroke="#7d1d33" stroke-width="4.5" stroke-linecap="round"/><path d="M33 3v11H22z" fill="#7d1d33" stroke="#7d1d33" stroke-width="2" stroke-linejoin="round"/></symbol>
+ <symbol id="ic-check" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="#3fae5a" stroke="#1d6a34" stroke-width="2.5"/><path d="M11 20l6 6 12-13" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+ <symbol id="ic-cross" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="#c9503f" stroke="#7a241a" stroke-width="2.5"/><path d="M13 13l14 14M27 13L13 27" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/></symbol>
+ <symbol id="ic-chev" viewBox="0 0 40 40"><path d="M14 8l13 12-13 12" stroke="#c9a24a" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
  <symbol id="ic-spark" viewBox="0 0 40 40"><path d="M20 3l4 13 13 4-13 4-4 13-4-13-13-4 13-4z" fill="#ffe6a8" stroke="#c9a24a" stroke-width="1.5" stroke-linejoin="round"/></symbol>
  <symbol id="ic-ticket" viewBox="0 0 40 40"><path d="M9 5h22v30l-4-3-3 3-4-3-4 3-3-3-4 3z" fill="#f1e6cf" stroke="#8f6a22" stroke-width="2"/><path d="M14 13h12M14 19h12M14 25h8" stroke="#8f6a22" stroke-width="2" stroke-linecap="round"/></symbol>
  <symbol id="d-croissant" viewBox="0 0 40 40"><ellipse cx="20" cy="33" rx="16" ry="4" fill="#f1e6cf" stroke="#c9a24a" stroke-width="1.5"/><path d="M5 27Q6 12 20 11Q34 12 35 27Q28 22 20 24Q12 22 5 27Z" fill="#e0a24a" stroke="#9a5f1c" stroke-width="2" stroke-linejoin="round"/><path d="M13 13l2 10M20 11v12M27 13l-2 10" stroke="#9a5f1c" stroke-width="1.6" opacity=".7"/></symbol>
@@ -47,21 +68,27 @@ export function customerSVG(l) {
   </svg>`;
 }
 
-export const waiterSVG = () => `<svg viewBox="0 0 64 90" width="64" height="90">
+export const waiterSVG = (o = {}) => { const coat = o.coat || '#1c1620', tie = o.tie || '#7d1d33', hair = o.hair || '#1b1220', skin = o.skin || '#f6d3b3', hat = o.hat || ''; return `<svg viewBox="0 0 64 90" width="64" height="90">
   <ellipse cx="32" cy="86" rx="18" ry="5" fill="#000" opacity=".3"/>
   <rect x="21" y="68" width="9" height="15" rx="3" fill="#15101a"/><rect x="34" y="68" width="9" height="15" rx="3" fill="#15101a"/>
-  <rect x="14" y="36" width="36" height="38" rx="13" fill="#1c1620" stroke="#000" stroke-width="1.5"/>
-  <path d="M24 36l8 20 8-20z" fill="#f1e6cf"/><path d="M27 40l5 4 5-4-2 6h-6z" fill="#7d1d33"/>
+  <rect x="14" y="36" width="36" height="38" rx="13" fill="${coat}" stroke="#000" stroke-width="1.5"/>
+  <path d="M24 36l8 20 8-20z" fill="#f1e6cf"/><path d="M27 40l5 4 5-4-2 6h-6z" fill="${tie}"/>
   <circle cx="32" cy="58" r="1.8" fill="#e8c766"/><circle cx="32" cy="65" r="1.8" fill="#e8c766"/>
-  <ellipse cx="12" cy="52" rx="5" ry="10" fill="#1c1620"/><ellipse cx="52" cy="48" rx="5" ry="9" fill="#1c1620"/>
-  <circle cx="52" cy="58" r="4" fill="#f6d3b3"/>
+  <ellipse cx="12" cy="52" rx="5" ry="10" fill="${coat}"/><ellipse cx="52" cy="48" rx="5" ry="9" fill="${coat}"/>
+  <circle cx="52" cy="58" r="4" fill="${skin}"/>
   <ellipse cx="55" cy="42" rx="12" ry="3.2" fill="#c9a24a" stroke="#8f6a22" stroke-width="1.5"/>
-  <circle cx="32" cy="26" r="16" fill="#f6d3b3" stroke="#0004" stroke-width="1.4"/>
-  <path d="M15 24Q14 7 32 7Q50 7 49 24Q42 15 32 15Q22 15 15 24Z" fill="#1b1220"/>
+  <circle cx="32" cy="26" r="16" fill="${skin}" stroke="#0004" stroke-width="1.4"/>
+  <path d="M15 24Q14 7 32 7Q50 7 49 24Q42 15 32 15Q22 15 15 24Z" fill="${hair}"/>
   <circle cx="25.5" cy="27" r="2" fill="#1b1220"/><circle cx="38.5" cy="27" r="2" fill="#1b1220"/>
   <circle cx="22" cy="32" r="3" fill="#e0476a" opacity=".3"/><circle cx="42" cy="32" r="3" fill="#e0476a" opacity=".3"/>
   <path d="M27 33Q32 38 37 33" stroke="#1b1220" stroke-width="2" fill="none" stroke-linecap="round"/>
-</svg>`;
+${hat}</svg>`; };
+
+export const STAFF_LOOK = {
+  host:   { coat: '#7d1d33', tie: '#f4dd8e', hair: '#5a3a22', skin: '#e8b58a', hat: '<path d="M16 14Q32 -2 48 14Z" fill="#c9a24a" stroke="#8f6a22" stroke-width="1.5"/>' },
+  busser: { coat: '#2f7f86', tie: '#f1e6cf', hair: '#2b1d17', skin: '#c98f62', hat: '<rect x="18" y="8" width="28" height="6" rx="3" fill="#f1e6cf"/>' },
+  runner: { coat: '#c98a2e', tie: '#1c1620', hair: '#8a2d3b', skin: '#f6d3b3', hat: '<path d="M15 16Q32 -4 49 16Q32 8 15 16Z" fill="#1c1620"/>' },
+};
 
 export const tableSVG = (n) => `<svg viewBox="0 0 130 92" width="130" height="92">
   <ellipse cx="65" cy="80" rx="50" ry="11" fill="#000" opacity=".25"/>

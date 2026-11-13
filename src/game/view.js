@@ -1,7 +1,8 @@
 // Draws the restaurant and keeps it in sync with the engine. Clicks are reported through callbacks.
-import { ICONS, use, customerSVG, waiterSVG, tableSVG, chairSVG, stoveSVG, chefSVG } from './sprites.js';
+import { ICONS, use, customerSVG, waiterSVG, STAFF_LOOK, tableSVG, chairSVG, stoveSVG, chefSVG } from './sprites.js';
 import { DISHES } from '../data/dishes.js';
-import { moodOf, upgradeCost } from './engine.js';
+import { moodOf } from './engine.js';
+import { OBJ_ICON } from './popups.js';
 import { sceneHTML } from './scene.js';
 import { sound } from './sound.js';
 
@@ -18,14 +19,11 @@ export function createView(host, g, info, handlers) {
     <div class="hud">
       <button class="hud-btn" data-act="pause" aria-label="Pause">II</button>
       <div class="hud-title"><b>Level ${info.level}</b><span>${info.name}</span></div>
-      <div class="goal"><div class="goal-fill"></div>
-        ${g.cfg.goals.map((v, i) => `<i class="mark" style="left:${(v / g.cfg.goals[2]) * 100}%"><svg width="18" height="18" viewBox="0 0 40 40"><use href="#ic-spark"/></svg><em>${v}</em></i>`).join('')}
-      </div>
+      <div class="objs"></div>
       <div class="pill timer"><span class="t">0:00</span></div>
       <div class="pill coins">${use('ic-bill', 24)}<span class="c">0</span></div>
       <button class="hud-btn snd" data-act="sfx" aria-label="Sound effects" title="Sound effects">${use('ic-sfx', 22)}</button>
       <button class="hud-btn snd" data-act="music" aria-label="Music" title="Music">${use('ic-music', 22)}</button>
-      <button class="hud-btn upg" data-act="upgrade"><span>Faster stoves</span><b class="cost"></b></button>
     </div>
     <div class="toast" role="status"></div>`;
   host.appendChild(stage);
@@ -48,10 +46,10 @@ export function createView(host, g, info, handlers) {
 
   const waiter = mk('ent waiter', `<div class="wbody">${waiterSVG()}</div><div class="carry"></div><div class="meter work"><div></div></div>`);
   ents.append(waiter);
-  const guests = new Map(), dishes = new Map();
+  const guests = new Map(), dishes = new Map(), staffEls = new Map();
   let toastT = 0;
 
-  const showToast = (text) => { toast.textContent = text; toast.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('on'), 1600); };
+  const showToast = (icon, bad) => { toast.innerHTML = use(icon, 28) + (bad ? '<b class="x">&#10005;</b>' : ''); toast.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('on'), 1600); };
   const float = (html, x, y, cls = '') => { const f = mk('float ' + cls, html); f.style.left = x + 'px'; f.style.top = y + 'px'; fx.appendChild(f); f.addEventListener('animationend', () => f.remove()); };
 
   function bubbleFor(c) {
@@ -71,7 +69,6 @@ export function createView(host, g, info, handlers) {
     else if (t.dataset.t) handlers.table(+t.dataset.t);
     else if (t.dataset.d) handlers.dish(+t.dataset.d);
     else if (t.dataset.act === 'pause') handlers.pause();
-    else if (t.dataset.act === 'upgrade') handlers.upgrade();
     else if (t.dataset.act === 'sfx') handlers.sfx();
     else if (t.dataset.act === 'music') handlers.music();
   });
@@ -83,11 +80,13 @@ export function createView(host, g, info, handlers) {
       live.add(c.id);
       let e = guests.get(c.id);
       if (!e) {
-        const el = mk('ent guest', `${customerSVG(c.look)}<div class="bar"><div></div></div><div class="bubble"></div>`);
-        el.dataset.c = c.id; ents.appendChild(el); e = { el, sig: '', bubble: el.querySelector('.bubble'), fill: el.querySelector('.bar div'), svg: el.querySelector('svg.cust') };
+        const el = mk('ent guest', `${customerSVG(c.look)}<div class="bar"><div></div></div><div class="bubble"></div><div class="addons"></div>`);
+        el.dataset.c = c.id; ents.appendChild(el); e = { el, sig: '', ad: '', addons: el.querySelector('.addons'), bubble: el.querySelector('.bubble'), fill: el.querySelector('.bar div'), svg: el.querySelector('svg.cust') };
         guests.set(c.id, e);
       }
       place(e.el, c.x, c.y);
+      const adSig = c.addons.join(',');
+      if (e.ad !== adSig) { e.ad = adSig; e.addons.innerHTML = c.addons.map((k) => `<div class="ad">${use('d-' + k, 18)}</div>`).join(''); }
       const sig = c.state + c.dish + c.kind + c.happy;
       if (sig !== e.sig) { e.sig = sig; e.bubble.innerHTML = bubbleFor(c); e.bubble.style.display = e.bubble.innerHTML ? '' : 'none'; e.el.classList.toggle('tap', tappable(c)); e.el.classList.toggle('walk', c.moving); e.el.classList.toggle('eat', c.state === 'eating'); }
       e.el.classList.toggle('walk', c.moving);
@@ -130,11 +129,24 @@ export function createView(host, g, info, handlers) {
       let e = dishes.get(d.id);
       if (!e) {
         const el = mk('ent dish tap', `${use('d-' + d.dish, 44)}<span class="tag">${d.label === 'GO' ? use('ic-bag', 16) : 'T' + d.label}</span>`);
-        el.dataset.d = d.id; const p = L.pickup[d.slot]; place(el, p.x, p.y); ents.appendChild(el); e = { el }; dishes.set(d.id, e);
+        el.dataset.d = d.id; place(el, d.x, d.y); ents.appendChild(el); e = { el }; dishes.set(d.id, e);
       }
       e.el.classList.toggle('late', d.age > 8);
     }
     for (const [id, e] of dishes) if (!seen.has(id)) { e.el.remove(); dishes.delete(id); }
+    // hired staff
+    for (const m of g.staff) {
+      let e = staffEls.get(m.id);
+      if (!e) {
+        const el = mk('ent waiter staff', `<div class="wbody">${waiterSVG(STAFF_LOOK[m.role])}</div><div class="carry"></div><span class="role">${m.role}</span>`);
+        ents.appendChild(el); e = { el, carry: '' }; staffEls.set(m.id, e);
+      }
+      place(e.el, m.x, m.y);
+      e.el.querySelector('.wbody').style.transform = `scaleX(${m.face})`;
+      e.el.classList.toggle('walk', !!m.task && m.task.phase === 'walk');
+      const cs = m.carry ? 'd-' + m.carry.dish : '';
+      if (e.carry !== cs) { e.carry = cs; e.el.querySelector('.carry').innerHTML = cs ? use(cs, 28) : ''; }
+    }
     // waiter
     const w = g.waiter;
     place(waiter, w.x, w.y);
@@ -149,16 +161,27 @@ export function createView(host, g, info, handlers) {
 
     // HUD
     const m = Math.floor(g.timeLeft / 60), s = Math.ceil(g.timeLeft % 60);
-    $('.t').textContent = `${m}:${String(s === 60 ? 59 : s).padStart(2, '0')}`;
+    $('.timer .t').textContent = `${m}:${String(s === 60 ? 59 : s).padStart(2, '0')}`;
     $('.timer').classList.toggle('low', g.timeLeft < 15);
-    $('.c').textContent = g.wallet;
-    $('.goal-fill').style.width = Math.min(100, (g.earned / g.cfg.goals[2]) * 100) + '%';
-    stage.querySelectorAll('.mark').forEach((mk2, i) => mk2.classList.toggle('got', g.earned >= g.cfg.goals[i]));
-    const cost = upgradeCost(g);
-    const ub = $('.upg'); ub.disabled = cost === undefined;
-    ub.classList.toggle('can', cost !== undefined && g.wallet >= cost);
-    $('.cost').textContent = cost === undefined ? 'MAX' : `${cost}`;
-
+    $('.c').textContent = g.earned;
+    // star objectives: icon + count, a thin bar, and a clock when timed
+    const objsEl = $('.objs');
+    const elapsed = g.cfg.duration - g.timeLeft;
+    if (!objsEl.children.length) objsEl.innerHTML = g.objectives.map((o) => `<div class="obj"><span class="oic">${use(OBJ_ICON[o.type], 30)}</span><div class="mid"><b class="num"></b><div class="bar"><i></i></div></div><span class="st"></span></div>`).join('');
+    g.objectives.forEach((o, i) => {
+      const el = objsEl.children[i];
+      el.className = 'obj ' + (o.status === 'open' ? '' : o.status);
+      const frac = o.type === 'noAngry' ? (o.status === 'open' ? (o.within ? elapsed / o.within : elapsed / g.cfg.duration) : o.status === 'done' ? 1 : 0) : Math.min(1, o.value / o.target);
+      el.querySelector('i').style.width = frac * 100 + '%';
+      const left = o.within && o.status === 'open' ? Math.max(0, Math.ceil(o.within - elapsed)) : 0;
+      const num = o.type === 'noAngry' ? '' : `${Math.min(o.value, o.target)}/${o.target}`;
+      const sig = o.status + '|' + left + '|' + num;
+      if (el.dataset.s !== sig) {
+        el.dataset.s = sig;
+        el.querySelector('.num').textContent = num;
+        el.querySelector('.st').innerHTML = o.status === 'done' ? use('ic-check', 20) : o.status === 'failed' ? use('ic-cross', 20) : left ? `<span class="chip">${use('ic-clock', 16)}${left}</span>` : '';
+      }
+    });
     stage.querySelector('[data-act=sfx]').classList.toggle('off', !sound.sfx);
     stage.querySelector('[data-act=music]').classList.toggle('off', !sound.music);
     // events
@@ -167,13 +190,14 @@ export function createView(host, g, info, handlers) {
       else if (ev.type === 'heart') float(use('ic-heart', 22), ev.x + 12, ev.y + 10, 'heart');
       else if (ev.type === 'angry') float(use('ic-angry', 26), ev.x - 13, ev.y - 90, 'heart');
       else if (ev.type === 'sparkle' || ev.type === 'ding' || ev.type === 'serve' || ev.type === 'clean') float(use('ic-spark', 26), ev.x - 13, ev.y - 40, 'spark');
-      else if (ev.type === 'toast') showToast(ev.text);
-      else if (ev.type === 'upgrade') showToast('Stoves upgraded — cooking is faster!');
-      const snd = { coin: ev.tip ? 'tip' : 'coin', ding: 'ding', serve: 'serve', clean: 'clean', angry: 'angry', upgrade: 'upgrade', toast: 'nope', seat: 'seat', order: 'order', arrive: 'arrive', cook: 'sizzle' }[ev.type];
+      else if (ev.type === 'toast') showToast(ev.icon, ev.bad);
+            else if (ev.type === 'goal') showToast('ic-star', false);
+      else if (ev.type === 'boost') float('<b>+25%</b>', ev.x - 22, ev.y + 14, 'tip');
+      const snd = { coin: ev.tip ? 'tip' : 'coin', ding: 'ding', serve: 'serve', clean: 'clean', angry: 'angry', upgrade: 'upgrade', toast: 'nope', seat: 'seat', order: 'order', arrive: 'arrive', cook: 'sizzle', boost: 'boost', goal: 'upgrade' }[ev.type];
       if (snd) sound.play(snd);
     }
   }
 
-  const overlay = (html) => { const o = mk('overlay', `<div class="card">${html}</div>`); stage.appendChild(o); return o; };
+  const overlay = (html) => { const o = mk('overlay', html); stage.appendChild(o); return o; };
   return { stage, sync, overlay, destroy: () => stage.remove(), dishName: (id) => DISHES[id].name };
 }

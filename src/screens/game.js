@@ -4,10 +4,10 @@ import { chapters } from '../data/chapters.js';
 import { levelConfig } from '../data/levels.js';
 import { themes } from '../themes/index.js';
 import { applyTheme } from '../themes/apply.js';
-import { recordResult } from '../state/progress.js';
-import { createGame, tick, tapCustomer, tapTable, tapDish, buyUpgrade, stars } from '../game/engine.js';
+import { recordResult, getUpgrades, bankCoins } from '../state/progress.js';
+import { createGame, tick, tapCustomer, tapTable, tapDish, stars } from '../game/engine.js';
 import { createView } from '../game/view.js';
-import { use } from '../game/sprites.js';
+import { introHTML, pauseHTML, resultsHTML } from '../game/popups.js';
 import { sound } from '../game/sound.js';
 
 export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {}) {
@@ -15,7 +15,7 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   applyTheme(themes[chapter.theme]); // the restaurant look applies inside a level only
   document.body.classList.add('game-open');
   const info = { ...chapter.levels.find((l) => l.n === level), level };
-  const g = createGame(levelConfig(chapterId, level));
+  const g = createGame(levelConfig(chapterId, level), getUpgrades(chapterId));
 
   const root = document.createElement('div');
   root.className = 'game-root';
@@ -27,7 +27,6 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     customer: (id) => mode === 'play' && tapCustomer(g, id),
     table: (id) => mode === 'play' && tapTable(g, id),
     dish: (id) => mode === 'play' && tapDish(g, id),
-    upgrade: () => mode === 'play' && buyUpgrade(g),
     pause: () => mode === 'play' && openPause(),
     sfx: () => sound.setSfx(!sound.sfx),
     music: () => sound.setMusic(!sound.music),
@@ -52,35 +51,20 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   const replay = () => go('game', { chapter: chapterId, level });
 
   function openIntro() {
-    show(`<h2>${info.name}</h2>
-      <p>Earn <b>${g.cfg.goals[0]}</b> coins for one star, <b>${g.cfg.goals[2]}</b> for three.</p>
-      <div class="how">
-        <span>${use('ic-dine', 30)}${use('ic-bag', 30)}</span><span>Tap a guest in line. Dine-in guests take a free table, take-out guests go to the window.</span>
-        <span>${use('ic-order', 30)}</span><span>Tap a guest with a notepad to take their order. It goes to the kitchen.</span>
-        <span>${use('d-sandwich', 30)}</span><span>Tap a finished dish on the pickup counter. Your waiter delivers it to the tag's table.</span>
-        <span>${use('ic-bill', 30)}</span><span>Tap a guest with a coin to collect payment, then tap the dirty table to clean it.</span>
-      </div>
-      <p>Watch the bar above each head: green is happy, red means they are about to leave.</p>
-      <div class="row"><button data-b="map">Back to map</button><button class="primary" data-b="go">Open the doors</button></div>`,
-    { map: toMap, go: () => { sound.unlock(); sound.startMusic(); sound.play('click'); close(); mode = 'play'; } });
+    show(introHTML(g, info), { map: toMap, go: () => { sound.unlock(); sound.startMusic(); sound.play('click'); close(); mode = 'play'; } });
   }
   function openPause() {
     mode = 'pause'; sound.stopMusic();
-    show(`<h2>Paused</h2><div class="row"><button data-b="quit">Quit to map</button><button data-b="again">Restart level</button><button class="primary" data-b="resume">Resume</button></div>`,
-      { quit: toMap, again: replay, resume: () => { sound.startMusic(); close(); mode = 'play'; } });
+    show(pauseHTML(), { quit: toMap, again: replay, resume: () => { sound.startMusic(); close(); mode = 'play'; } });
   }
   function openResults() {
     mode = 'over'; sound.stopMusic();
     const n = stars(g);
     sound.play(n === 3 ? 'win3' : n === 2 ? 'win2' : n === 1 ? 'win1' : 'lose');
     recordResult(chapterId, level, n); // saved once; a worse replay never lowers the best score
+    bankCoins(g.earned); // coins carry over to the map, where you spend them on upgrades
     const win = n > 0;
-    show(`<h2>${win ? (n === 3 ? 'Standing ovation!' : 'Well served') : 'Closed for the night'}</h2>
-      <div class="stars">${[0, 1, 2].map((i) => `<svg width="56" height="56" viewBox="0 0 40 40" class="${i < n ? 'on' : ''}" style="animation-delay:${i * 0.25}s"><use href="#ic-spark"/></svg>`).join('')}</div>
-      <div class="stats"><div><b>${g.earned}</b>coins earned</div><div><b>${g.served}</b>guests served</div><div><b>${g.lost}</b>guests lost</div></div>
-      <p>${win ? '' : `You needed ${g.cfg.goals[0]} coins for the first star. Give it another go!`}</p>
-      <div class="row"><button data-b="map">Map</button><button data-b="again">Play again</button>${win && next ? '<button class="primary" data-b="next">Next level</button>' : ''}</div>`,
-    { map: toMap, again: replay, ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}) });
+    show(resultsHTML(g, info, !!next), { map: toMap, again: replay, ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}) });
   }
 
   const onKey = (e) => { if (e.key === 'Escape') { if (mode === 'play') openPause(); else if (mode === 'pause') { sound.startMusic(); close(); mode = 'play'; } } };
