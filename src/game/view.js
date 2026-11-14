@@ -18,7 +18,7 @@ export function createView(host, g, info, handlers) {
     <div class="ents"></div><div class="fx"></div>
     <div class="hud">
       <button class="hud-btn" data-act="pause" aria-label="Pause">II</button>
-      <div class="hud-title"><b>Level ${info.level}</b><span>${info.name}</span></div>
+      <div class="hud-title"><b>Level ${info.num ?? info.level}</b><span>${info.name}</span></div>
       <div class="objs"></div>
       <div class="hstars" aria-label="Stars"><svg viewBox="0 0 40 40"><use href="#ic-star"/></svg><svg viewBox="0 0 40 40"><use href="#ic-star"/></svg><svg viewBox="0 0 40 40"><use href="#ic-star"/></svg></div>
       <div class="pill timer"><span class="t">0:00</span></div>
@@ -235,5 +235,5 @@ export function createView(host, g, info, handlers) {
   }
 
   const overlay = (html) => { const o = mk('overlay', html); stage.appendChild(o); return o; };
-  return { stage, sync, overlay, destroy: () => stage.remove(), dishName: (id) => DISHES[id].name };
+  return { stage, ents, sync, overlay, destroy: () => stage.remove(), dishName: (id) => DISHES[id].name };
 }

@@ -403,3 +403,39 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .fountain .cups i.empty{filter:grayscale(1) brightness(.6) opacity(.5)}
 .fountain.dry .cups{border-color:#ff5a4a;animation:pulse 1s infinite}
 .fountain .qn{left:10px;top:-104px}
+
+/* ---- first-level help ---- */
+.popup.tutor h2{margin-bottom:6px}
+.tsteps{display:flex;align-items:center;justify-content:center;gap:4px;margin:10px 0}
+.tstep{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:66px;position:relative}
+.tstep b{font:700 14px var(--font-body);color:#7d1d33}
+.tstep .tn{position:absolute;left:2px;top:-8px;width:20px;height:20px;border-radius:50%;background:#7d1d33;color:#fff;font:700 12px var(--font-body);display:grid;place-items:center}
+.tarr{font:700 28px var(--font-body);color:#c9a24a;font-style:normal}
+.tnote{display:flex;align-items:center;justify-content:center;gap:8px;font:700 15px var(--font-body);color:#7d1d33;margin-bottom:10px}
+.coach{position:absolute;left:0;top:0;width:0;height:0;z-index:99999;pointer-events:none}
+.coach .cbub{position:absolute;left:-52px;top:-60px;width:104px;display:flex;align-items:center;justify-content:center;gap:4px;padding:4px 8px;background:#fffaf0;border:3px solid #7d1d33;border-radius:14px;box-shadow:0 3px 0 #5a0f20;animation:cbob .8s ease-in-out infinite}
+.coach .cbub b{font:700 14px var(--font-body);color:#7d1d33;white-space:nowrap}
+.coach .carr{position:absolute;left:-13px;top:-12px;width:0;height:0;border:13px solid transparent;border-top:18px solid #ffd84a;filter:drop-shadow(0 2px 0 #5a0f20) drop-shadow(0 0 4px #5a0f20);animation:cbob .8s ease-in-out infinite}
+@keyframes cbob{50%{transform:translateY(5px)}}
+
+/* ---- spotlight walkthrough ---- */
+.guide{inset:0;z-index:100001;pointer-events:auto;cursor:default}
+.guide .ghole{position:absolute;box-shadow:0 0 0 4000px rgba(7,10,26,.78),0 0 0 4px #ffd84a,0 0 22px 6px #ffd84a99;transition:left .5s cubic-bezier(.4,0,.2,1),top .5s cubic-bezier(.4,0,.2,1),width .5s cubic-bezier(.4,0,.2,1),height .5s cubic-bezier(.4,0,.2,1),border-radius .5s,opacity .3s;animation:gglow 1.6s ease-in-out infinite;pointer-events:none}
+.guide.nohole{background:rgba(7,10,26,.78)}
+@keyframes gglow{50%{box-shadow:0 0 0 4000px rgba(7,10,26,.78),0 0 0 4px #fff2a8,0 0 34px 12px #ffd84acc}}
+.guide .gcard{position:absolute;width:300px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 16px 14px;text-align:center;color:#4a0f1d;background:linear-gradient(#fbf3de,#f0e0b8);border:5px solid var(--brass);border-radius:22px;box-shadow:inset 0 0 0 3px #fff8,0 18px 40px #000a;transition:left .5s cubic-bezier(.4,0,.2,1),top .5s cubic-bezier(.4,0,.2,1)}
+.guide .gic{display:flex;align-items:center;gap:6px;min-height:54px}
+.guide .gic i{font:700 26px var(--font-body);font-style:normal;color:#a52e4a}
+.guide .gtxt{font:700 19px/1.2 var(--font-body);color:#7d1d33}
+.guide .gdots{display:flex;gap:5px}
+.guide .gdots i{width:8px;height:8px;border-radius:50%;background:#d9c9a0}
+.guide .gdots i.on{background:#a52e4a;transform:scale(1.3)}
+.guide .gbtns{display:flex;gap:10px;margin-top:2px}
+.hud-btn.help{font:700 22px var(--font-body)}
+
+.guide.live{pointer-events:none}
+.guide .gblk{position:absolute;pointer-events:auto;background:transparent}
+.guide .gblk[data-k=all]{inset:0;width:100%;height:100%}
+.guide.live .gcard{pointer-events:auto}
+.guide.trk .ghole,.guide.trk .gcard{transition:none}
+.guide.live.nohole{background:rgba(7,10,26,.78);pointer-events:auto}

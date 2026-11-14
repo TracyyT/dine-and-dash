@@ -88,7 +88,7 @@ export function introHTML(g, info, lives = 5, nextLife = 0) {
 }
 
 export function pauseHTML() {
-  return `<div class="popup slim"><div class="prow wide">${btn('quit', 'ic-pin', 'Map')}${btn('again', 'ic-replay', 'Retry')}${btn('resume', 'ic-play', 'Resume', 'primary')}</div></div>`;
+  return `<div class="popup slim"><div class="prow wide">${btn('help', 'ic-help', 'Help')}${btn('quit', 'ic-pin', 'Map')}${btn('again', 'ic-replay', 'Retry')}${btn('resume', 'ic-play', 'Resume', 'primary')}</div></div>`;
 }
 
 const coinPile = `<svg class="pile" viewBox="0 0 160 50" width="160" height="50" aria-hidden="true">${[[30, 36], [56, 40], [84, 36], [110, 40], [132, 36], [44, 26], [72, 28], [100, 26], [58, 16], [86, 16], [72, 6]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="17" ry="7" fill="#e8c766" stroke="#8f6a22" stroke-width="2"/><ellipse cx="${x}" cy="${y - 2}" rx="12" ry="4" fill="#f4dd8e"/>`).join('')}</svg>`;
