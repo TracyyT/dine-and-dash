@@ -56,14 +56,15 @@ const star5 = (x, y, on, off) => `<path transform="translate(${x},${y}) scale(1.
 // Draws one stop. `parent` gets the clickable coin, `labels` gets the name plate, stars and crown (non-interactive overlay).
 export function levelStop({ parent, labels, l, chapter, skin, x = l.pos[0], y = l.pos[1] }) {
   const K = SKINS[skin], lock = l.st === 'lock', c = K[l.st === 'now' ? 'now' : lock ? 'lock' : 'done'], R = GEO.ring;
-  const n = el('g', { class: 'node', 'data-n': l.n, transform: `translate(${x},${y})`, tabindex: lock ? -1 : 0, role: 'button', 'aria-label': `Level ${l.n}, ${l.name}, ` + (lock ? 'locked' : l.st === 'now' ? 'next up' : l.s + ' stars') }, parent);
+  const num = (chapter.levels.find((x) => x.n === l.n) || l).num ?? l.n; // game-wide level number
+  const n = el('g', { class: 'node', 'data-n': l.n, transform: `translate(${x},${y})`, tabindex: lock ? -1 : 0, role: 'button', 'aria-label': `Level ${num}, ${l.name}, ` + (lock ? 'locked' : l.st === 'now' ? 'next up' : l.s + ' stars') }, parent);
   el('ellipse', { ...GEO.shadow, fill: K.shadow, opacity: 0.38 }, n);
   const u = el('g', { class: 'lift' }, n);
   if (l.st === 'now') el('ellipse', { ...GEO.pulse, fill: K.pulse, class: 'pulse' }, u);
   el('path', { d: `M${-R.rx} 0v${GEO.side}a${R.rx} ${R.ry - 1} 0 0 0 ${R.rx * 2} 0v${-GEO.side}Z`, fill: c.edge, stroke: K.ol, 'stroke-width': 2.2 }, u);
   el('ellipse', { class: 'ring', ...R, fill: c.top, stroke: K.ol, 'stroke-width': 2.5 }, u);
   el('ellipse', { ...GEO.inner, fill: c.inFill || 'none', stroke: c.inStroke || c.dash, 'stroke-width': 2, opacity: 0.85, ...(c.inFill ? {} : { 'stroke-dasharray': '4 5' }) }, u);
-  const t = el('text', { y: GEO.numY, 'text-anchor': 'middle', 'font-family': FONT, 'font-weight': 700, 'font-size': GEO.numSize, fill: c.num, stroke: c.numLine, 'stroke-width': 1.3, 'paint-order': 'stroke' }, u); t.textContent = l.n;
+  const t = el('text', { y: GEO.numY, 'text-anchor': 'middle', 'font-family': FONT, 'font-weight': 700, 'font-size': num > 9 ? GEO.numSize - 4 : GEO.numSize, fill: c.num, stroke: c.numLine, 'stroke-width': 1.3, 'paint-order': 'stroke' }, u); t.textContent = num;
   if (lock) el('g', { transform: `translate(0,${GEO.lockY}) scale(1.4)` }, u).innerHTML = `<rect x="-7" y="-2" width="14" height="11" rx="2" fill="${c.lockFill}" stroke="#14100f"/><path d="M-4-2V-6a4 4 0 0 1 8 0V-2" fill="none" stroke="#14100f" stroke-width="2"/>`;
   const g = el('g', { transform: `translate(${x},${y})`, 'pointer-events': 'none' }, labels);
   const lab = el('g', { transform: `translate(0,${GEO.labelY})` }, g), L = K.label, w = GEO.labelW;

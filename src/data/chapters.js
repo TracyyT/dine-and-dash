@@ -84,3 +84,7 @@ export const chapters = [
     ],
   },
 ];
+
+// Level numbers run on through the whole game (chapter 2 starts at 9, and so on). `n` stays the level's place inside its chapter, which is what saves use.
+let count = 0;
+for (const ch of chapters) for (const l of ch.levels) l.num = ++count;
