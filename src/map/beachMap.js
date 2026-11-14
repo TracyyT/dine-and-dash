@@ -1,4 +1,5 @@
 // Chapter 2 map: a sunset beach with a winding stone path. Flat illustrated style, drawn as SVG.
+import { levelStop } from './stop.js';
 import { el, rnd, seedRandom, WW, WH } from './iso.js';
 
 export const BEACH_DEFS = `<defs>
@@ -125,26 +126,7 @@ export function renderBeach(S, LB, chapter, progress) {
   el('g', { transform: 'translate(2200,1420)' }, S).innerHTML = `<ellipse cx="0" cy="40" rx="130" ry="22" fill="#000" opacity=".16"/><rect x="-110" y="-110" width="220" height="130" rx="10" fill="#fff4e0" stroke="${OL}" stroke-width="3"/><path d="M-110 -110Q0 -170 110 -110" fill="#e8f2f4" stroke="${OL}" stroke-width="3"/><rect x="-100" y="-50" width="200" height="60" rx="8" fill="#9ac8d6" stroke="${OL}" stroke-width="3"/><path d="M-110 -110V30M110 -110V30" stroke="#8a5a2a" stroke-width="8"/>`;
 
   // stops
-  const star5 = (x, y, on) => `<path transform="translate(${x},${y}) scale(1.4)" d="M0-9L2.7-3 9-2.4 4.2 1.8 5.6 8 0 4.8 -5.6 8 -4.2 1.8 -9-2.4 -2.7-3Z" fill="${on ? '#ffd84a' : '#5a6a78'}" stroke="#14100f" stroke-width="1.2"/>`;
-  lvl.forEach((l) => {
-    const [x, y] = l.pos, lock = l.st === 'lock';
-    const n = el('g', { class: 'node', 'data-n': l.n, transform: `translate(${x},${y})`, tabindex: lock ? -1 : 0, role: 'button', 'aria-label': `Level ${l.n}, ${l.name}, ` + (lock ? 'locked' : l.st === 'now' ? 'next up' : l.s + ' stars') }, S);
-    el('ellipse', { cy: 16, rx: 56, ry: 22, fill: '#5a3a1e', opacity: 0.3 }, n);
-    const u = el('g', { class: 'lift' }, n);
-    if (l.st === 'now') el('ellipse', { rx: 52, ry: 24, fill: '#fff0a0', class: 'pulse' }, u);
-    const top = lock ? '#b8a890' : l.st === 'now' ? '#ff8a6a' : '#f6d27a', edge = lock ? '#8a7a64' : l.st === 'now' ? '#b8442f' : '#a87a22';
-    el('path', { d: 'M-48 0v14a48 22 0 0 0 96 0v-14Z', fill: edge, stroke: OL, 'stroke-width': 2 }, u);
-    el('ellipse', { class: 'ring', rx: 48, ry: 23, fill: top, stroke: OL, 'stroke-width': 2.5 }, u);
-    el('ellipse', { rx: 36, ry: 16, fill: 'none', stroke: '#fff', 'stroke-width': 2, opacity: 0.6, 'stroke-dasharray': '3 6' }, u);
-    const t = el('text', { y: 11, 'text-anchor': 'middle', 'font-family': 'Pacifico,cursive', 'font-size': 32, fill: lock ? '#7a6a54' : '#fff', stroke: '#4a2f18', 'stroke-width': 1.4, 'paint-order': 'stroke' }, u); t.textContent = l.n;
-    if (lock) el('g', { transform: 'translate(0,-26) scale(1.4)' }, u).innerHTML = '<rect x="-7" y="-2" width="14" height="11" rx="2" fill="#8a7a64" stroke="#14100f"/><path d="M-4-2V-6a4 4 0 0 1 8 0V-2" fill="none" stroke="#14100f" stroke-width="2"/>';
-    const g = el('g', { transform: `translate(${x},${y})`, 'pointer-events': 'none' }, LB);
-    const lab = el('g', { transform: 'translate(0,64)' }, g);
-    el('rect', { x: -86, y: -17, width: 172, height: 32, rx: 8, fill: '#6b4420', stroke: lock ? '#8a7a64' : '#ffe6b0', 'stroke-width': 2 }, lab);
-    const tt = el('text', { y: 6, 'text-anchor': 'middle', 'font-family': 'Josefin Sans', 'font-weight': 700, 'font-size': 18, fill: lock ? '#cbb89a' : '#fff4e0' }, lab); tt.textContent = l.name;
-    if (!lock) el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
-    if (l.n === chapter.levels.length) el('path', { transform: 'translate(0,-100)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: '#ffd96a', stroke: OL, 'stroke-width': 1.5 }, g);
-  });
+  lvl.forEach((l) => levelStop({ parent: S, labels: LB, l, chapter, skin: 'beach' }));
   // start sign + next-chapter sign
   el('g', { transform: 'translate(110,1330)' }, S).innerHTML = `<ellipse cy="6" rx="30" ry="10" fill="#000" opacity=".2"/><rect x="-4" y="-70" width="8" height="74" fill="#7a4a22"/><path d="M4 -70h54l-12 14 12 14H4z" fill="#ff7a6a" stroke="${OL}" stroke-width="2.5"/>`;
   return { nodes: lvl, board: { x: 2290, y: 1200, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };

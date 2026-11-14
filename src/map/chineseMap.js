@@ -1,6 +1,7 @@
 // Chapter 3 map: a dusk-lit Chinese restaurant courtyard. Red storefront with a striped awning and a 福 sign on the left, cherry blossoms,
 // a canal with a stone arch bridge and a pagoda behind, a lily pond with a glowing lantern, and a glowing path of round red stepping coins.
 // The scenery is drawn in a 848x468 "picture" space and scaled up into the 2400x1500 world, so shapes can be placed straight from a reference.
+import { levelStop } from './stop.js';
 import { el, seedRandom, rnd, WW } from './iso.js';
 
 export const CHINESE_DEFS = `<defs>
@@ -230,31 +231,7 @@ export function renderChinese(S, LB, chapter, progress) {
   add(petals());
 
   // stops: round red coins with a gold rim; the next one glows, locked ones are grey stone
-  const star5 = (x, y, on) => `<path transform="translate(${x},${y}) scale(1.4)" d="M0-9L2.7-3 9-2.4 4.2 1.8 5.6 8 0 4.8 -5.6 8 -4.2 1.8 -9-2.4 -2.7-3Z" fill="${on ? '#ffd84a' : '#5a6a78'}" stroke="#14100f" stroke-width="1.2"/>`;
-  lvl.forEach((l) => {
-    const [x, y] = l.pos, lock = l.st === 'lock';
-    const n = el('g', { class: 'node', 'data-n': l.n, transform: `translate(${x},${y})`, tabindex: lock ? -1 : 0, role: 'button', 'aria-label': `Level ${l.n}, ${l.name}, ` + (lock ? 'locked' : l.st === 'now' ? 'next up' : l.s + ' stars') }, S);
-    const k = el('g', { transform: 'scale(0.6)' }, n); // same footprint as the stops on the other maps
-    el('ellipse', { cy: 26, rx: 92, ry: 30, fill: '#2a1a14', opacity: 0.35 }, k);
-    const u = el('g', { class: 'lift' }, k);
-    if (l.st === 'now') { el('ellipse', { rx: 108, ry: 44, fill: '#ffe08a', class: 'pulse' }, u); el('ellipse', { cy: 4, rx: 120, ry: 52, fill: 'url(#glow)' }, u); }
-    const top = lock ? '#a9a49a' : l.st === 'now' ? '#e0452f' : '#a52a2e', side = lock ? '#6f6a60' : l.st === 'now' ? '#7a1810' : '#5a1218', rim = lock ? '#c8c2b6' : '#f2c75a';
-    el('path', { d: 'M-80 0v26a80 34 0 0 0 160 0v-26Z', fill: side, stroke: OL, 'stroke-width': 3 }, u);
-    el('path', { d: 'M-80 12v14a80 34 0 0 0 160 0v-14a80 34 0 0 1 -160 0Z', fill: rim, opacity: 0.9 }, u);
-    el('ellipse', { class: 'ring', rx: 80, ry: 34, fill: rim, stroke: OL, 'stroke-width': 3 }, u);
-    el('ellipse', { rx: 69, ry: 28, fill: top, stroke: lock ? '#7a756a' : '#7a1810', 'stroke-width': 2.4 }, u);
-    el('ellipse', { cy: -6, rx: 56, ry: 15, fill: '#fff', opacity: lock ? 0.12 : 0.16 }, u);
-    const t = el('text', { y: 16, 'text-anchor': 'middle', 'font-family': 'Cinzel Decorative,serif', 'font-weight': 700, 'font-size': 56, fill: lock ? '#6f6a60' : '#fff', stroke: lock ? '#d9d4c8' : '#5a0f14', 'stroke-width': 2.4, 'paint-order': 'stroke' }, u); t.textContent = lock ? '' : l.n;
-    if (lock) {
-      el('g', { transform: 'translate(0,-10) scale(2.5)' }, u).innerHTML = '<rect x="-8" y="-2" width="16" height="13" rx="2.4" fill="#f2c75a" stroke="#14100f" stroke-width="1.2"/><path d="M-4.6-2V-6.4a4.6 4.6 0 0 1 9.2 0V-2" fill="none" stroke="#14100f" stroke-width="2.4"/><circle cy="5" r="1.7" fill="#14100f"/>';
-    }
-    const g = el('g', { transform: `translate(${x},${y})`, 'pointer-events': 'none' }, LB);
-    const lab = el('g', { transform: 'translate(0,64)' }, g);
-    el('rect', { x: -88, y: -17, width: 176, height: 32, rx: 8, fill: '#7a1818', stroke: lock ? '#8a7a64' : '#e8b64a', 'stroke-width': 2, opacity: 0.94 }, lab);
-    const tt = el('text', { y: 6, 'text-anchor': 'middle', 'font-family': 'Josefin Sans', 'font-weight': 700, 'font-size': 18, fill: lock ? '#cbb89a' : '#fff0d8' }, lab); tt.textContent = l.name;
-    if (!lock) el('g', { transform: 'translate(0,-58)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
-    if (l.n === chapter.levels.length) el('path', { transform: 'translate(0,-102)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: '#ffd96a', stroke: OL, 'stroke-width': 1.5 }, g);
-  });
+  lvl.forEach((l) => levelStop({ parent: S, labels: LB, l, chapter, skin: 'chinese' }));
   const home = (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos;
   return { nodes: lvl, board: { x: Math.round(wx(822)), y: Math.round(wy(186)), dir: 1 }, home };
 }

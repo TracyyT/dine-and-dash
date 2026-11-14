@@ -1,4 +1,5 @@
 // Chapter 4 map: an evening luxury shopping street. Boutiques across the top, Maison d'Or in the middle, a marble plaza with a fountain, and a red-carpet path.
+import { levelStop } from './stop.js';
 import { el, rnd, seedRandom, WW, WH } from './iso.js';
 
 export const FINE_DEFS = `<defs>
@@ -119,25 +120,6 @@ export function renderFine(S, LB, chapter, progress) {
   G(S, 1000, 880, `${bag('#7a1d3a', 0, 0)}${bag('#d9b66a', 22, 8)}`); G(S, 2290, 1290, `${bag('#1d4a5a', 0, 0)}${bag('#fbf3e2', 20, 6)}`);
 
   // stops (gold medallions)
-  const star5 = (x, y, on) => `<path transform="translate(${x},${y}) scale(1.4)" d="M0-9L2.7-3 9-2.4 4.2 1.8 5.6 8 0 4.8 -5.6 8 -4.2 1.8 -9-2.4 -2.7-3Z" fill="${on ? '#ffd84a' : '#5a6a78'}" stroke="#14100f" stroke-width="1.2"/>`;
-  lvl.forEach((l) => {
-    const [x, y] = l.pos, lock = l.st === 'lock';
-    const n = el('g', { class: 'node', 'data-n': l.n, transform: `translate(${x},${y})`, tabindex: lock ? -1 : 0, role: 'button', 'aria-label': `Level ${l.n}, ${l.name}, ` + (lock ? 'locked' : l.st === 'now' ? 'next up' : l.s + ' stars') }, S);
-    el('ellipse', { cy: 16, rx: 58, ry: 22, fill: '#000', opacity: 0.4 }, n);
-    const u = el('g', { class: 'lift' }, n);
-    if (l.st === 'now') el('ellipse', { rx: 56, ry: 26, fill: GOLD_L, class: 'pulse' }, u);
-    const top = lock ? '#6a6678' : l.st === 'now' ? '#9a1d3a' : GOLD, edge = lock ? '#3a3648' : l.st === 'now' ? '#4a0a1c' : GOLD_D;
-    el('path', { d: 'M-48 0v14a48 22 0 0 0 96 0v-14Z', fill: edge, stroke: OL, 'stroke-width': 2 }, u);
-    el('ellipse', { class: 'ring', rx: 48, ry: 23, fill: top, stroke: OL, 'stroke-width': 2.5 }, u);
-    el('ellipse', { rx: 37, ry: 17, fill: 'none', stroke: lock ? '#8a869a' : GOLD_L, 'stroke-width': 2, opacity: 0.85, 'stroke-dasharray': '4 5' }, u);
-    const t = el('text', { y: 11, 'text-anchor': 'middle', 'font-family': 'Playfair Display,serif', 'font-weight': 900, 'font-size': 30, fill: lock ? '#a8a4b8' : '#fff', stroke: '#2a0a14', 'stroke-width': 1.4, 'paint-order': 'stroke' }, u); t.textContent = l.n;
-    if (lock) el('g', { transform: 'translate(0,-26) scale(1.4)' }, u).innerHTML = '<rect x="-7" y="-2" width="14" height="11" rx="2" fill="#8a869a" stroke="#14100f"/><path d="M-4-2V-6a4 4 0 0 1 8 0V-2" fill="none" stroke="#14100f" stroke-width="2"/>';
-    const g = el('g', { transform: `translate(${x},${y})`, 'pointer-events': 'none' }, LB);
-    const lab = el('g', { transform: 'translate(0,64)' }, g);
-    el('rect', { x: -90, y: -17, width: 180, height: 32, rx: 8, fill: '#15131c', stroke: lock ? '#6a6678' : GOLD, 'stroke-width': 2 }, lab);
-    const tt = el('text', { y: 6, 'text-anchor': 'middle', 'font-family': 'Josefin Sans', 'font-weight': 700, 'font-size': 18, fill: lock ? '#a8a4b8' : GOLD_L }, lab); tt.textContent = l.name;
-    if (!lock) el('g', { transform: 'translate(0,-56)' }, g).innerHTML = star5(-30, 0, l.s >= 1) + star5(0, -8, l.s >= 2) + star5(30, 0, l.s >= 3);
-    if (l.n === chapter.levels.length) el('path', { transform: 'translate(0,-100)', d: 'M-20 0L-12-16-3-4 0-20 3-4 12-16 20 0Z', fill: GOLD, stroke: OL, 'stroke-width': 1.5 }, g);
-  });
+  lvl.forEach((l) => levelStop({ parent: S, labels: LB, l, chapter, skin: 'fine' }));
   return { nodes: lvl, board: { x: 2290, y: 1200, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }
