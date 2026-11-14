@@ -48,7 +48,7 @@ export function createView(host, g, info, handlers) {
   L.take.forEach((s) => { const el = mk('take-mat'); el.style.left = s.x - 60 + 'px'; el.style.top = s.y - 14 + 'px'; stage.insertBefore(el, ents); });
 
   const FP = L.fountain;
-  const fountainEl = mk('ent fountain', `${SN.stand()}<div class="cups">${use(SN.cup, 18)}<div class="seg">${[0, 1, 2].map(() => '<b></b>').join('')}</div></div><div class="qn"></div>`);
+  const fountainEl = mk('ent fountain', `${SN.stand()}<div class="cups">${[0, 1, 2].map(() => `<i>${use(SN.cup, 18)}</i>`).join('')}</div><div class="qn"></div>`);
   fountainEl.dataset.f = 1; place(fountainEl, FP.x, FP.y); ents.append(fountainEl);
 
   const waiter = mk('ent waiter', `<div class="wbody">${waiterSVG()}</div><div class="carry"></div><div class="meter work"><div></div></div>`);
@@ -133,7 +133,7 @@ export function createView(host, g, info, handlers) {
       qn.mark(el, 't' + t.id);
     }
     // lemonade fountain
-    [...fountainEl.querySelectorAll('.cups .seg b')].forEach((c, i) => { c.style.display = i < g.fountain.max ? '' : 'none'; c.classList.toggle('on', i < g.fountain.cups); }); // one block per refill the stand holds; lit = still there
+    [...fountainEl.querySelectorAll('.cups i')].forEach((c, i) => { c.style.display = i < g.fountain.max ? '' : 'none'; c.classList.toggle('empty', i >= g.fountain.cups); }); // one snack icon per refill the stand holds; greyed = used up
     fountainEl.classList.toggle('tap', g.fountain.cups < g.fountain.max);
     fountainEl.classList.toggle('dry', g.fountain.cups === 0);
     qn.mark(fountainEl, 'f1');

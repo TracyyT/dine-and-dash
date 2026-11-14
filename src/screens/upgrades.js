@@ -66,7 +66,7 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
     pop.innerHTML = `<div class="upop" role="dialog" aria-label="${u.name}"><button class="upop-x" aria-label="Close">&#10005;</button>
       <div class="upop-head"><div class="uart">${u.id === 'lemonade' && SNACK_SHOP_ICONS[chapterId] ? SNACK_SHOP_ICONS[chapterId] : UPGRADE_ICONS[u.id]}</div><b>${u.name}</b></div>
       <p>${info.text}</p>
-      <div class="upop-each"><span>Each upgrade</span><b>${info.each}</b></div>
+      <div class="upop-each"><span>Each level</span><b>${info.each}</b></div>
       <div class="ubar">${u.tiers.map((_, k) => `<i class="${k < lvl ? 'on' : ''}"></i>`).join('')}</div><small>Level ${lvl} of ${u.tiers.length}</small></div>`;
     pop.addEventListener('click', (ev) => { if (ev.target === pop || ev.target.closest('.upop-x')) closeInfo(); });
     root.appendChild(pop);
