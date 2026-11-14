@@ -1,8 +1,8 @@
 // Draws the restaurant and keeps it in sync with the engine. Clicks are reported through callbacks.
-import { SNACK_SYMBOLS, snackFor } from './snacks.js';
+import { SNACK_SYMBOLS, snackFor, PLATE, plateSlots } from './snacks.js';
 import { ICONS, use, customerSVG, waiterSVG, STAFF_LOOK, tableSVG, chairSVG, stoveSVG, chefSVG } from './sprites.js';
 import { DISHES } from '../data/dishes.js';
-import { moodOf, taskOrder, workTime } from './engine.js';
+import { moodOf, taskOrder, workTime, refillProgress } from './engine.js';
 import { OBJ_ICON } from './popups.js';
 import { sceneHTML } from './scene.js';
 import { sound } from './sound.js';
@@ -48,7 +48,10 @@ export function createView(host, g, info, handlers) {
   L.take.forEach((s) => { const el = mk('take-mat'); el.style.left = s.x - 60 + 'px'; el.style.top = s.y - 14 + 'px'; stage.insertBefore(el, ents); });
 
   const FP = L.fountain;
-  const fountainEl = mk('ent fountain', `${SN.stand()}<div class="cups">${[0, 1, 2].map(() => `<i>${use(SN.cup, 18)}</i>`).join('')}</div><div class="qn"></div>`);
+  // The treat station is a table with a plate. Items sit on the plate (one per refill held); the table gets fancier with each upgrade.
+  const tier = Math.min(2, g.owned.lemonade || 0), slots = plateSlots(g.fountain.max);
+  const plateTop = Math.round(-83 + (PLATE[tier].cy - 2) * 0.8);
+  const fountainEl = mk('ent fountain t' + tier, `${SN.stand(tier)}<div class="plate" style="top:${plateTop}px">${slots.map(([dx, dy]) => `<i style="left:${dx}px;margin-top:${dy}px">${use(SN.cup, 21)}</i>`).join('')}</div><div class="rfbar"><div></div></div><div class="qn"></div>`);
   fountainEl.dataset.f = 1; place(fountainEl, FP.x, FP.y); ents.append(fountainEl);
 
   const waiter = mk('ent waiter', `<div class="wbody">${waiterSVG()}</div><div class="carry"></div><div class="meter work"><div></div></div>`);
@@ -133,7 +136,9 @@ export function createView(host, g, info, handlers) {
       qn.mark(el, 't' + t.id);
     }
     // lemonade fountain
-    [...fountainEl.querySelectorAll('.cups i')].forEach((c, i) => { c.style.display = i < g.fountain.max ? '' : 'none'; c.classList.toggle('empty', i >= g.fountain.cups); }); // one snack icon per refill the stand holds; greyed = used up
+    [...fountainEl.querySelectorAll('.plate i')].forEach((c, i) => c.classList.toggle('on', i < g.fountain.cups)); // each item on the plate is one refill still there
+    const rp = refillProgress(g), rf = fountainEl.querySelector('.rfbar');
+    rf.style.display = rp >= 0 ? 'block' : 'none'; if (rp >= 0) rf.firstChild.style.width = Math.round(rp * 100) + '%'; // the refill timer
     fountainEl.classList.toggle('tap', g.fountain.cups < g.fountain.max);
     fountainEl.classList.toggle('dry', g.fountain.cups === 0);
     qn.mark(fountainEl, 'f1');
@@ -189,7 +194,7 @@ export function createView(host, g, info, handlers) {
     const cs = w.carry ? (w.carry.kind === 'dish' ? 'd-' + w.carry.dish : 'ic-ticket') : '';
     if (carry.dataset.c !== cs) { carry.dataset.c = cs; carry.innerHTML = cs ? use(cs, 30) : ''; }
     const wm = waiter.querySelector('.work');
-    wm.style.visibility = w.task && w.task.phase === 'work' ? 'visible' : 'hidden';
+    wm.style.visibility = w.task && w.task.phase === 'work' && w.task.type !== 'refill' ? 'visible' : 'hidden'; // refilling shows its own bar at the station
     if (w.task && w.task.phase === 'work') wm.firstChild.style.width = Math.min(100, (w.task.t / (workTime(g, w.task.type) || 1)) * 100) + '%'; // includes refilling the treat stand
 
     // HUD

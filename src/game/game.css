@@ -398,12 +398,15 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .fountain.tap svg.fount{filter:drop-shadow(0 0 6px var(--glow));animation:fpulse 1.4s ease-in-out infinite}
 @keyframes fpulse{50%{transform:translateY(-2px)}}
 .fountain:not(.tap){pointer-events:auto;cursor:pointer}
-.fountain .cups{left:0;top:6px;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:2px;background:#1c0f0a;border:2px solid var(--brass);border-radius:12px;padding:2px 5px;box-shadow:0 2px 0 #0008;white-space:nowrap}
-.fountain .cups i{display:block;width:14px;height:14px;transition:.2s}
-.fountain .cups i svg{width:14px;height:14px}
-.fountain .cups i svg{display:block}
-.fountain .cups i.empty{filter:grayscale(1) brightness(.55) opacity(.55)}
-.fountain.dry .cups{border-color:#ff5a4a;animation:pulse 1s infinite}
+.fountain .plate{position:absolute;left:0;width:0;height:0;pointer-events:none}
+.fountain .plate i{position:absolute;display:block;width:21px;height:21px;margin-left:-10px;margin-top:-17px;opacity:0;transform:translateY(-10px) scale(.3);transition:opacity .25s,transform .3s cubic-bezier(.3,1.6,.5,1)}
+.fountain .plate i svg{display:block;filter:drop-shadow(0 1px 0 #0006)}
+.fountain .plate i.on{opacity:1;transform:none}
+.fountain .rfbar{display:none;left:-24px;top:4px;width:48px;height:9px;box-sizing:border-box;background:#1c0f0a;border:2px solid var(--brass);border-radius:6px;overflow:hidden;box-shadow:0 2px 0 #0008}
+.fountain .rfbar div{height:100%;width:0;background:linear-gradient(#a8f0b0,#4fc860)}
+.fountain.t2 svg.fount .twk{animation:twk 2.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.fountain.t2 svg.fount .twk2{animation-delay:1.1s}
+@keyframes twk{0%,100%{opacity:.25;transform:scale(.6)}50%{opacity:1;transform:scale(1.15)}}
 .fountain .qn{left:10px;top:-104px}
 
 /* ---- first-level help ---- */
@@ -441,3 +444,5 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .guide.live .gcard{pointer-events:auto}
 .guide.trk .ghole,.guide.trk .gcard{transition:none}
 .guide.live.nohole{background:rgba(7,10,26,.78);pointer-events:auto}
+
+.fountain svg.fount{overflow:visible}
