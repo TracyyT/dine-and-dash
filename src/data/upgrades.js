@@ -1,3 +1,4 @@
+import { snackFor } from '../game/snacks.js';
 // Upgrades are bought on the Upgrade screen with banked coins and last for ONE chapter (each chapter has its own menu and food).
 // tiers = price of each level, label = short card title, group = which shelf it sits on.
 // The in-game effect of each id is applied in game/engine.js and game/scene.js.
@@ -8,6 +9,7 @@ export const UPGRADES = {
     { id: 'ingredients', group: 'kitchen', label: 'Ingredients',  name: 'Finer ingredients', tiers: [40, 80, 130] },
     { id: 'shoes',       group: 'service', label: 'Quick shoes',  name: 'Quick shoes',       tiers: [30, 60] },
     { id: 'seats',       group: 'service', label: 'Patience',     name: 'Cozy seats',        tiers: [35, 70] },
+    { id: 'lemonade',    group: 'service', label: 'Lemonade',     name: 'Bigger jar',        tiers: [30, 60] },
     { id: 'cleaning',    group: 'service', label: 'Quick clean',  name: 'Faster cleaning',   tiers: [35, 70] },
     { id: 'tips',        group: 'service', label: 'Tips',         name: 'Tip bonus',         tiers: [45, 90] },
     { id: 'host',        group: 'staff',   label: 'Host',         name: 'Hire a host',       tiers: [60, 110] },
@@ -21,4 +23,9 @@ UPGRADES.beach = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Mat
 UPGRADES.chinese = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 1.8) / 5) * 5) }));
 UPGRADES.fine = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.4) / 5) * 5) }));
 UPGRADES.steak = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.8) / 5) * 5) }));
+// The treat in the wait line has a different name in every chapter (cookies, coconuts, tea, macarons, lemonade).
+for (const [chapterId, list] of Object.entries(UPGRADES)) {
+  const sn = snackFor(chapterId);
+  UPGRADES[chapterId] = list.map((u) => (u.id === 'lemonade' ? { ...u, label: sn.label, name: sn.upName } : u));
+}
 export const upgradeList = (chapterId) => UPGRADES[chapterId] || [];

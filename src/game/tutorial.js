@@ -1,5 +1,7 @@
 // First-time help for the very first level: a short how-to card before play, then a pointer that always shows the next thing to tap.
 import { use } from './sprites.js';
+import { snackFor } from './snacks.js';
+let SN = snackFor('steak'); // the chapter's treat, set when a guide opens
 
 const KEY = 'dine-and-dash:tutorial:v1';
 const read = () => { try { return localStorage.getItem(KEY) === 'done'; } catch { return true; } };
@@ -70,7 +72,7 @@ const guideSteps = (g, L, rectOf, stage) => {
     { icons: ['ic-dine'], text: 'The chefs cook it', rect: () => ({ x: L.kx, y: 232, w: L.kw, h: 190 }) },
     { icons: ['ic-dine'], text: 'Tap finished dishes to serve', rect: () => ({ x: L.kx, y: 410, w: L.kw, h: 120 }) },
     { icons: ['ic-bill', 'ic-broom'], text: 'Collect pay, then clean up', rect: () => dineRect },
-    { icons: ['ic-cup'], text: 'Lemonade cheers up waiting guests', rect: () => ({ x: L.fountain.x - 50, y: L.fountain.y - 100, w: 100, h: 130 }) },
+    { icons: [SN.cup], text: `Refill the ${SN.name} for waiting guests`, rect: () => ({ x: L.fountain.x - 50, y: L.fountain.y - 100, w: 100, h: 130 }) },
     { icons: ['ic-play'], text: 'Ready? Go!', rect: null },
   ];
 };
@@ -102,7 +104,7 @@ const liveSteps = (g, L, rectOf, stage, ids) => {
     { kind: 'info', icons: ['ic-clock', 'ic-bill'], text: 'Before time runs out', rect: () => union(rectOf(q('.timer')), rectOf(q('.coins'))) },
     { kind: 'info', icons: ['ic-smile'], text: 'Keep the bar green', rect: () => { const c = cu(0); return c ? { x: c.x - 42, y: c.y - 150, w: 84, h: 60 } : null; } },
     ...round(0),
-    { kind: 'info', icons: ['ic-cup'], text: 'Lemonade cheers up waiting guests', rect: fountainRect },
+    { kind: 'info', icons: [SN.cup], text: `Refill the ${SN.name} for waiting guests`, rect: fountainRect },
     ...round(1),
     { kind: 'info', icons: ['ic-play'], text: 'Ready? Go!', rect: null },
   ];
@@ -129,6 +131,7 @@ const FEATURES = [
   { id: 'seats', icons: ['ic-smile'], text: 'Cozy seats: guests stay patient longer' },
   { id: 'cleaning', icons: ['ic-broom'], text: 'Quick clean: tables are ready sooner' },
   { id: 'tips', icons: ['ic-bill'], text: 'Tip bonus: happy guests tip more' },
+  { id: 'lemonade', icons: ['ic-cup'], text: 'More refills for waiting guests' },
   { id: 'training', icons: ['ic-star', 'ic-people'], text: 'Training: your staff work faster' },
 ];
 const featureSteps = (g, L, rectOf, stage, ids) => {
@@ -142,12 +145,13 @@ const featureSteps = (g, L, rectOf, stage, ids) => {
     host: () => person(staff('host')), busser: () => person(staff('busser')), runner: () => person(staff('runner')),
     kitchen: () => kitchen, ingredients: () => pickup, shoes: () => person(g.waiter),
     seats: () => ({ x: 8, y: L.queue[0].y - 100, w: 236, h: L.queue[5].y - L.queue[0].y + 150 }),
-    cleaning: () => dineRect, tips: () => rectOf(q('.coins')), training: () => person(g.staff[0] || g.waiter),
+    cleaning: () => dineRect, lemonade: () => ({ x: L.fountain.x - 50, y: L.fountain.y - 100, w: 100, h: 130 }), tips: () => rectOf(q('.coins')), training: () => person(g.staff[0] || g.waiter),
   };
-  return ids.map((id) => { const f = FEATURES.find((x) => x.id === id); return { kind: 'info', icons: f.icons, text: f.text, rect: rects[id] }; });
+  return ids.map((id) => { const f = FEATURES.find((x) => x.id === id); return { kind: 'info', icons: id === 'lemonade' ? [SN.cup] : f.icons, text: id === 'lemonade' ? `${SN.upName}: one refill serves more guests` : f.text, rect: rects[id] }; });
 };
 
-export function createGuide({ stage, g, onDone, interactive = false, ids = [], features = null }) {
+export function createGuide({ stage, g, onDone, interactive = false, ids = [], features = null, theme = 'steak' }) {
+  SN = snackFor(theme);
   const L = g.L;
   const rectOf = (el) => {
     if (!el) return null;

@@ -81,12 +81,12 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     }
     if (interactive) g.customers.forEach((c) => { c.kind = 'dine'; c.planned = 1; }); // one dish each, so the lesson stays short
     view.sync();
-    try { guide = createGuide({ stage: view.stage, g, interactive, ids: g.customers.map((c) => c.id), onDone: () => { guide = null; g.timeLeft = g.cfg.duration; g.nextArrival = Math.min(g.cfg.arrival, 3); after(); } }); } catch (err) { console.error(err); guide = null; after(); }
+    try { guide = createGuide({ stage: view.stage, g, theme: info.theme, interactive, ids: g.customers.map((c) => c.id), onDone: () => { guide = null; g.timeLeft = g.cfg.duration; g.nextArrival = Math.min(g.cfg.arrival, 3); after(); } }); } catch (err) { console.error(err); guide = null; after(); }
   }
   // A bought upgrade is explained once, in the first chapter only: the room stays paused and the new thing is lit up.
   function openFeatures(after) {
     close(); mode = 'guide'; view.sync();
-    guide = createGuide({ stage: view.stage, g, features: newFeatures(chapterId, g.owned), onDone: () => { guide = null; after(); } });
+    guide = createGuide({ stage: view.stage, g, theme: info.theme, features: newFeatures(chapterId, g.owned), onDone: () => { guide = null; after(); } });
   }
   function openPause() {
     mode = 'pause'; sound.stopMusic();
