@@ -9,6 +9,7 @@ import { getWallet, getUpgrades, nextUpgradeCost, buyUpgrade } from '../state/pr
 import { UPGRADE_ICONS, COIN_ICON } from '../map/upgradeIcons.js';
 import { SNACK_SHOP_ICONS } from '../game/snacks.js';
 import { sound } from '../game/sound.js';
+import { upgradeInfo } from '../data/upgradeInfo.js';
 
 const SHELVES = [['kitchen', 'Kitchen'], ['service', 'Service'], ['staff', 'Staff']];
 const BACK = '<svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M4 9l11-4 10 4 11-4v26l-11 4-10-4-11 4z" fill="#f2e2b0" stroke="#8f6a22" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 5v26M25 9v26" stroke="#8f6a22" stroke-width="1.8"/></svg>';
@@ -41,6 +42,7 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
             const lvl = owned[u.id] || 0, cost = nextUpgradeCost(chapterId, u.id), max = cost === undefined, many = u.tiers.length > 1;
             const can = !max && wallet >= cost;
             return `<article class="ucard ${max ? 'max' : ''} ${flash === u.id ? 'flash' : ''}">
+              <button class="uinfo-btn" data-info="${u.id}" aria-label="About ${u.name}" title="About ${u.name}">i</button>
               <div class="uart">${u.id === 'lemonade' && SNACK_SHOP_ICONS[chapterId] ? SNACK_SHOP_ICONS[chapterId] : UPGRADE_ICONS[u.id]}</div>
               <div class="uinfo"><b>${u.label}</b>${many ? `<span>Lv. ${lvl}/${u.tiers.length}</span>` : `<span>${max ? 'Hired' : 'Hire'}</span>`}
                 <div class="ubar">${u.tiers.map((_, k) => `<i class="${k < lvl ? 'on' : ''}"></i>`).join('')}</div></div>
@@ -52,8 +54,25 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
       b.onclick = () => { if (buyUpgrade(chapterId, b.dataset.up)) { sound.unlock(); sound.play('upgrade'); draw(b.dataset.up); } };
     });
   };
+  // The (i) popup: what the upgrade does and what one level adds. It closes on its own button, a tap outside, or Escape.
+  let pop = null;
+  const closeInfo = () => { if (pop) { pop.remove(); pop = null; } };
+  root.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-info]'); if (!b) return;
+    const u = list.find((x) => x.id === b.dataset.info), info = upgradeInfo(u.id, chapterId), lvl = getUpgrades(chapterId)[u.id] || 0;
+    closeInfo(); sound.unlock(); sound.play('click');
+    pop = document.createElement('div');
+    pop.className = 'upop-wrap';
+    pop.innerHTML = `<div class="upop" role="dialog" aria-label="${u.name}"><button class="upop-x" aria-label="Close">&#10005;</button>
+      <div class="upop-head"><div class="uart">${u.id === 'lemonade' && SNACK_SHOP_ICONS[chapterId] ? SNACK_SHOP_ICONS[chapterId] : UPGRADE_ICONS[u.id]}</div><b>${u.name}</b></div>
+      <p>${info.text}</p>
+      <div class="upop-each"><span>Each upgrade</span><b>${info.each}</b></div>
+      <div class="ubar">${u.tiers.map((_, k) => `<i class="${k < lvl ? 'on' : ''}"></i>`).join('')}</div><small>Level ${lvl} of ${u.tiers.length}</small></div>`;
+    pop.addEventListener('click', (ev) => { if (ev.target === pop || ev.target.closest('.upop-x')) closeInfo(); });
+    root.appendChild(pop);
+  });
   draw();
-  const onKey = (e) => { if (e.key === 'Escape') go('map', { chapter: chapterId }); };
+  const onKey = (e) => { if (e.key !== 'Escape') return; if (pop) closeInfo(); else go('map', { chapter: chapterId }); };
   window.addEventListener('keydown', onKey);
   return () => { window.removeEventListener('keydown', onKey); document.body.classList.remove('upg-open'); };
 }
