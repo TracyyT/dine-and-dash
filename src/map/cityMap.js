@@ -1,3 +1,4 @@
+import { levelStop } from './stop.js';
 import { FL, G0, G1, OUT, P, el, inView, isSt, m6, poly, pts, rnd, seedRandom } from './iso.js';
 import { box, car, lamp, planter, sign, tree, truck } from './props.js';
 import { FLR, PAL, STY, drawBuilding, plaza } from './buildings.js';
@@ -70,27 +71,7 @@ export function renderCity(S, LB, chapter, progress) {
   // level stops
   const lv=lvl;
   lv.forEach(l=>{const [gx,gy]=gridAt(l.a);let best=null,bd=1e9;B.forEach(b=>{if(b.sign||b.h<FL*3||b.style=="loft")return;const c=[b.x0+b.w/2,b.y0+b.d/2],dd=Math.hypot(c[0]-gx,c[1]-gy);if(c[0]+c[1]<gx+gy&&dd<bd){bd=dd;best=b}});if(best)best.sign=l.sg});
-  const star=(x,y,on)=>`<path transform="translate(${x},${y}) scale(1.4)" d="M0-9L2.7-3 9-2.4 4.2 1.8 5.6 8 0 4.8 -5.6 8 -4.2 1.8 -9-2.4 -2.7-3Z" fill="${on?'#ffd84a':'#3a3050'}" stroke="#14100f" stroke-width="1.2"/>`;
-  lv.forEach(l=>{
-   const [gx,gy]=gridAt(l.a),[x,y]=P(gx,gy),lock=l.st=='lock';
-   add(gx+gy+.6,g=>{
-    const n=el('g',{class:'node','data-n':l.n,transform:`translate(${x},${y})`,tabindex:lock?-1:0,role:'button','aria-label':`Level ${l.n}, ${l.name}, `+(lock?'locked':l.st=='now'?'next up':l.s+' stars')},g);
-    el('ellipse',{cy:18,rx:54,ry:23,fill:'#1a0a30',opacity:.38},n);
-    const u=el('g',{class:'lift'},n);
-    if(l.st=='now')el('ellipse',{rx:48,ry:24,fill:'#ffd96a',class:'pulse'},u);
-    const base=lock?'#7a7088':l.st=='now'?'#c43a52':'#e8b84a',edge=lock?'#4a4258':l.st=='now'?'#7d1d33':'#a87a22',top=lock?'#a49ab4':l.st=='now'?'#ec5a72':'#ffd96a';
-    el('path',{d:'M-46 0v14a46 23 0 0 0 92 0v-14Z',fill:edge,stroke:'#14100f','stroke-width':1.6},u);
-    el('ellipse',{class:'ring',rx:46,ry:23,fill:top,stroke:'#14100f','stroke-width':2},u);
-    el('ellipse',{rx:34,ry:17,fill:base,stroke:lock?'#5a5068':'#fff3c0','stroke-width':1.6,opacity:.95},u);
-    const t=el('text',{y:10,'text-anchor':'middle','font-family':'Limelight,serif','font-size':30,fill:lock?'#4a4258':'#fff8e0',stroke:'#14100f','stroke-width':1,'paint-order':'stroke'},u);t.textContent=l.n;
-    if(lock){const lk=el('g',{transform:'translate(0,-28) scale(1.4)'},u);lk.innerHTML='<rect x="-7" y="-2" width="14" height="11" rx="2" fill="#5a5068" stroke="#14100f"/><path d="M-4-2V-6a4 4 0 0 1 8 0V-2" fill="none" stroke="#5a5068" stroke-width="2.4"/>'}
-   });
-   const g=el('g',{transform:`translate(${x},${y})`,'pointer-events':'none'},LB);
-   const lab=el('g',{transform:'translate(0,62)'},g);el('rect',{x:-80,y:-17,width:160,height:32,fill:'#14100f',stroke:lock?'#5a5068':'#c9a24a','stroke-width':2},lab);
-   const tt=el('text',{y:6,'text-anchor':'middle','font-family':'Josefin Sans','font-weight':700,'font-size':18,fill:lock?'#9a90ac':'#f2e2b8'},lab);tt.textContent=l.name;
-   if(!lock){const s=el('g',{transform:'translate(0,-56)'},g);s.innerHTML=star(-30,0,l.s>=1)+star(0,-8,l.s>=2)+star(30,0,l.s>=3)}
-   if(l.n==chapter.levels.length)el('path',{d:'M-20-100L-12-116-3-104 0-120 3-104 12-116 20-100Z',fill:'#ffd96a',stroke:'#14100f','stroke-width':1.5},g);
-  });
+  lv.forEach(l=>{const [gx,gy]=gridAt(l.a),[x,y]=P(gx,gy);add(gx+gy+.6,g=>levelStop({parent:g,labels:LB,l,chapter,skin:'city',x,y}))});
   // start flag
   add(24,g=>{const [x,y]=P(...W[0]);el('ellipse',{cx:x,cy:y+4,rx:26,ry:11,fill:'#14100f',stroke:'url(#brass)','stroke-width':4},g);el('line',{x1:x,y1:y,x2:x,y2:y-56,stroke:'#8f6a22','stroke-width':4},g);el('path',{d:`M${x} ${y-56}l32 10-32 10Z`,fill:'#d9435f',stroke:'#14100f','stroke-width':1.5},g)});
   items.sort((a,b)=>a.key-b.key).forEach(i=>i.fn(S));
