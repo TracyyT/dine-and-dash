@@ -11,7 +11,9 @@ const BOOST = 0.25; // satisfaction a guest regains each time the waiter complet
 
 const rand = (a, b) => a + Math.random() * (b - a);
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const WORK = { refill: 0.8, order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop: 0.3, deliver: 0.4 };
+// How long the waiter works on a job (the cleaning upgrade shortens cleaning). The room's progress bar reads this too.
+export const workTime = (g, type) => WORK[type] * (type === 'clean' ? 1 - 0.3 * g.owned.cleaning : 1);
+const WORK = { refill: 0.6, order: 0.5, bill: 0.4, clean: 0.8, pickup: 0.3, drop: 0.3, deliver: 0.4 };
 const MOOD_RATE = { queue: 1, wantOrder: 1.3, waitFood: 1, wantBill: 1.5, eating: 0.1 };
 
 export function createGame(baseCfg, owned = {}) {
@@ -38,7 +40,7 @@ export function createGame(baseCfg, owned = {}) {
       g.staff.push({ id: g.nextId++, role, x: home.x, y: home.y, home, task: null, carry: null, face: 1 });
     }
   }
-  if (!own.host) g.tasks.push({ type: 'refill', id: 1 }); // the waiter fills the empty jar first (a hired host does it instead)
+  // The treat stand starts empty and the player taps it to refill it (a hired host keeps it filled on their own).
   return g;
 }
 
@@ -265,7 +267,7 @@ function updateWaiter(g, dt) {
     }
   } else {
     task.t += dt;
-    if (task.t >= WORK[task.type] * (task.type === 'clean' ? 1 - 0.3 * g.owned.cleaning : 1)) finish(g, task);
+    if (task.t >= workTime(g, task.type)) finish(g, task);
   }
 }
 
