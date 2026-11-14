@@ -12,6 +12,13 @@ const BOOST = 0.25; // satisfaction a guest regains each time the waiter complet
 const rand = (a, b) => a + Math.random() * (b - a);
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 // How long the waiter works on a job (the cleaning upgrade shortens cleaning). The room's progress bar reads this too.
+// 0..1 while somebody is pouring a refill at the treat station, -1 when nobody is.
+export function refillProgress(g) {
+  const w = g.waiter.task;
+  if (w && w.type === 'refill' && w.phase === 'work') return Math.min(1, w.t / workTime(g, 'refill'));
+  for (const s of g.staff) { const t = s.task; if (t && t.type === 'refill' && t.phase === 'work') return Math.min(1, t.t / (STAFF_WORK.refill / (1 + 0.25 * g.owned.training))); }
+  return -1;
+}
 export const workTime = (g, type) => WORK[type] * (type === 'clean' ? 1 - 0.3 * g.owned.cleaning : 1);
 const WORK = { refill: 0.8, order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop: 0.3, deliver: 0.4 };
 const MOOD_RATE = { queue: 1, wantOrder: 1.3, waitFood: 1, wantBill: 1.5, eating: 0.1 };

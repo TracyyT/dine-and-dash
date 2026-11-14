@@ -9,7 +9,7 @@ export const upgradeInfo = (id, chapterId) => {
     ingredients: { text: 'Every dish and drink earns more coins.', each: '+15% coins per dish' },
     shoes: { text: 'You walk to every job faster.', each: '+25% walking speed' },
     seats: { text: 'Guests stay happy for longer while they wait.', each: '-20% patience loss' },
-    lemonade: { text: `Refill the ${sn.name} stand to cheer up waiting guests (+35% mood). It holds 1 refill to start.`, each: '+1 refill (up to 3)' },
+    lemonade: { text: `Tap the ${sn.name} table to refill the plate and cheer up waiting guests (+35% mood). Each level makes the table fancier and puts more on the plate.`, each: '+1 item per refill (up to 3)' },
     cleaning: { text: 'Dirty tables are ready again sooner.', each: '-30% cleaning time' },
     tips: { text: 'Happy guests leave bigger tips.', each: '+30% tips' },
     host: { text: `Seats waiting guests and keeps the ${sn.name} filled, so you don't have to.`, each: '+1 host' },
