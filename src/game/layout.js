@@ -25,10 +25,11 @@ export function buildLayout(cfg) {
   const takeY = H - 40;
   const take = [{ x: kx + kw * 0.28, y: takeY }, { x: kx + kw * 0.72, y: takeY }];
   const queue = [];
-  for (let i = 0; i < 6; i++) queue.push({ x: i % 2 ? 180 : 80, y: 420 + Math.floor(i / 2) * 125 });
+  for (let i = 0; i < 6; i++) queue.push({ x: i % 2 ? 150 : 70, y: 420 + Math.floor(i / 2) * 125 });
   return {
     W, H, dineX, kx, kw, cols, rows, cellW: CELL_W,
     tables, stations, pickup, take, queue, stalls,
+    fountain: { x: 214, y: 396, spot: { x: 204, y: 432 } },
     door: { x: 130, y: H + 80 },
     drop: { x: kx + kw / 2, y: 392 },
     pickupPoint: { x: kx + kw / 2, y: 512 },

@@ -5,7 +5,7 @@ import { levelConfig } from '../data/levels.js';
 import { themes } from '../themes/index.js';
 import { applyTheme } from '../themes/apply.js';
 import { recordResult, getUpgrades, bankCoins, chapterStars, getLives, loseLife, nextLifeIn } from '../state/progress.js';
-import { createGame, tick, tapCustomer, tapTable, tapDish, stars } from '../game/engine.js';
+import { createGame, tick, tapCustomer, tapTable, tapDish, tapFountain, stars } from '../game/engine.js';
 import { createView } from '../game/view.js';
 import { introHTML, pauseHTML, resultsHTML, chapterDoneHTML } from '../game/popups.js';
 import { sound } from '../game/sound.js';
@@ -31,6 +31,7 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     customer: (id) => mode === 'play' && tapCustomer(g, id),
     table: (id) => mode === 'play' && tapTable(g, id),
     dish: (id) => mode === 'play' && tapDish(g, id),
+    fountain: () => mode === 'play' && tapFountain(g),
     pause: () => mode === 'play' && openPause(),
     sfx: () => sound.setSfx(!sound.sfx),
     music: () => sound.setMusic(!sound.music),
