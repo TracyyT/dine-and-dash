@@ -51,7 +51,7 @@ export function createView(host, g, info, handlers) {
   // The treat station is a table with a plate. Items sit on the plate (one per refill held); the table gets fancier with each upgrade.
   const tier = Math.min(2, g.owned.lemonade || 0), slots = plateSlots(g.fountain.max);
   const plateTop = Math.round(-83 + (PLATE[tier].cy - 2) * 0.8);
-  const fountainEl = mk('ent fountain t' + tier, `${SN.stand(tier)}<div class="plate" style="top:${plateTop}px">${slots.map(([dx, dy]) => `<i style="left:${dx}px;margin-top:${dy}px">${use(SN.cup, 21)}</i>`).join('')}</div><div class="rfbar"><div></div></div><div class="qn"></div>`);
+  const fountainEl = mk('ent fountain t' + tier, `${SN.stand(tier)}<div class="plate" style="top:${plateTop}px">${slots.map(([dx, dy]) => `<i style="left:${dx}px;top:${dy}px">${use(SN.cup, 21)}</i>`).join('')}</div><div class="rfbar"><div></div></div><div class="qn"></div>`);
   fountainEl.dataset.f = 1; place(fountainEl, FP.x, FP.y); ents.append(fountainEl);
 
   const waiter = mk('ent waiter', `<div class="wbody">${waiterSVG()}</div><div class="carry"></div><div class="meter work"><div></div></div>`);
