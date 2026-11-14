@@ -402,7 +402,7 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .fountain .plate i{position:absolute;display:block;width:21px;height:21px;margin-left:-10px;margin-top:-17px;opacity:0;transform:translateY(-10px) scale(.3);transition:opacity .25s,transform .3s cubic-bezier(.3,1.6,.5,1)}
 .fountain .plate i svg{display:block;filter:drop-shadow(0 1px 0 #0006)}
 .fountain .plate i.on{opacity:1;transform:none}
-.fountain .rfbar{display:none;left:-24px;top:4px;width:48px;height:9px;box-sizing:border-box;background:#1c0f0a;border:2px solid var(--brass);border-radius:6px;overflow:hidden;box-shadow:0 2px 0 #0008}
+.fountain .rfbar{display:none;left:-24px;top:-92px;width:48px;height:9px;box-sizing:border-box;background:#1c0f0a;border:2px solid var(--brass);border-radius:6px;overflow:hidden;box-shadow:0 2px 0 #0008}
 .fountain .rfbar div{height:100%;width:0;background:linear-gradient(#a8f0b0,#4fc860)}
 .fountain.t2 svg.fount .twk{animation:twk 2.2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
 .fountain.t2 svg.fount .twk2{animation-delay:1.1s}
@@ -446,3 +446,7 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .guide.live.nohole{background:rgba(7,10,26,.78);pointer-events:auto}
 
 .fountain svg.fount{overflow:visible}
+
+.fountain .qn{top:-118px}
+.fountain.t2 svg.fount .stm,.fountain.t1 svg.fount .stm{animation:stm 2.4s ease-in-out infinite}
+@keyframes stm{0%,100%{opacity:.2}50%{opacity:.9}}
