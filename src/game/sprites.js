@@ -5,6 +5,8 @@ export const ICONS = `
  <symbol id="ic-bag" viewBox="0 0 40 40"><path d="M10 14h20l2 21H8z" fill="#d9a25a" stroke="#8a5a22" stroke-width="2" stroke-linejoin="round"/><path d="M14 14Q14 5 20 5Q26 5 26 14" fill="none" stroke="#8a5a22" stroke-width="2.4"/><path d="M10 20h20" stroke="#8a5a22" stroke-width="1.4" opacity=".5"/><path d="M17 26h6" stroke="#7d1d33" stroke-width="3" stroke-linecap="round"/></symbol>
  <symbol id="ic-order" viewBox="0 0 40 40"><rect x="9" y="5" width="22" height="30" rx="3" fill="#f1e6cf" stroke="#8f6a22" stroke-width="2"/><path d="M14 13h12M14 19h12M14 25h7" stroke="#8f6a22" stroke-width="2" stroke-linecap="round"/><path d="M27 27l6-6 3 3-6 6-4 1z" fill="#7d1d33"/></symbol>
  <symbol id="ic-bill" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#e8c766" stroke="#8f6a22" stroke-width="2.5"/><circle cx="20" cy="20" r="10.5" fill="none" stroke="#8f6a22" stroke-width="1.5"/><text x="20" y="26.5" text-anchor="middle" font-size="17" font-weight="700" fill="#6b4a12" font-family="Josefin Sans,sans-serif">$</text></symbol>
+ <symbol id="ic-lemon" viewBox="0 0 40 40"><ellipse cx="20" cy="22" rx="15" ry="11" fill="#ffe14a" stroke="#a8861a" stroke-width="2.5" transform="rotate(-18 20 22)"/><path d="M33 12q4-2 6 0" stroke="#a8861a" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M22 8q4-6 11-3q-2 7-9 6Z" fill="#6fae5a" stroke="#2f6a2a" stroke-width="2"/></symbol>
+ <symbol id="ic-cup" viewBox="0 0 40 40"><path d="M9 8h22l-3 28H12Z" fill="#fff6c8" stroke="#8a7a2a" stroke-width="2.5" stroke-linejoin="round"/><path d="M10.5 16h19l-1.6 20H12.1Z" fill="#ffd93a"/><path d="M25 3l-5 14" stroke="#e0533f" stroke-width="3" stroke-linecap="round"/></symbol>
  <symbol id="ic-heart" viewBox="0 0 40 40"><path d="M20 35C6 25 5 14 11 10Q17 7 20 14Q23 7 29 10C35 14 34 25 20 35Z" fill="#e0476a" stroke="#8c1f3d" stroke-width="2"/></symbol>
  <symbol id="ic-angry" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#e0533f" stroke="#8c2418" stroke-width="2"/><path d="M10 13l9 4M30 13l-9 4" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="14" cy="21" r="2" fill="#fff"/><circle cx="26" cy="21" r="2" fill="#fff"/><path d="M13 30Q20 24 27 30" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
  <symbol id="ic-sfx" viewBox="0 0 40 40"><path d="M6 15h7l9-8v26l-9-8H6z" fill="#f4dd8e" stroke="#8f6a22" stroke-width="2" stroke-linejoin="round"/><path d="M27 14q5 6 0 12M31 10q9 10 0 20" fill="none" stroke="#f4dd8e" stroke-width="2.6" stroke-linecap="round"/></symbol>
@@ -186,4 +188,18 @@ export const chefSVG = () => `<svg viewBox="0 0 60 84" width="60" height="84">
   <circle cx="23.5" cy="26" r="2" fill="#1b1220"/><circle cx="36.5" cy="26" r="2" fill="#1b1220"/>
   <path d="M25 32Q30 37 35 32" stroke="#1b1220" stroke-width="2" fill="none" stroke-linecap="round"/>
   <path d="M25 31q5 3 10 0" stroke="#3a2418" stroke-width="2" fill="none" opacity="0"/>
+</svg>`;
+
+// Lemonade fountain for the wait line: a glass jar on a stand with a tap. `cups` fills the three little cups.
+export const fountainSVG = () => `<svg class="fount" viewBox="0 0 80 110" width="80" height="110" aria-hidden="true">
+  <ellipse cx="40" cy="104" rx="30" ry="6" fill="#000" opacity=".28"/>
+  <rect x="14" y="78" width="52" height="24" rx="5" fill="#a52e4a" stroke="#4a0f1d" stroke-width="2.5"/>
+  <rect x="20" y="84" width="40" height="5" rx="2.5" fill="#e8c766" opacity=".85"/>
+  <path d="M16 20Q14 52 22 76H58Q66 52 64 20Z" fill="#fff6c8" fill-opacity=".55" stroke="#4a0f1d" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M17.5 34Q17 54 24 74H56Q63 54 62.5 34Z" fill="#ffd93a"/>
+  <path d="M22 40Q22 56 27 70" stroke="#fff" stroke-opacity=".6" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <ellipse cx="29" cy="49" rx="6.5" ry="4.5" fill="#fff27a" stroke="#a8861a" stroke-width="1.5"/><ellipse cx="48" cy="59" rx="6.5" ry="4.5" fill="#fff27a" stroke="#a8861a" stroke-width="1.5"/>
+  <rect x="12" y="12" width="56" height="10" rx="4" fill="#e8c766" stroke="#4a0f1d" stroke-width="2.5"/>
+  <ellipse cx="40" cy="8" rx="9" ry="6" fill="#ffe14a" stroke="#a8861a" stroke-width="2"/><path d="M42 3q3-3 7-1" stroke="#2f6a2a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <rect x="35" y="74" width="10" height="8" rx="2" fill="#c8d0d4" stroke="#4a0f1d" stroke-width="2"/>
 </svg>`;

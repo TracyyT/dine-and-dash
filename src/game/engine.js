@@ -5,11 +5,13 @@ import { buildLayout } from './layout.js';
 // Upgrades come from the map (see data/upgrades.js) and are passed in as `owned` when a level starts.
 export const PRICES = { drink: 5, dessert: 9 };
 const ADDON_TIME = { drink: 2.5, dessert: 3.5 };
+const LEMON_BOOST = 0.35; // satisfaction a waiting guest regains from a cup of lemonade
+const LEMON_BELOW = 0.65; // a cup goes to a waiting guest once they are less happy than this
 const BOOST = 0.25; // satisfaction a guest regains each time the waiter completes one of their requests
 
 const rand = (a, b) => a + Math.random() * (b - a);
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-const WORK = { order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop: 0.3, deliver: 0.4 };
+const WORK = { refill: 0.8, order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop: 0.3, deliver: 0.4 };
 const MOOD_RATE = { queue: 1, wantOrder: 1.3, waitFood: 1, wantBill: 1.5, eating: 0.1 };
 
 export function createGame(baseCfg, owned = {}) {
@@ -23,6 +25,7 @@ export function createGame(baseCfg, owned = {}) {
     stats: { dishes: 0, made: 0, happy: 0, take: 0, satSum: 0 },
     objectives: [{ ...cfg.objective, status: 'open', value: 0 }], // ONE requirement per level
     result: null,
+    fountain: { cups: 3, max: 3, claimed: false }, // lemonade in the wait line
     waiter: { x: L.home.x, y: L.home.y, carry: null, task: null, work: 0, face: 1 },
   };
   L.tables.slice(0, cfg.tables).forEach(([x, y], i) => g.tables.push({ id: i + 1, x, y, state: 'free', guest: null }));
@@ -117,7 +120,7 @@ function leave(g, c, happy) {
 export const QUEUE_MAX = 10;
 export function taskOrder(g) {
   const cur = g.waiter.task;
-  const list = cur && ['order', 'bill', 'pickup', 'clean', 'deliver'].includes(cur.type) ? [cur] : [];
+  const list = cur && ['order', 'bill', 'pickup', 'clean', 'deliver', 'refill'].includes(cur.type) ? [cur] : [];
   return list.concat(g.tasks).slice(0, QUEUE_MAX);
 }
 
@@ -142,6 +145,7 @@ function aim(g, task) {
   if (task.type === 'clean') { const t = byId(g.tables, task.id); return { x: t.x, y: t.y + 66 }; }
   if (task.type === 'pickup') { const d = byId(g.pickup, task.id); return d ? { x: d.px, y: d.py } : g.L.pickupPoint; }
   if (task.type === 'drop') return g.L.drop;
+  if (task.type === 'refill') return g.L.fountain.spot;
 }
 
 function valid(g, task) {
@@ -150,13 +154,14 @@ function valid(g, task) {
   if (task.type === 'bill') return !!c && c.state === 'wantBill';
   if (task.type === 'clean') { const t = byId(g.tables, task.id); return t.state === 'dirty' && !t.claimed; }
   if (task.type === 'pickup') { const d = byId(g.pickup, task.id); return !!d && !d.claimed; }
+  if (task.type === 'refill') return g.fountain.cups < g.fountain.max && !g.fountain.claimed;
   return true;
 }
 
 function finish(g, task) {
   const w = g.waiter;
   // The guest may have left, or the dish vanished, while the waiter was busy.
-  if (['order', 'bill', 'pickup', 'clean'].includes(task.type) && !valid(g, task)) { w.task = null; return; }
+  if (['order', 'bill', 'pickup', 'clean', 'refill'].includes(task.type) && !valid(g, task)) { w.task = null; return; }
   if (task.type === 'order') {
     const c = byId(g.customers, task.id);
     c.dish = pick(g.cfg.dishes); c.state = 'waitFood'; emit(g, { type: 'order' }); boost(g, c);
@@ -188,9 +193,25 @@ function finish(g, task) {
     if (carry.addon) { if (c && c.state !== 'leaving') addon(g, c, carry.dish); }
     else if (c && c.state === 'waitFood') serve(g, c, carry.dish);
   }
+  if (task.type === 'refill') refill(g);
   if (task.type === 'bill') collect(g, byId(g.customers, task.id));
   if (task.type === 'clean') { byId(g.tables, task.id).state = 'free'; emit(g, { type: 'clean', x: byId(g.tables, task.id).x, y: byId(g.tables, task.id).y }); }
   w.task = null;
+}
+
+function refill(g) {
+  g.fountain.cups = g.fountain.max; g.fountain.claimed = false;
+  emit(g, { type: 'pour', x: g.L.fountain.x, y: g.L.fountain.y });
+}
+// A cup goes to the waiting guest who is least happy, once they dip below LEMON_BELOW. One cup per guest.
+function serveLemonade(g) {
+  const f = g.fountain;
+  while (f.cups > 0) {
+    const c = g.customers.filter((x) => x.state === 'queue' && !x.lemon && x.sat < LEMON_BELOW).sort((a, b) => a.sat - b.sat)[0];
+    if (!c) return;
+    f.cups--; c.lemon = true; c.sat = Math.min(1, c.sat + LEMON_BOOST);
+    emit(g, { type: 'lemon', x: c.x, y: c.y - 70 });
+  }
 }
 
 function boost(g, c) {
@@ -281,7 +302,7 @@ function updateKitchen(g, dt) {
   g.pickup.forEach((d) => { d.age += dt; });
 }
 
-const STAFF_WORK = { seat: 0.4, clean: 1.6, fetch: 0.3, bring: 0.4 };
+const STAFF_WORK = { refill: 0.8, seat: 0.4, clean: 1.6, fetch: 0.3, bring: 0.4 };
 const STAFF_SPEED = { host: 260, busser: 260, runner: 340 };
 const waiterBusyWith = (g, type, id) => (g.waiter.task && g.waiter.task.type === type && g.waiter.task.id === id) || g.tasks.some((t) => t.type === type && t.id === id);
 
@@ -290,6 +311,7 @@ function pickStaffTask(g, s) {
     const c = g.customers.filter((x) => x.state === 'queue' && !g.staff.some((o) => o !== s && o.task && o.task.type === 'seat' && o.task.id === x.id)).sort((a, b) => a.id - b.id)
       .find((x) => (x.kind === 'dine' ? g.tables.some((t) => t.state === 'free') : g.takeSlots.some((t) => !t.guest)));
     if (c) return { type: 'seat', id: c.id };
+    if (g.fountain.cups === 0 && !g.fountain.claimed) { g.fountain.claimed = true; return { type: 'refill', id: 1 }; } // the host keeps the lemonade topped up
   } else if (s.role === 'busser') {
     const t = g.tables.find((x) => x.state === 'dirty' && !x.claimed && !waiterBusyWith(g, 'clean', x.id));
     if (t) { t.claimed = true; return { type: 'clean', id: t.id }; }
@@ -300,12 +322,14 @@ function pickStaffTask(g, s) {
   return null;
 }
 function staffSpot(g, s, t) {
+  if (t.type === 'refill') return g.L.fountain.spot;
   if (t.type === 'seat') { const c = byId(g.customers, t.id); return c && { x: c.x + 48, y: c.y }; }
   if (t.type === 'clean') { const tb = byId(g.tables, t.id); return { x: tb.x, y: tb.y + 66 }; }
   if (t.type === 'fetch') { const d = byId(g.pickup, t.id); return d && { x: d.px - 60, y: d.py }; }
   if (t.type === 'bring') { const c = byId(g.customers, t.id); return c && workSpot(g, c); }
 }
 function staffValid(g, t) {
+  if (t.type === 'refill') return g.fountain.cups < g.fountain.max;
   if (t.type === 'seat') { const c = byId(g.customers, t.id); return !!c && c.state === 'queue' && (c.kind === 'dine' ? g.tables.some((x) => x.state === 'free') : g.takeSlots.some((x) => !x.guest)); }
   if (t.type === 'clean') return byId(g.tables, t.id).state === 'dirty';
   if (t.type === 'fetch') return !!byId(g.pickup, t.id);
@@ -314,11 +338,13 @@ function staffValid(g, t) {
 function staffDrop(g, s) {
   const t = s.task;
   if (t && t.type === 'clean') byId(g.tables, t.id).claimed = false;
+  if (t && t.type === 'refill') g.fountain.claimed = false;
   if (t && t.type === 'fetch') { const d = byId(g.pickup, t.id); if (d) d.claimed = false; }
   s.task = null; s.carry = null;
 }
 function staffFinish(g, s, t) {
   if (t.type === 'seat') tapCustomer(g, t.id);
+  else if (t.type === 'refill') refill(g);
   else if (t.type === 'clean') { const tb = byId(g.tables, t.id); tb.state = 'free'; tb.claimed = false; emit(g, { type: 'clean', x: tb.x, y: tb.y }); }
   else if (t.type === 'fetch') {
     const d = byId(g.pickup, t.id);
@@ -378,6 +404,7 @@ export function tick(g, dt) {
       if (c.sat <= 0) { c.sat = 0; leave(g, c, false); }
     }
   }
+  serveLemonade(g);
   updateKitchen(g, dt);
   updateWaiter(g, dt);
   updateStaff(g, dt);
@@ -407,5 +434,10 @@ export function tapTable(g, id) {
   if (!t || g.over) return;
   if (t.state === 'dirty' && !t.claimed) { if (!g.owned.busser) enqueue(g, 'clean', t.id); } // a hired busser handles cleaning, so it is not in the waiter's queue
   else if (t.guest) tapCustomer(g, t.guest);
+}
+export function tapFountain(g) {
+  if (g.over) return;
+  if (g.fountain.cups >= g.fountain.max) return emit(g, { type: 'toast', icon: 'ic-lemon', text: 'Full' });
+  if (!g.fountain.claimed) enqueue(g, 'refill', 1);
 }
 export function tapDish(g, id) { const d = byId(g.pickup, id); if (d && !d.claimed && !g.over) enqueue(g, 'pickup', id); }

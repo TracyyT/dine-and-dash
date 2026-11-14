@@ -1,5 +1,5 @@
 // Draws the restaurant and keeps it in sync with the engine. Clicks are reported through callbacks.
-import { ICONS, use, customerSVG, waiterSVG, STAFF_LOOK, tableSVG, chairSVG, stoveSVG, chefSVG } from './sprites.js';
+import { ICONS, use, fountainSVG, customerSVG, waiterSVG, STAFF_LOOK, tableSVG, chairSVG, stoveSVG, chefSVG } from './sprites.js';
 import { DISHES } from '../data/dishes.js';
 import { moodOf, taskOrder } from './engine.js';
 import { OBJ_ICON } from './popups.js';
@@ -45,6 +45,10 @@ export function createView(host, g, info, handlers) {
   });
   L.take.forEach((s) => { const el = mk('take-mat'); el.style.left = s.x - 60 + 'px'; el.style.top = s.y - 14 + 'px'; stage.insertBefore(el, ents); });
 
+  const FP = L.fountain;
+  const fountainEl = mk('ent fountain', `${fountainSVG()}<div class="cups">${[0, 1, 2].map(() => `<i>${use('ic-cup', 16)}</i>`).join('')}</div><div class="qn"></div>`);
+  fountainEl.dataset.f = 1; place(fountainEl, FP.x, FP.y); ents.append(fountainEl);
+
   const waiter = mk('ent waiter', `<div class="wbody">${waiterSVG()}</div><div class="carry"></div><div class="meter work"><div></div></div>`);
   ents.append(waiter);
   const guests = new Map(), dishes = new Map(), staffEls = new Map();
@@ -64,11 +68,12 @@ export function createView(host, g, info, handlers) {
   const tappable = (c) => ['queue', 'wantOrder', 'wantBill'].includes(c.state);
 
   stage.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-c],[data-t],[data-d],[data-act]');
+    const t = e.target.closest('[data-c],[data-t],[data-d],[data-f],[data-act]');
     if (!t) return;
     if (t.dataset.c) handlers.customer(+t.dataset.c);
     else if (t.dataset.t) handlers.table(+t.dataset.t);
     else if (t.dataset.d) handlers.dish(+t.dataset.d);
+    else if (t.dataset.f) handlers.fountain();
     else if (t.dataset.act === 'pause') handlers.pause();
     else if (t.dataset.act === 'sfx') handlers.sfx();
     else if (t.dataset.act === 'music') handlers.music();
@@ -78,7 +83,7 @@ export function createView(host, g, info, handlers) {
   function queueNumbers() {
     const num = new Map();
     taskOrder(g).forEach((t, i) => {
-      const key = (t.type === 'clean' ? 't' : t.type === 'pickup' ? 'd' : 'c') + t.id;
+      const key = (t.type === 'clean' ? 't' : t.type === 'pickup' ? 'd' : t.type === 'refill' ? 'f' : 'c') + t.id;
       if (!num.has(key)) num.set(key, i + 1);
     });
     const mark = (el, key) => {
@@ -125,6 +130,11 @@ export function createView(host, g, info, handlers) {
       el.classList.toggle('tap', t.state === 'dirty');
       qn.mark(el, 't' + t.id);
     }
+    // lemonade fountain
+    [...fountainEl.querySelectorAll('.cups i')].forEach((c, i) => c.classList.toggle('empty', i >= g.fountain.cups));
+    fountainEl.classList.toggle('tap', g.fountain.cups < g.fountain.max);
+    fountainEl.classList.toggle('dry', g.fountain.cups === 0);
+    qn.mark(fountainEl, 'f1');
     // kitchen
     for (const { s, el } of stationEls) {
       el.classList.toggle('busy', !!s.ticket && !s.hold);
@@ -217,7 +227,9 @@ export function createView(host, g, info, handlers) {
       else if (ev.type === 'toast') showToast(ev.icon, ev.bad, ev.text);
             else if (ev.type === 'goal') showToast('ic-check', false, 'Goal reached!');
       else if (ev.type === 'boost') float('<b>+25%</b>', ev.x - 22, ev.y + 14, 'tip');
-      const snd = { coin: ev.tip ? 'tip' : 'coin', ding: 'ding', serve: 'serve', clean: 'clean', angry: 'angry', upgrade: 'upgrade', toast: 'nope', seat: 'seat', order: 'order', arrive: 'arrive', cook: 'sizzle', boost: 'boost', goal: 'upgrade' }[ev.type];
+      else if (ev.type === 'lemon') { float(`${use('ic-lemon', 24)}<b>+35%</b>`, ev.x - 34, ev.y + 14, 'tip'); float(use('ic-heart', 20), ev.x + 12, ev.y + 30, 'heart'); }
+      else if (ev.type === 'pour') float(use('ic-spark', 26), ev.x - 13, ev.y - 70, 'spark');
+      const snd = { coin: ev.tip ? 'tip' : 'coin', ding: 'ding', serve: 'serve', clean: 'clean', angry: 'angry', upgrade: 'upgrade', toast: 'nope', seat: 'seat', order: 'order', arrive: 'arrive', cook: 'sizzle', boost: 'boost', lemon: 'boost', pour: 'serve', goal: 'upgrade' }[ev.type];
       if (snd) sound.play(snd);
     }
   }
