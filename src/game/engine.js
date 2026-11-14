@@ -15,7 +15,7 @@ const WORK = { refill: 0.8, order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop
 const MOOD_RATE = { queue: 1, wantOrder: 1.3, waitFood: 1, wantBill: 1.5, eating: 0.1 };
 
 export function createGame(baseCfg, owned = {}) {
-  const own = { training: 0, cleaning: 0, chefs: 0, kitchen: 0, ingredients: 0, shoes: 0, seats: 0, tips: 0, host: 0, busser: 0, runner: 0, ...owned };
+  const own = { training: 0, cleaning: 0, chefs: 0, kitchen: 0, ingredients: 0, shoes: 0, seats: 0, tips: 0, host: 0, busser: 0, runner: 0, lemonade: 0, ...owned };
   const cfg = { ...baseCfg, stations: Math.min(3, 1 + own.chefs) };
   const L = buildLayout(cfg);
   const g = {
@@ -25,7 +25,7 @@ export function createGame(baseCfg, owned = {}) {
     stats: { dishes: 0, made: 0, happy: 0, take: 0, satSum: 0 },
     objectives: [{ ...cfg.objective, status: 'open', value: 0 }], // ONE requirement per level
     result: null,
-    fountain: { cups: 3, max: 3, claimed: false }, // lemonade in the wait line
+    fountain: { cups: 0, max: Math.min(3, 1 + own.lemonade), claimed: false }, // lemonade in the wait line: starts empty with room for one cup; the jar upgrade adds cups (up to 3)
     waiter: { x: L.home.x, y: L.home.y, carry: null, task: null, work: 0, face: 1 },
   };
   L.tables.slice(0, cfg.tables).forEach(([x, y], i) => g.tables.push({ id: i + 1, x, y, state: 'free', guest: null }));
@@ -38,6 +38,7 @@ export function createGame(baseCfg, owned = {}) {
       g.staff.push({ id: g.nextId++, role, x: home.x, y: home.y, home, task: null, carry: null, face: 1 });
     }
   }
+  if (!own.host) g.tasks.push({ type: 'refill', id: 1 }); // the waiter fills the empty jar first (a hired host does it instead)
   return g;
 }
 

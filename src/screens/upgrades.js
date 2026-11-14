@@ -7,6 +7,7 @@ import { themes } from '../themes/index.js';
 import { applyTheme } from '../themes/apply.js';
 import { getWallet, getUpgrades, nextUpgradeCost, buyUpgrade } from '../state/progress.js';
 import { UPGRADE_ICONS, COIN_ICON } from '../map/upgradeIcons.js';
+import { SNACK_SHOP_ICONS } from '../game/snacks.js';
 import { sound } from '../game/sound.js';
 
 const SHELVES = [['kitchen', 'Kitchen'], ['service', 'Service'], ['staff', 'Staff']];
@@ -40,7 +41,7 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
             const lvl = owned[u.id] || 0, cost = nextUpgradeCost(chapterId, u.id), max = cost === undefined, many = u.tiers.length > 1;
             const can = !max && wallet >= cost;
             return `<article class="ucard ${max ? 'max' : ''} ${flash === u.id ? 'flash' : ''}">
-              <div class="uart">${UPGRADE_ICONS[u.id]}</div>
+              <div class="uart">${u.id === 'lemonade' && SNACK_SHOP_ICONS[chapterId] ? SNACK_SHOP_ICONS[chapterId] : UPGRADE_ICONS[u.id]}</div>
               <div class="uinfo"><b>${u.label}</b>${many ? `<span>Lv. ${lvl}/${u.tiers.length}</span>` : `<span>${max ? 'Hired' : 'Hire'}</span>`}
                 <div class="ubar">${u.tiers.map((_, k) => `<i class="${k < lvl ? 'on' : ''}"></i>`).join('')}</div></div>
               <button class="ubuy ${can ? 'can' : ''}" data-up="${u.id}" ${can ? '' : 'disabled'} aria-label="${u.name}${max ? ', maxed' : `, ${cost} coins`}">${max ? '&#10003;' : `${COIN_ICON}<span>${cost}</span>`}</button>
