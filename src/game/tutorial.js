@@ -103,8 +103,8 @@ const liveSteps = (g, L, rectOf, stage, ids) => {
     { kind: 'info', icons: ['ic-star'], text: 'Reach the goal', rect: () => union(rectOf(q('.objs')), rectOf(q('.hstars'))) },
     { kind: 'info', icons: ['ic-clock', 'ic-bill'], text: 'Before time runs out', rect: () => union(rectOf(q('.timer')), rectOf(q('.coins'))) },
     { kind: 'info', icons: ['ic-smile'], text: 'Keep the bar green', rect: () => { const c = cu(0); return c ? { x: c.x - 42, y: c.y - 150, w: 84, h: 60 } : null; } },
+    { kind: 'tap', icons: [SN.cup], text: `Tap to refill the ${SN.name}`, only: 'f', rect: fountainRect, done: () => g.fountain.cups >= g.fountain.max }, // it starts empty: the player fills it first
     ...round(0),
-    { kind: 'info', icons: [SN.cup], text: `Refill the ${SN.name} for waiting guests`, rect: fountainRect },
     ...round(1),
     { kind: 'info', icons: ['ic-play'], text: 'Ready? Go!', rect: null },
   ];

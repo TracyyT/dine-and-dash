@@ -398,7 +398,10 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .fountain.tap svg.fount{filter:drop-shadow(0 0 6px var(--glow));animation:fpulse 1.4s ease-in-out infinite}
 @keyframes fpulse{50%{transform:translateY(-2px)}}
 .fountain:not(.tap){pointer-events:auto;cursor:pointer}
-.fountain .cups{left:-30px;top:-12px;display:flex;gap:2px;background:#000a;border:2px solid var(--brass);border-radius:10px;padding:1px 4px}
+.fountain .cups{left:-46px;top:-14px;display:flex;align-items:center;gap:4px;background:#1c0f0a;border:2px solid var(--brass);border-radius:12px;padding:2px 6px 2px 4px;box-shadow:0 2px 0 #0008}
+.fountain .cups .seg{display:flex;gap:3px}
+.fountain .cups .seg b{display:block;width:12px;height:10px;border-radius:4px;background:#4a3a32;border:1.5px solid #8a7a6a;box-sizing:border-box;transition:background .25s,border-color .25s}
+.fountain .cups .seg b.on{background:linear-gradient(#ffe98a,#f2b830);border-color:#fff4c0;box-shadow:0 0 6px #ffd84a99}
 .fountain .cups i{display:block;width:16px;height:16px;transition:.2s}
 .fountain .cups i.empty{filter:grayscale(1) brightness(.6) opacity(.5)}
 .fountain.dry .cups{border-color:#ff5a4a;animation:pulse 1s infinite}

@@ -2,7 +2,7 @@
 import { SNACK_SYMBOLS, snackFor } from './snacks.js';
 import { ICONS, use, customerSVG, waiterSVG, STAFF_LOOK, tableSVG, chairSVG, stoveSVG, chefSVG } from './sprites.js';
 import { DISHES } from '../data/dishes.js';
-import { moodOf, taskOrder } from './engine.js';
+import { moodOf, taskOrder, workTime } from './engine.js';
 import { OBJ_ICON } from './popups.js';
 import { sceneHTML } from './scene.js';
 import { sound } from './sound.js';
@@ -48,7 +48,7 @@ export function createView(host, g, info, handlers) {
   L.take.forEach((s) => { const el = mk('take-mat'); el.style.left = s.x - 60 + 'px'; el.style.top = s.y - 14 + 'px'; stage.insertBefore(el, ents); });
 
   const FP = L.fountain;
-  const fountainEl = mk('ent fountain', `${SN.stand()}<div class="cups">${[0, 1, 2].map(() => `<i>${use(SN.cup, 16)}</i>`).join('')}</div><div class="qn"></div>`);
+  const fountainEl = mk('ent fountain', `${SN.stand()}<div class="cups">${use(SN.cup, 18)}<div class="seg">${[0, 1, 2].map(() => '<b></b>').join('')}</div></div><div class="qn"></div>`);
   fountainEl.dataset.f = 1; place(fountainEl, FP.x, FP.y); ents.append(fountainEl);
 
   const waiter = mk('ent waiter', `<div class="wbody">${waiterSVG()}</div><div class="carry"></div><div class="meter work"><div></div></div>`);
@@ -133,7 +133,7 @@ export function createView(host, g, info, handlers) {
       qn.mark(el, 't' + t.id);
     }
     // lemonade fountain
-    [...fountainEl.querySelectorAll('.cups i')].forEach((c, i) => { c.style.display = i < g.fountain.max ? '' : 'none'; c.classList.toggle('empty', i >= g.fountain.cups); }); // only as many cups as the jar holds
+    [...fountainEl.querySelectorAll('.cups .seg b')].forEach((c, i) => { c.style.display = i < g.fountain.max ? '' : 'none'; c.classList.toggle('on', i < g.fountain.cups); }); // one block per refill the stand holds; lit = still there
     fountainEl.classList.toggle('tap', g.fountain.cups < g.fountain.max);
     fountainEl.classList.toggle('dry', g.fountain.cups === 0);
     qn.mark(fountainEl, 'f1');
@@ -190,7 +190,7 @@ export function createView(host, g, info, handlers) {
     if (carry.dataset.c !== cs) { carry.dataset.c = cs; carry.innerHTML = cs ? use(cs, 30) : ''; }
     const wm = waiter.querySelector('.work');
     wm.style.visibility = w.task && w.task.phase === 'work' ? 'visible' : 'hidden';
-    if (w.task && w.task.phase === 'work') wm.firstChild.style.width = Math.min(100, (w.task.t / ({ order: .5, bill: .4, clean: 1.3, pickup: .3, drop: .3, deliver: .4 })[w.task.type]) * 100) + '%';
+    if (w.task && w.task.phase === 'work') wm.firstChild.style.width = Math.min(100, (w.task.t / (workTime(g, w.task.type) || 1)) * 100) + '%'; // includes refilling the treat stand
 
     // HUD
     const m = Math.floor(g.timeLeft / 60), s = Math.ceil(g.timeLeft % 60);
