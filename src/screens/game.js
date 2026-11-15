@@ -7,7 +7,7 @@ import { applyTheme } from '../themes/apply.js';
 import { recordResult, getUpgrades, bankCoins, chapterStars, getLives, loseLife, nextLifeIn } from '../state/progress.js';
 import { createGame, tick, tapCustomer, tapTable, tapDish, tapFountain, stars } from '../game/engine.js';
 import { createView } from '../game/view.js';
-import { introHTML, pauseHTML, resultsHTML, chapterDoneHTML } from '../game/popups.js';
+import { introHTML, pauseHTML, resultsHTML, chapterDoneHTML, leaveHTML } from '../game/popups.js';
 import { sound } from '../game/sound.js';
 import { tutorialNeeded, tutorialDone, createCoach, guideNeeded, createGuide, newFeatures } from '../game/tutorial.js';
 
@@ -90,7 +90,11 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   }
   function openPause() {
     mode = 'pause'; sound.stopMusic();
-    show(pauseHTML(), { help: () => openGuide(openPause), quit: toMap, again: replay, resume: () => { sound.startMusic(); close(); mode = 'play'; } });
+    show(pauseHTML(), { help: () => openGuide(openPause), quit: openLeave, again: replay, resume: () => { sound.startMusic(); close(); mode = 'play'; } });
+  }
+  // Leaving a level that has not run its full time costs one life (finishing, passing or failing, is handled in openResults).
+  function openLeave() {
+    show(leaveHTML(g), { leave: () => { if (!g.over) loseLife(); toMap(); }, stay: openPause });
   }
   function openResults() {
     mode = 'over'; sound.stopMusic();

@@ -451,3 +451,15 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 /* refill task bubble: looks like the other task bubbles (take order, bill...); the ring is the time left while refilling */
 .fountain .bubble.rfb{display:none;top:-118px;border-color:var(--brass);box-shadow:0 0 0 3px #e8c76688,0 3px 0 #0005}
 .fountain .bubble.rfb.working::before{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(#4fc860 calc(var(--p,100) * 1%),#0000 0);-webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,#0000 calc(100% - 5px),#000 calc(100% - 4px));z-index:-1}
+
+.prow.intro-back{width:100%;margin-top:10px}.prow.intro-back .pbtn{width:100%}
+
+.lives.sure{gap:4px;margin:2px 0 6px}.lives.sure small{margin-left:0}
+
+.leave .lose-say{margin:2px 0 10px;font:700 14px var(--font-body);color:#7d1d33;text-align:center}
+.lose-row{display:flex;justify-content:center;gap:14px;margin-bottom:14px}
+.lose-box{position:relative;width:76px;height:76px;border-radius:18px;border:3px solid #c9a24a;background:linear-gradient(#fffaf0,#f4e8c8);box-shadow:0 3px 0 #b89a52;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.lose-box em{font:700 13px var(--font-body);font-style:normal;color:#5a0f20}
+.lose-ic{position:relative;display:grid;place-items:center;width:34px;height:34px}
+.lose-x{position:absolute;left:50%;top:50%;width:46px;height:5px;margin:-2.5px 0 0 -23px;border-radius:3px;background:#e0141e;box-shadow:0 0 0 2px #fffaf0;transform:rotate(-45deg)}
+.lose-n{position:absolute;right:-7px;bottom:-7px;min-width:22px;height:22px;border-radius:6px;background:#7d1d33;color:#fff;font:700 13px/22px var(--font-body);text-align:center;border:2px solid #fffaf0}
