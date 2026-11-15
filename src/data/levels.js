@@ -9,7 +9,7 @@
 // Levels 1-2 are easy, 3-5 build up, 6-8 are tuned so they need upgrades or hired staff.
 export const LEVELS = {
   // City Supper Club
-  'city:1': { duration: 60, cols: 3, rows: 1, tables: 3, dishes: ['croissant', 'cheesecake'], arrival: 9, take: .10, patience: 95, orders: [.8,.2,0], stalls: false,
+  'city:1': { duration: 70, cols: 3, rows: 1, tables: 3, dishes: ['croissant', 'cheesecake'], arrival: 8, take: .10, patience: 95, orders: [.8,.2,0], stalls: false,
     objective: { type: 'guests', target: 3 } },
   'city:2': { duration: 65, cols: 3, rows: 2, tables: 4, dishes: ['croissant', 'cheesecake', 'sandwich'], arrival: 8.5, take: .15, patience: 90, orders: [.6,.3,.1], stalls: false,
     objective: { type: 'coins', target: 36 } },
@@ -41,7 +41,7 @@ export const LEVELS = {
   'beach:7': { duration: 110, cols: 4, rows: 2, tables: 8, dishes: ['burger', 'shrimp', 'lobster'], arrival: 4.8, take: .25, patience: 57, orders: [.25,.4,.35], stalls: true,
     objective: { type: 'items', target: 22 } },
   'beach:8': { duration: 120, cols: 4, rows: 2, tables: 8, dishes: ['shrimp', 'lobster', 'burger'], arrival: 4.2, take: .25, patience: 55, orders: [.2,.4,.4], stalls: true,
-    objective: { type: 'coins', target: 308 } },
+    objective: { type: 'coins', target: 290 } },
   // Lantern Garden
   'chinese:1': { duration: 60, cols: 3, rows: 1, tables: 3, dishes: ['dumpling', 'friedrice'], arrival: 9, take: .10, patience: 95, orders: [.8,.2,0], stalls: false,
     objective: { type: 'guests', target: 3 } },
@@ -58,7 +58,7 @@ export const LEVELS = {
   'chinese:7': { duration: 110, cols: 4, rows: 2, tables: 8, dishes: ['noodles', 'duck', 'dimsum'], arrival: 4.8, take: .25, patience: 57, orders: [.25,.4,.35], stalls: true,
     objective: { type: 'items', target: 23 } },
   'chinese:8': { duration: 120, cols: 4, rows: 2, tables: 8, dishes: ['duck', 'dimsum', 'noodles'], arrival: 4.2, take: .25, patience: 55, orders: [.2,.4,.4], stalls: true,
-    objective: { type: 'coins', target: 305 } },
+    objective: { type: 'coins', target: 290 } },
   // Maison d'Or
   'fine:1': { duration: 60, cols: 3, rows: 1, tables: 3, dishes: ['caviar', 'bisque'], arrival: 9, take: .10, patience: 95, orders: [.8,.2,0], stalls: false,
     objective: { type: 'guests', target: 3 } },
@@ -75,7 +75,7 @@ export const LEVELS = {
   'fine:7': { duration: 110, cols: 4, rows: 2, tables: 8, dishes: ['truffle', 'wagyu', 'souffle'], arrival: 4.8, take: .25, patience: 57, orders: [.25,.4,.35], stalls: true,
     objective: { type: 'items', target: 22 } },
   'fine:8': { duration: 120, cols: 4, rows: 2, tables: 8, dishes: ['wagyu', 'souffle', 'truffle'], arrival: 4.2, take: .25, patience: 55, orders: [.2,.4,.4], stalls: true,
-    objective: { type: 'coins', target: 456 } },
+    objective: { type: 'coins', target: 410 } },
   // Big Sky Steakhouse
   'steak:1': { duration: 60, cols: 3, rows: 1, tables: 3, dishes: ['fries', 'wings'], arrival: 9, take: .10, patience: 95, orders: [.8,.2,0], stalls: false,
     objective: { type: 'guests', target: 3 } },
@@ -92,7 +92,7 @@ export const LEVELS = {
   'steak:7': { duration: 110, cols: 4, rows: 2, tables: 8, dishes: ['ribs', 'ribeye', 'tomahawk'], arrival: 4.8, take: .25, patience: 57, orders: [.25,.4,.35], stalls: true,
     objective: { type: 'items', target: 22 } },
   'steak:8': { duration: 120, cols: 4, rows: 2, tables: 8, dishes: ['ribeye', 'tomahawk', 'ribs'], arrival: 4.2, take: .25, patience: 55, orders: [.2,.4,.4], stalls: true,
-    objective: { type: 'coins', target: 426 } },
+    objective: { type: 'coins', target: 385 } },
 };
 export const levelConfig = (chapterId, n) => LEVELS[`${chapterId}:${n}`] || LEVELS['city:1'];
 

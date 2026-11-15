@@ -8,9 +8,9 @@ export const LIFE_SECONDS = 300;
 function load() {
   try {
     const data = JSON.parse(localStorage.getItem(KEY));
-    if (data && typeof data.stars === 'object' && data.stars) return { stars: data.stars, wallet: +data.wallet || 0, lives: Number.isFinite(+data.lives) ? +data.lives : MAX_LIVES, lifeAt: +data.lifeAt || 0, upgrades: data.upgrades && typeof data.upgrades === 'object' ? data.upgrades : {} };
+    if (data && typeof data.stars === 'object' && data.stars) return { stars: data.stars, wallet: +data.wallet || 0, lives: Number.isFinite(+data.lives) ? +data.lives : MAX_LIVES, lifeAt: +data.lifeAt || 0, upgrades: data.upgrades && typeof data.upgrades === 'object' ? data.upgrades : {}, daily: data.daily && typeof data.daily === 'object' ? data.daily : {} };
   } catch { /* missing or corrupted save: start fresh */ }
-  return { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {} };
+  return { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {}, daily: {} };
 }
 
 let state = load();
@@ -89,14 +89,35 @@ export function loseLife() {
   return state.lives;
 }
 
+// ---- daily bonus: one gift per calendar day; coming back on consecutive days builds a 7-day streak ----
+export const DAILY_COINS = [20, 25, 30, 40, 50, 60, 100];
+const dayKey = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const yesterdayKey = () => { const d = new Date(); d.setDate(d.getDate() - 1); return dayKey(d); };
+// { available, day (1-7, which gift is next), coins, streak (days already collected in a row) }
+export function dailyStatus() {
+  const last = state.daily.last, streak = state.daily.streak || 0;
+  const available = last !== dayKey();
+  const kept = last === yesterdayKey() ? streak : last === dayKey() ? streak : 0; // a missed day starts the streak over
+  const day = available ? (kept % 7) + 1 : ((streak - 1 + 7) % 7) + 1;
+  return { available, day, coins: DAILY_COINS[day - 1], streak: kept };
+}
+export function claimDaily() {
+  const s = dailyStatus();
+  if (!s.available) return 0;
+  state.daily = { last: dayKey(), streak: s.streak + 1 };
+  state.wallet += s.coins;
+  save();
+  return s.coins;
+}
+
 export function resetProgress() {
-  state = { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {} };
+  state = { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {}, daily: {} };
   save();
 }
 
 // Dev-only shortcut for testing (see main.js). ?unlock=all | beach:3 (everything before that level cleared), ?coins=500, ?reset
 export function devSetup(chapters, params) {
-  if (params.has('reset')) state = { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {} };
+  if (params.has('reset')) state = { stars: {}, wallet: 0, lives: MAX_LIVES, lifeAt: 0, upgrades: {}, daily: {} };
   if (params.has('lives')) { state.lives = Math.max(0, Math.min(MAX_LIVES, +params.get('lives') || 0)); state.lifeAt = state.lives >= MAX_LIVES ? 0 : Date.now(); }
   const u = params.get('unlock');
   if (u) {
@@ -107,6 +128,7 @@ export function devSetup(chapters, params) {
       state.stars[keyOf(c.id, l.n)] = 3;
     }
   }
+  if (params.has('daily')) state.daily = {}; // ?daily makes today's bonus claimable again
   if (params.has('coins')) state.wallet = Math.max(0, +params.get('coins') || 0);
   save();
 }

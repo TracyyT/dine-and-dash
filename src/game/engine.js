@@ -396,7 +396,7 @@ export function tick(g, dt) {
   if (g.over) return;
   g.timeLeft -= dt;
   if (g.timeLeft <= 0) { g.timeLeft = 0; g.over = true; evalObjectives(g, true); return; }
-  if (!g.closed && g.timeLeft <= CLOSING_AT) { g.closed = true; emit(g, { type: 'toast', icon: 'ic-clock', text: 'Closed: no new guests', bad: false }); } // the door closes for the last seconds of the level
+  if (!g.closed && g.timeLeft <= CLOSING_AT) { g.closed = true; emit(g, { type: 'closed' }); } // the door closes for the last seconds of the level
   g.nextArrival -= dt;
   if (g.nextArrival <= 0) {
     if (!g.closed) spawn(g);
@@ -408,6 +408,7 @@ export function tick(g, dt) {
       if (c.state === 'leaving') { g.customers = g.customers.filter((x) => x !== c); continue; }
       c.state = c.next;
     }
+    if (c.state === 'eating' && c.sat > 0.55) { c.heartT = (c.heartT ?? rand(0.5, 1.5)) - dt; if (c.heartT <= 0) { c.heartT = rand(2.2, 3.4); emit(g, { type: 'heart', x: c.x, y: c.y - 70 }); } } // happy guests send up little hearts while they eat
     if (c.state === 'eating') { c.eatT -= dt; if (c.eatT <= 0) c.state = c.done < c.planned ? 'wantOrder' : 'wantBill'; }
     const rate = MOOD_RATE[c.state] * (1 - 0.2 * g.owned.seats);
     if (rate) {

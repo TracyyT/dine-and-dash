@@ -1,0 +1,13 @@
+.daily { position: fixed; inset: 0; z-index: 3000; display: grid; place-items: center; padding: 16px; background: #0009; backdrop-filter: blur(3px); }
+.daily-card { width: min(420px, 100%); box-sizing: border-box; padding: 16px 18px 20px; text-align: center; color: #4a0f1d; background: linear-gradient(#fbf3de, #f0e0b8); border: 5px solid #c9a24a; border-radius: 22px; box-shadow: 0 0 0 3px #7d1d33, 0 14px 30px #000a; animation: dpop .35s cubic-bezier(.3, 1.5, .5, 1) both; }
+.daily-card h2 { margin: 0 0 4px; font: 400 28px var(--font-display, 'Limelight', serif); color: #7d1d33; }
+.daily-card p { margin: 0 0 12px; font: 600 14px var(--font-body, system-ui); }
+.daily-card ul { list-style: none; margin: 0 0 14px; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.daily-card li { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; border-radius: 10px; background: #fffaf0; border: 2px solid #e5d4a4; font: 700 12px var(--font-body, system-ui); }
+.daily-card li small { font-size: 9px; letter-spacing: .04em; color: #8a6a2a; }
+.daily-card li.got { opacity: .45; }
+.daily-card li.now { border-color: #c62839; background: #fff1d6; transform: scale(1.12); box-shadow: 0 0 0 3px #e8c76688; }
+.daily-claim { width: 100%; padding: 13px 18px; border-radius: 16px; border: 4px solid #fffaf0; background: linear-gradient(#e0546f, #a3243d); color: #fff; font: 700 20px var(--font-body, system-ui); letter-spacing: .04em; box-shadow: 0 5px 0 #5a0f20; cursor: pointer; }
+.daily-claim:hover { background: linear-gradient(#ee6580, #b32a46); }
+@keyframes dpop { from { transform: scale(.7); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (max-height: 420px) { .daily-card h2 { font-size: 22px; } .daily-card ul { margin-bottom: 8px; } }
