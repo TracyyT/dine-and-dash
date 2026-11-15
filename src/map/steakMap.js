@@ -162,5 +162,5 @@ export function renderSteak(S, LB, chapter, progress) {
 
   // stops (cream coins)
   lvl.forEach((l) => levelStop({ parent: S, labels: LB, l, chapter, skin: 'steak' }));
-  return { nodes: lvl, board: { x: 2290, y: 1190, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
+  return { nodes: lvl, board: { x: 2290, y: 1190, dir: 1 }, prev: { x: 110, y: 1240, dir: -1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }
