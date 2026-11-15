@@ -225,7 +225,7 @@ export function createView(host, g, info, handlers) {
       }
     });
     const hs = stage.querySelector('.hstars'), keep = g.objectives[0].type === 'noAngry' ? 3 : g.lost === 0 ? 3 : g.lost === 1 ? 2 : 1;
-    hs.classList.toggle('hide', g.objectives[0].type === 'noAngry'); // that level has no star rule: one angry guest simply ends it
+    hs.classList.toggle('hide', g.objectives[0].type === 'noAngry' || g.objectives[0].type === 'cleanServe'); // that level has no star rule: one angry guest simply ends it
     [...hs.children].forEach((st, i) => st.classList.toggle('off', i >= keep));
     stage.querySelector('[data-act=sfx]').classList.toggle('off', !sound.sfx);
     stage.querySelector('[data-act=music]').classList.toggle('off', !sound.music);
