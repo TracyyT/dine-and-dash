@@ -51,7 +51,7 @@ export function createView(host, g, info, handlers) {
   // The treat station is a table with a plate. Items sit on the plate (one per refill held); the table gets fancier with each upgrade.
   const tier = Math.min(2, g.owned.lemonade || 0), slots = plateSlots(g.fountain.max);
   const plateTop = Math.round(-83 + (PLATE[tier].cy - 2) * 0.8);
-  const fountainEl = mk('ent fountain t' + tier, `${SN.stand(tier)}<div class="plate" style="top:${plateTop}px">${slots.map(([dx, dy]) => `<i style="left:${dx}px;top:${dy}px">${use(SN.cup, 21)}</i>`).join('')}</div><div class="rfbar"><div></div></div><div class="qn"></div>`);
+  const fountainEl = mk('ent fountain t' + tier, `${SN.stand(tier)}<div class="plate" style="top:${plateTop}px">${slots.map(([dx, dy]) => `<i style="left:${dx}px;top:${dy}px">${use(SN.cup, 21)}</i>`).join('')}</div><div class="bubble rfb">${use('ic-replay', 26)}</div><div class="qn"></div>`);
   fountainEl.dataset.f = 1; place(fountainEl, FP.x, FP.y); ents.append(fountainEl);
 
   const waiter = mk('ent waiter', `<div class="wbody">${waiterSVG()}</div><div class="carry"></div><div class="meter work"><div></div></div>`);
@@ -137,8 +137,9 @@ export function createView(host, g, info, handlers) {
     }
     // lemonade fountain
     [...fountainEl.querySelectorAll('.plate i')].forEach((c, i) => c.classList.toggle('on', i < g.fountain.cups)); // each item on the plate is one refill still there
-    const rp = refillProgress(g), rf = fountainEl.querySelector('.rfbar');
-    rf.style.display = rp >= 0 ? 'block' : 'none'; if (rp >= 0) rf.firstChild.style.width = Math.round(rp * 100) + '%'; // the refill timer
+    const rp = refillProgress(g), rb = fountainEl.querySelector('.rfb');
+    rb.style.display = g.fountain.cups === 0 || rp >= 0 ? 'grid' : 'none'; // empty or being refilled: a task bubble like the others
+    rb.classList.toggle('working', rp >= 0); rb.style.setProperty('--p', Math.round((1 - Math.max(0, rp)) * 100)); // the ring around it shows the time left
     fountainEl.classList.toggle('tap', g.fountain.cups < g.fountain.max);
     fountainEl.classList.toggle('dry', g.fountain.cups === 0);
     qn.mark(fountainEl, 'f1');
