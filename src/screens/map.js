@@ -70,6 +70,7 @@ export function renderMap(app, params = {}) {
   document.body.dataset.map = chapter.map;
   const pz = createPanZoom({ view, world, width: WW, height: WH });
   pz.home(...city.home);
+  if (import.meta.env.DEV) window.__pz = pz; // dev-only: lets tests pan the map
 
   $('wallet').querySelector('b').textContent = getWallet();
   const paintLives = () => {
@@ -99,6 +100,13 @@ export function renderMap(app, params = {}) {
       bd.addEventListener('click', goNext);
       bd.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goNext(); } });
     }
+  }
+  if (city.prev && chapterIndex > 0) { // a board at the start of the trail pointing back (chapters 2 and up)
+    const prevCh = chapters[chapterIndex - 1];
+    const pb = directionBoard($('scene'), { ...city.prev, theme: chapter.theme, next: prevCh, open: true, back: true });
+    const goBack = () => { if (!pz.isDragging()) go('map', { chapter: prevCh.id }); };
+    pb.addEventListener('click', goBack);
+    pb.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goBack(); } });
   }
   const choose = (n) => {
     if (pz.isDragging()) return; // a drag is not a click

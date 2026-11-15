@@ -234,5 +234,5 @@ export function renderChinese(S, LB, chapter, progress) {
   // stops: round red coins with a gold rim; the next one glows, locked ones are grey stone
   lvl.forEach((l) => levelStop({ parent: S, labels: LB, l, chapter, skin: 'chinese' }));
   const home = (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos;
-  return { nodes: lvl, board: { x: Math.round(wx(822)), y: Math.round(wy(186)), dir: 1 }, home };
+  return { nodes: lvl, board: { x: Math.round(wx(822)), y: Math.round(wy(186)), dir: 1 }, prev: { x: Math.round(wx(52)), y: Math.round(wy(396)), dir: -1 }, home };
 }

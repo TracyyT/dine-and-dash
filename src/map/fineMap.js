@@ -121,5 +121,5 @@ export function renderFine(S, LB, chapter, progress) {
 
   // stops (gold medallions)
   lvl.forEach((l) => levelStop({ parent: S, labels: LB, l, chapter, skin: 'fine' }));
-  return { nodes: lvl, board: { x: 2290, y: 1200, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
+  return { nodes: lvl, board: { x: 2290, y: 1200, dir: 1 }, prev: { x: 110, y: 1270, dir: -1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }

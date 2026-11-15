@@ -128,6 +128,5 @@ export function renderBeach(S, LB, chapter, progress) {
   // stops
   lvl.forEach((l) => levelStop({ parent: S, labels: LB, l, chapter, skin: 'beach' }));
   // start sign + next-chapter sign
-  el('g', { transform: 'translate(110,1330)' }, S).innerHTML = `<ellipse cy="6" rx="30" ry="10" fill="#000" opacity=".2"/><rect x="-4" y="-70" width="8" height="74" fill="#7a4a22"/><path d="M4 -70h54l-12 14 12 14H4z" fill="#ff7a6a" stroke="${OL}" stroke-width="2.5"/>`;
-  return { nodes: lvl, board: { x: 2290, y: 1200, dir: 1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
+  return { nodes: lvl, board: { x: 2290, y: 1200, dir: 1 }, prev: { x: 90, y: 1340, dir: -1 }, home: (lvl.find((l) => l.st === 'now') || lvl[lvl.length - 1]).pos };
 }
