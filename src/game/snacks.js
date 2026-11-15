@@ -98,7 +98,7 @@ const maker = (theme, t, c) => {
 
 export const stationSVG = (theme, tier = 0) => {
   const c = PAL[theme] || PAL.steak, t = Math.max(0, Math.min(2, tier)), P = PLATE[t];
-  let s = `<ellipse cx="40" cy="100" rx="34" ry="6" fill="#000" opacity=".28"/>`;
+  let s = `<ellipse cx="40" cy="104" rx="34" ry="6" fill="#000" opacity=".28"/>`;
   if (t === 2) s += `<defs><radialGradient id="stg"><stop offset="0" stop-color="#ffe9a0" stop-opacity=".55"/><stop offset="1" stop-color="#ffe9a0" stop-opacity="0"/></radialGradient></defs><circle cx="40" cy="56" r="46" fill="url(#stg)"/>`;
   s += base(c, t) + maker(theme, t, c);
   // the tray at the front: wide and flat with a raised rim and two handles
