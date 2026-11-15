@@ -3,6 +3,7 @@ import { DISHES } from '../data/dishes.js';
 
 import { buildLayout } from './layout.js';
 // Upgrades come from the map (see data/upgrades.js) and are passed in as `owned` when a level starts.
+export const CLOSING_AT = 12; // seconds left when the door closes to new guests
 export const PRICES = { drink: 5, dessert: 9 };
 const ADDON_TIME = { drink: 2.5, dessert: 3.5 };
 const LEMON_BOOST = 0.35; // satisfaction a waiting guest regains from a cup of lemonade
@@ -29,7 +30,7 @@ export function createGame(baseCfg, owned = {}) {
   const L = buildLayout(cfg);
   const g = {
     cfg, L, timeLeft: cfg.duration, earned: 0, served: 0, lost: 0, turnedAway: 0,
-    over: false, customers: [], tables: [], stations: [], tickets: [], pickup: [], takeSlots: [], stallJobs: [],
+    over: false, closed: false, customers: [], tables: [], stations: [], tickets: [], pickup: [], takeSlots: [], stallJobs: [],
     tasks: [], events: [], owned: own, staff: [], nextId: 1, nextArrival: 1,
     stats: { dishes: 0, made: 0, happy: 0, take: 0, satSum: 0 },
     objectives: [{ ...cfg.objective, status: 'open', value: 0 }], // ONE requirement per level
@@ -395,9 +396,10 @@ export function tick(g, dt) {
   if (g.over) return;
   g.timeLeft -= dt;
   if (g.timeLeft <= 0) { g.timeLeft = 0; g.over = true; evalObjectives(g, true); return; }
+  if (!g.closed && g.timeLeft <= CLOSING_AT) { g.closed = true; emit(g, { type: 'toast', icon: 'ic-clock', text: 'Closed: no new guests', bad: false }); } // the door closes for the last seconds of the level
   g.nextArrival -= dt;
   if (g.nextArrival <= 0) {
-    if (g.timeLeft > 8) spawn(g);
+    if (!g.closed) spawn(g);
     g.nextArrival = g.cfg.arrival * rand(0.75, 1.25);
   }
   for (const c of [...g.customers]) {

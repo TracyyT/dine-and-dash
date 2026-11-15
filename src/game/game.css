@@ -463,3 +463,22 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 .lose-ic{position:relative;display:grid;place-items:center;width:34px;height:34px}
 .lose-x{position:absolute;left:50%;top:50%;width:46px;height:5px;margin:-2.5px 0 0 -23px;border-radius:3px;background:#e0141e;box-shadow:0 0 0 2px #fffaf0;transform:rotate(-45deg)}
 .lose-n{position:absolute;right:-7px;bottom:-7px;min-width:22px;height:22px;border-radius:6px;background:#7d1d33;color:#fff;font:700 13px/22px var(--font-body);text-align:center;border:2px solid #fffaf0}
+
+/* closing time: a CLOSED board on one standing leg opposite the treat stand; each theme restyles the same structure */
+.sc-closed{display:none;width:72px;height:78px;transform-origin:50% 100%;pointer-events:none;
+  --bd:#1c1620;--tx:#ffd9dd;--rim:var(--brass);--post:#7a5a2a}
+.sc-closed b{position:absolute;left:0;top:0;width:72px;height:34px;box-sizing:border-box;display:grid;place-items:center;background:var(--bd);color:var(--tx);border:3px solid var(--rim);border-radius:7px;box-shadow:0 3px 0 #0006;font:700 12px var(--font-body);letter-spacing:.05em;white-space:nowrap}
+.sc-closed .post{position:absolute;left:33px;top:34px;width:6px;height:38px;background:var(--post);border-radius:0 0 2px 2px;box-shadow:inset -2px 0 #0003}
+.sc-closed .foot{position:absolute;left:22px;top:70px;width:28px;height:8px;background:var(--post);border-radius:4px;box-shadow:0 2px 0 #0005}
+.stage.closed .sc-closed{display:block;animation:closedIn .5s cubic-bezier(.3,1.6,.5,1) both}
+.stage.closed .sc-door{filter:saturate(.5) brightness(.8)}
+@keyframes closedIn{from{transform:translateY(-14px) scale(.6);opacity:0}to{transform:none;opacity:1}}
+/* theme looks: chalkboard (city), driftwood (beach), red lacquer (chinese), black & gold (fine), plank (steak) */
+[data-theme=beach] .sc-closed{--bd:#b98a52;--tx:#fff4e0;--rim:#7a4f2a;--post:#8a6a3a}
+[data-theme=beach] .sc-closed b{border-radius:4px 12px 4px 12px}
+[data-theme=chinese] .sc-closed{--bd:#b3202a;--tx:#ffe39a;--rim:#e8b64a;--post:#5a1414}
+[data-theme=chinese] .sc-closed b{border-radius:14px 14px 4px 4px}
+[data-theme=fine] .sc-closed{--bd:#15131c;--tx:#f6e2a8;--rim:#d9b66a;--post:#d9b66a}
+[data-theme=fine] .sc-closed b{border-radius:3px;letter-spacing:.1em;font-family:var(--font-display)}
+[data-theme=steak] .sc-closed{--bd:#6a3d22;--tx:#ffd890;--rim:#2b1a10;--post:#2b1a10}
+[data-theme=steak] .sc-closed b{border-radius:3px;border-style:dashed}

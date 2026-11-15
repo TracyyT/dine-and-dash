@@ -103,6 +103,7 @@ export function createView(host, g, info, handlers) {
 
   function sync() {
     const qn = queueNumbers();
+    stage.classList.toggle('closed', !!g.closed);
     // customers
     const live = new Set();
     for (const c of g.customers) {

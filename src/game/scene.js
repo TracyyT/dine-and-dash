@@ -85,6 +85,8 @@ export function sceneHTML(g, info) {
     if (y + 150 < H - 40) h += put('sc-rope', 250, y + 14, '', 'height:140px');
   }
   h += put('sc-door', 130 - 60, H - 52, '<span>ENTRANCE</span>');
+  // closing-time board on one standing leg, opposite the treat stand (shown only once the door has closed)
+  h += put('sc-closed', 4, 318, '<b>CLOSED</b><i class="post"></i><i class="foot"></i>', 'z-index:2');
 
   // light pools under each table
   g.tables.forEach((t) => { h += put('sc-pool', t.x - 120, t.y - 70, '', 'width:240px;height:170px'); });
