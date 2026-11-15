@@ -20,12 +20,12 @@ export function refillProgress(g) {
   for (const s of g.staff) { const t = s.task; if (t && t.type === 'refill' && t.phase === 'work') return Math.min(1, t.t / (STAFF_WORK.refill / (1 + 0.25 * g.owned.training))); }
   return -1;
 }
-export const workTime = (g, type) => WORK[type] * (type === 'clean' ? 1 - 0.3 * g.owned.cleaning : 1);
+export const workTime = (g, type) => WORK[type];
 const WORK = { refill: 1.6, order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop: 0.3, deliver: 0.4 };
 const MOOD_RATE = { queue: 1, wantOrder: 1.3, waitFood: 1, wantBill: 1.5, eating: 0.1 };
 
 export function createGame(baseCfg, owned = {}) {
-  const own = { training: 0, cleaning: 0, chefs: 0, kitchen: 0, ingredients: 0, shoes: 0, seats: 0, tips: 0, host: 0, busser: 0, runner: 0, lemonade: 0, ...owned };
+  const own = { training: 0, chefs: 0, kitchen: 0, ingredients: 0, shoes: 0, seats: 0, host: 0, busser: 0, runner: 0, ...owned };
   const cfg = { ...baseCfg, stations: Math.min(3, 1 + own.chefs) };
   const L = buildLayout(cfg);
   const g = {
@@ -35,7 +35,7 @@ export function createGame(baseCfg, owned = {}) {
     stats: { dishes: 0, made: 0, happy: 0, take: 0, satSum: 0 },
     objectives: [{ ...cfg.objective, status: 'open', value: 0 }], // ONE requirement per level
     result: null,
-    fountain: { cups: 0, max: Math.min(3, 1 + own.lemonade), claimed: false }, // lemonade in the wait line: starts empty with room for one cup; the jar upgrade adds cups (up to 3)
+    fountain: { cups: 0, max: 3, claimed: false }, // the treat stand in the wait line starts empty and holds 3
     waiter: { x: L.home.x, y: L.home.y, carry: null, task: null, work: 0, face: 1 },
   };
   L.tables.slice(0, cfg.tables).forEach(([x, y], i) => g.tables.push({ id: i + 1, x, y, state: 'free', guest: null }));
@@ -249,7 +249,7 @@ function addon(g, c, item) {
 
 function collect(g, c) {
   const pay = Math.round(c.bill * (0.7 + 0.3 * c.sat));
-  const tip = Math.round(c.bill * 0.35 * Math.max(0, c.sat - 0.35) * (1 + 0.3 * g.owned.tips));
+  const tip = Math.round(c.bill * 0.35 * Math.max(0, c.sat - 0.35) );
   g.earned += pay + tip; g.served++;
   g.stats.satSum += c.sat;
   if (c.sat >= 0.7) g.stats.happy++;
@@ -270,7 +270,7 @@ function updateWaiter(g, dt) {
   if (task.phase === 'walk') {
     const spot = aim(g, task);
     if (!spot) { w.task = null; w.carry = null; return; }
-    if (step(w, spot.x, spot.y, 400 * (1 + 0.25 * g.owned.shoes), dt)) {
+    if (step(w, spot.x, spot.y, 400 * (1 + 0.12 * g.owned.shoes), dt)) {
       if (!valid(g, task)) { w.task = null; w.carry = null; return; }
       task.phase = 'work'; task.t = 0;
     }
@@ -388,7 +388,7 @@ function updateStaff(g, dt) {
     } else {
       t.t += dt;
       if (!staffValid(g, t)) { staffDrop(g, s); continue; }
-      if (t.t >= (STAFF_WORK[t.type] * (t.type === 'clean' ? 1 - 0.3 * g.owned.cleaning : 1)) / (1 + 0.25 * g.owned.training)) staffFinish(g, s, t);
+      if (t.t >= STAFF_WORK[t.type] / (1 + 0.25 * g.owned.training)) staffFinish(g, s, t);
     }
   }
 }

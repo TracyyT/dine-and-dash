@@ -129,9 +129,6 @@ const FEATURES = [
   { id: 'ingredients', icons: ['ic-star'], text: 'Finer ingredients: dishes pay more' },
   { id: 'shoes', icons: ['ic-waiter'], text: 'Quick shoes: you walk faster' },
   { id: 'seats', icons: ['ic-smile'], text: 'Cozy seats: guests stay patient longer' },
-  { id: 'cleaning', icons: ['ic-broom'], text: 'Quick clean: tables are ready sooner' },
-  { id: 'tips', icons: ['ic-bill'], text: 'Tip bonus: happy guests tip more' },
-  { id: 'lemonade', icons: ['ic-cup'], text: 'More refills for waiting guests' },
   { id: 'training', icons: ['ic-star', 'ic-people'], text: 'Training: your staff work faster' },
 ];
 const featureSteps = (g, L, rectOf, stage, ids) => {
@@ -145,9 +142,9 @@ const featureSteps = (g, L, rectOf, stage, ids) => {
     host: () => person(staff('host')), busser: () => person(staff('busser')), runner: () => person(staff('runner')),
     kitchen: () => kitchen, ingredients: () => pickup, shoes: () => person(g.waiter),
     seats: () => ({ x: 8, y: L.queue[0].y - 100, w: 236, h: L.queue[5].y - L.queue[0].y + 150 }),
-    cleaning: () => dineRect, lemonade: () => ({ x: L.fountain.x - 50, y: L.fountain.y - 100, w: 100, h: 130 }), tips: () => rectOf(q('.coins')), training: () => person(g.staff[0] || g.waiter),
+    training: () => person(g.staff[0] || g.waiter),
   };
-  return ids.map((id) => { const f = FEATURES.find((x) => x.id === id); return { kind: 'info', icons: id === 'lemonade' ? [SN.cup] : f.icons, text: id === 'lemonade' ? `${SN.upName}: one refill serves more guests` : f.text, rect: rects[id] }; });
+  return ids.map((id) => { const f = FEATURES.find((x) => x.id === id); return { kind: 'info', icons: f.icons, text: f.text, rect: rects[id] }; });
 };
 
 export function createGuide({ stage, g, onDone, interactive = false, ids = [], features = null, theme = 'steak' }) {

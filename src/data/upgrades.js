@@ -1,21 +1,17 @@
-import { snackFor } from '../game/snacks.js';
 // Upgrades are bought on the Upgrade screen with banked coins and last for ONE chapter (each chapter has its own menu and food).
 // tiers = price of each level, label = short card title, group = which shelf it sits on.
 // The in-game effect of each id is applied in game/engine.js and game/scene.js.
 export const UPGRADES = {
   city: [
-    { id: 'chefs',       group: 'kitchen', label: 'Chefs',        name: 'More chefs',        tiers: [40, 80] },
-    { id: 'kitchen',     group: 'kitchen', label: 'Kitchen',      name: 'Better kitchen',    tiers: [50, 90, 140] },
-    { id: 'ingredients', group: 'kitchen', label: 'Ingredients',  name: 'Finer ingredients', tiers: [40, 80, 130] },
-    { id: 'shoes',       group: 'service', label: 'Quick shoes',  name: 'Quick shoes',       tiers: [30, 60] },
-    { id: 'seats',       group: 'service', label: 'Patience',     name: 'Cozy seats',        tiers: [35, 70] },
-    { id: 'lemonade',    group: 'service', label: 'Lemonade',     name: 'Bigger jar',        tiers: [30, 60] },
-    { id: 'cleaning',    group: 'service', label: 'Quick clean',  name: 'Faster cleaning',   tiers: [35, 70] },
-    { id: 'tips',        group: 'service', label: 'Tips',         name: 'Tip bonus',         tiers: [45, 90] },
+    { id: 'chefs',       group: 'staff',   label: 'Chefs',        name: 'More chefs',        tiers: [40, 80] },
     { id: 'host',        group: 'staff',   label: 'Host',         name: 'Hire a host',       tiers: [60, 110] },
     { id: 'busser',      group: 'staff',   label: 'Busser',       name: 'Hire a busser',     tiers: [50, 90] },
     { id: 'runner',      group: 'staff',   label: 'Runner',       name: 'Hire a runner',     tiers: [80, 140, 200] },
-    { id: 'training',    group: 'staff',   label: 'Training',     name: 'Staff training',    tiers: [70, 130] },
+    { id: 'kitchen',     group: 'speed',   label: 'Kitchen',      name: 'Better kitchen',    tiers: [50, 90, 140] },
+    { id: 'shoes',       group: 'speed',   label: 'Quick shoes',  name: 'Quick shoes',       tiers: [30, 60] },
+    { id: 'training',    group: 'speed',   label: 'Training',     name: 'Staff training',    tiers: [70, 130] },
+    { id: 'ingredients', group: 'service', label: 'Ingredients',  name: 'Finer ingredients', tiers: [40, 80, 130] },
+    { id: 'seats',       group: 'service', label: 'Patience',     name: 'Cozy seats',        tiers: [35, 70] },
   ],
 };
 // Beach Bistro has its own menu, so its upgrades start fresh (about 40% pricier; the wallet carries over).
@@ -23,9 +19,4 @@ UPGRADES.beach = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Mat
 UPGRADES.chinese = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 1.8) / 5) * 5) }));
 UPGRADES.fine = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.4) / 5) * 5) }));
 UPGRADES.steak = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.8) / 5) * 5) }));
-// The treat in the wait line has a different name in every chapter (cookies, coconuts, tea, macarons, lemonade).
-for (const [chapterId, list] of Object.entries(UPGRADES)) {
-  const sn = snackFor(chapterId);
-  UPGRADES[chapterId] = list.map((u) => (u.id === 'lemonade' ? { ...u, label: sn.label, name: sn.upName } : u));
-}
 export const upgradeList = (chapterId) => UPGRADES[chapterId] || [];
