@@ -53,7 +53,7 @@ export function renderMap(app, params = {}) {
         <button class="mu-btn" id="chb" aria-label="Chapters"><span class="ic">${MAP_ICONS.chapters}</span>Chapters</button>
         <button class="mu-btn" id="dayb" aria-label="Daily bonus"><span class="ic">${MAP_ICONS.daily}</span>Daily<span class="mu-badge" id="daybadge">1</span></button>
       </div>
-      <div class="mu-title" id="hud"><b>${chapter.name}</b><span>&#9733; ${chapterStars(chapter)}/${chapter.levels.length * 3}</span></div>
+      <div class="mu-title" id="hud" aria-label="Chapter ${chapterIndex + 1}: ${chapter.name}"><small>CHAPTER ${chapterIndex + 1}</small><b>${chapter.name}</b><span>&#9733; ${chapterStars(chapter)}/${chapter.levels.length * 3}</span></div>
       <div class="mu-top">
         <div class="mu-pill" id="lives" aria-label="Lives">${MAP_ICONS.heart}<b></b><small></small></div>
         <div class="mu-pill" id="wallet" aria-label="Coins">${COIN_ICON}<b></b></div>
