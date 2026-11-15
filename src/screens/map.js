@@ -1,7 +1,7 @@
 import '../map/map.css';
 import { go } from '../router.js';
 import { chapters } from '../data/chapters.js';
-import { getProgress, isUnlocked, resetProgress, getWallet, isChapterDone, getLives, nextLifeIn, MAX_LIVES } from '../state/progress.js';
+import { getProgress, isUnlocked, resetProgress, getWallet, isChapterDone, chapterStars, getLives, nextLifeIn, dailyStatus, MAX_LIVES } from '../state/progress.js';
 import { COIN_ICON } from '../map/upgradeIcons.js';
 import { clearTheme } from '../themes/apply.js';
 import { renderCity } from '../map/cityMap.js';
@@ -11,7 +11,11 @@ import { directionBoard } from '../map/board.js';
 import { renderFine, FINE_DEFS } from '../map/fineMap.js';
 import { renderSteak, STEAK_DEFS } from '../map/steakMap.js';
 import { createPanZoom } from '../map/panzoom.js';
-import { maybeShowDaily } from '../map/daily.js';
+import { maybeShowDaily, showDaily } from '../map/daily.js';
+import { MAP_ICONS } from '../map/icons.js';
+import { MINI_LOGO } from '../map/logo.js';
+import { openChapters, openSettings } from '../map/panels.js';
+import '../map/ui.css';
 import { MAP_DEFS } from '../map/defs.js';
 import { WW, WH } from '../map/iso.js';
 
@@ -43,28 +47,27 @@ export function renderMap(app, params = {}) {
       </div>
     </div>
     <div id="vig"></div>
-    <div id="hud"><b>${chapter.name}</b><span>CHAPTER ${chapterIndex + 1}</span><div class="pips" aria-label="${doneCount} of ${chapter.levels.length} levels done">${chapter.levels.map((l) => `<i class="${(progress.stars[l.n] || 0) > 0 ? 'on' : ''}"></i>`).join('')}</div></div>
-    <div id="wallet" aria-label="Coins">${COIN_ICON}<b></b></div>
-    <div id="lives" aria-label="Lives"><svg viewBox="0 0 40 40" width="22" height="22" aria-hidden="true"><path d="M20 35C6 25 5 14 11 10Q17 7 20 14Q23 7 29 10C35 14 34 25 20 35Z" fill="#e0476a" stroke="#8c1f3d" stroke-width="2"/></svg><b></b><small></small></div>
-    <div id="tools">
-      <button id="cp" aria-label="Previous chapter" title="Previous chapter"${chapterIndex > 0 ? '' : ' disabled'}>&#9664;</button>
-      <button id="cn" aria-label="Next chapter" title="Next chapter"${chapterIndex < chapters.length - 1 && open(chapterIndex + 1) ? '' : ' disabled'}>&#9654;</button>
-      <button id="upb" aria-label="Upgrades" title="Upgrades"><svg viewBox="0 0 48 48" width="26" height="26" aria-hidden="true"><path d="M4 8h7l5 22h21l4-16H14" fill="#ffe9a8" stroke="#8f6a22" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="19" cy="38" r="3.6" fill="#ffe9a8" stroke="#8f6a22" stroke-width="2.4"/><circle cx="33" cy="38" r="3.6" fill="#ffe9a8" stroke="#8f6a22" stroke-width="2.4"/></svg></button>
-      <button id="zin" aria-label="Zoom in">+</button>
-      <button id="zout" aria-label="Zoom out">&minus;</button>
-      <button id="ctr" aria-label="Current level" title="Current level"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><circle cx="20" cy="20" r="11" fill="none" stroke="#ffe9a8" stroke-width="3.5"/><circle cx="20" cy="20" r="4" fill="#ffe9a8"/><path d="M20 2v7M20 31v7M2 20h7M31 20h7" stroke="#ffe9a8" stroke-width="3.5" stroke-linecap="round"/></svg></button>
-      <button id="fs" aria-label="Full screen" title="Full screen"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><path d="M6 15V6h9M25 6h9v9M34 25v9h-9M15 34H6v-9" fill="none" stroke="#ffe9a8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      ${import.meta.env.DEV ? '<button id="rst" aria-label="Reset progress" title="Reset progress (dev only)"><svg viewBox="0 0 40 40" width="24" height="24" aria-hidden="true"><path d="M8 12h24M15 12V7h10v5M11 12l2 24h14l2-24" fill="none" stroke="#ffe9a8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' : ''}
+    <div class="mu">
+      <div class="mu-side" role="toolbar" aria-label="Menu">
+        <button class="mu-btn" id="upb" aria-label="Upgrades"><span class="ic">${MAP_ICONS.upgrade}</span>Upgrade</button>
+        <button class="mu-btn" id="chb" aria-label="Chapters"><span class="ic">${MAP_ICONS.chapters}</span>Chapters</button>
+        <button class="mu-btn" id="dayb" aria-label="Daily bonus"><span class="ic">${MAP_ICONS.daily}</span>Daily<span class="mu-badge" id="daybadge">1</span></button>
+      </div>
+      <div class="mu-title" id="hud"><b>${chapter.name}</b><span>&#9733; ${chapterStars(chapter)}/${chapter.levels.length * 3}</span></div>
+      <div class="mu-top">
+        <div class="mu-pill" id="lives" aria-label="Lives">${MAP_ICONS.heart}<b></b><small></small></div>
+        <div class="mu-pill" id="wallet" aria-label="Coins">${COIN_ICON}<b></b></div>
+        <button class="mu-gear" id="setb" aria-label="Settings">${MAP_ICONS.settings}</button>
+        <button class="mu-logo" id="logob" aria-label="Title screen">${MINI_LOGO}</button>
+      </div>
+      <div class="mu-hint" id="hint" aria-label="Drag to look around"><span>Drag to look around</span></div>
     </div>
-    <div id="hint" aria-label="Drag to look around, scroll to zoom"><span>Drag · Scroll</span><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M13 22V9a2.5 2.5 0 0 1 5 0v9m0-3V7a2.5 2.5 0 0 1 5 0v8m0-4a2.5 2.5 0 0 1 5 0v9c0 8-4 13-10 13-5 0-8-3-10-8l-3-6a2.4 2.4 0 0 1 4-2.5l3 4" fill="#fff" stroke="#14100f" stroke-width="2" stroke-linejoin="round"/></svg><svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><circle cx="17" cy="17" r="10" fill="none" stroke="#ffe9a8" stroke-width="3.5"/><path d="M25 25l11 11" stroke="#ffe9a8" stroke-width="4.5" stroke-linecap="round"/></svg></div>
-    <div id="toast" role="status"></div>`;
+    <div class="mu-toast" id="toast" role="status"></div>`;
 
   const $ = (id) => app.querySelector('#' + id);
   const view = $('view'), world = $('world');
   const city = ({ beach: renderBeach, chinese: renderChinese, fine: renderFine, steak: renderSteak }[chapter.map] || renderCity)($('scene'), $('labels'), chapter, progress);
   document.body.dataset.map = chapter.map;
-  $('cp').onclick = () => go('map', { chapter: chapters[chapterIndex - 1].id });
-  $('cn').onclick = () => go('map', { chapter: chapters[chapterIndex + 1].id });
   const pz = createPanZoom({ view, world, width: WW, height: WH });
   pz.home(...city.home);
 
@@ -79,7 +82,7 @@ export function renderMap(app, params = {}) {
   paintLives();
   const livesTimer = setInterval(paintLives, 1000);
   $('upb').onclick = () => go('upgrades', { chapter: chapter.id });
-  maybeShowDaily(document.body, () => { $('wallet').querySelector('b').textContent = getWallet(); }); // today's gift, if it has not been collected yet
+  maybeShowDaily(document.body, () => { $('wallet').querySelector('b').textContent = getWallet(); paintBadge(); }); // today's gift, if it has not been collected yet
 
   const LOCK = '<span style="margin-right:8px;font-weight:700">Locked</span><svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true"><rect x="8" y="18" width="24" height="18" rx="3" fill="#e8c766" stroke="#8f6a22" stroke-width="2.5"/><path d="M13 18v-5a7 7 0 0 1 14 0v5" fill="none" stroke="#e8c766" stroke-width="4"/><circle cx="20" cy="27" r="3" fill="#6b4a12"/></svg>';
   let toastTimer;
@@ -108,11 +111,13 @@ export function renderMap(app, params = {}) {
     node.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(n); } });
   });
   view.addEventListener('panstart', () => { $('hint').style.opacity = 0; });
-  $('zin').onclick = () => pz.zoomBy(1.2);
-  $('zout').onclick = () => pz.zoomBy(1 / 1.2);
-  $('ctr').onclick = () => pz.home(...city.home);
-  if ($('rst')) $('rst').onclick = () => { resetProgress(); go('map'); }; // dev builds only
-  $('fs').onclick = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.());
+  const paintWallet = () => { $('wallet').querySelector('b').textContent = getWallet(); };
+  const paintBadge = () => { $('daybadge').style.display = dailyStatus().available ? '' : 'none'; };
+  paintBadge();
+  $('chb').onclick = () => openChapters(document.body, chapter.id);
+  $('dayb').onclick = () => showDaily(document.body, () => { paintWallet(); paintBadge(); });
+  $('setb').onclick = () => openSettings(document.body, { onReset: () => { resetProgress(); go('map'); } });
+  $('logob').onclick = () => go('title');
   const hintTimer = setTimeout(() => { $('hint').style.opacity = 0; }, 5000);
 
   return () => { clearInterval(livesTimer); // cleanup when leaving the map
