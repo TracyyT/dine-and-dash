@@ -5,7 +5,7 @@ import { stars } from './engine.js';
 
 export const OBJ_ICON = { coins: 'ic-bill', guests: 'ic-people', dishes: 'd-sandwich', items: 'ic-chef', happy: 'ic-smile', takeout: 'ic-bag', noAngry: 'ic-noangry' };
 const clock = (s) => (s ? `<span class="chip">${use('ic-clock', 18)}${s}s</span>` : '');
-const btn = (id, icon, label, cls = '') => `<button class="pbtn ${cls}" data-b="${id}" aria-label="${label}" title="${label}">${use(icon, cls.includes('big') ? 34 : 28)}<span>${label}</span></button>`;
+const btn = (id, icon, label, cls = '') => `<button class="pbtn ${cls}" data-b="${id}" aria-label="${label}" title="${label}">${icon ? use(icon, cls.includes('big') ? 34 : 28) : ''}<span>${label}</span></button>`;
 
 function beachFront(sign) {
   return `<svg viewBox="0 0 320 150" width="100%" height="100%" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="bsk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a62b8"/><stop offset=".42" stop-color="#f2889e"/><stop offset=".66" stop-color="#ffd09a"/><stop offset=".67" stop-color="#2a9ab4"/><stop offset="1" stop-color="#1c6a88"/></linearGradient></defs>
@@ -81,14 +81,14 @@ export function introHTML(g, info, lives = 5, nextLife = 0) {
     <div class="pban">${{ beach: beachFront, chinese: chineseFront, fine: fineFront, steak: steakFront }[info.theme]?.(info.sign || 'TEA') ?? storefront(info.sign || 'CAFE')}</div>
     <h2>${info.name}</h2><div class="dots">${dots}</div>
     <div class="orows">${row}${o.type === 'noAngry' ? `<div class="srule note">${use('ic-angry', 20)}<span>One angry guest ends the level</span></div>` : starRule(o)}</div>
-    <div class="lives" aria-label="${lives} lives left">${hearts(lives)}<small>${dead ? `Next life ${fmt(nextLife)}` : 'Fail = \u22121'}</small></div>
-    ${dead ? `<button class="pbtn primary big" disabled aria-label="No lives left"><span>No lives</span></button>` : btn('go', 'ic-play', 'Play', 'primary big')}
-    <div class="prow">${btn('map', 'ic-pin', 'Map')}</div>
+    ${dead ? `<div class="lives"><small>Next life ${fmt(nextLife)}</small></div>` : ''}
+    ${dead ? `<button class="pbtn primary big" disabled aria-label="No lives left"><span>No lives</span></button>` : btn('go', '', 'Play', 'primary big')}
+    <div class="prow intro-back">${btn('map', '', 'Back', 'big')}</div>
   </div>`;
 }
 
 export function pauseHTML() {
-  return `<div class="popup slim"><div class="prow wide">${btn('help', 'ic-help', 'Help')}${btn('quit', 'ic-pin', 'Map')}${btn('again', 'ic-replay', 'Retry')}${btn('resume', 'ic-play', 'Resume', 'primary')}</div></div>`;
+  return `<div class="popup slim"><div class="prow wide">${btn('help', 'ic-help', 'Help')}${btn('quit', 'ic-home', 'Home')}${btn('again', 'ic-replay', 'Retry')}${btn('resume', 'ic-play', 'Resume', 'primary')}</div></div>`;
 }
 
 const coinPile = `<svg class="pile" viewBox="0 0 160 50" width="160" height="50" aria-hidden="true">${[[30, 36], [56, 40], [84, 36], [110, 40], [132, 36], [44, 26], [72, 28], [100, 26], [58, 16], [86, 16], [72, 6]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="17" ry="7" fill="#e8c766" stroke="#8f6a22" stroke-width="2"/><ellipse cx="${x}" cy="${y - 2}" rx="12" ry="4" fill="#f4dd8e"/>`).join('')}</svg>`;
@@ -104,7 +104,7 @@ export function resultsHTML(g, info, hasNext, lives = 5) {
     <div class="orows">${row}${angry}</div>
     <div class="stats2"><span>${use('ic-people', 34)}<div><b>${g.served}</b><small>Guests</small></div></span><span>${use('ic-smile', 34)}<div><b>${avg}%</b><small>Mood</small></div></span><span>${use('ic-bill', 34)}<div><b>+${g.earned}</b><small>Coins</small></div></span></div>
     ${coinPile}
-    <div class="prow wide">${btn('map', 'ic-map', 'Map')}${btn('again', 'ic-replay', 'Retry')}${win && hasNext ? btn('next', 'ic-next', 'Next', 'primary') : ''}</div>
+    <div class="prow wide">${btn('map', 'ic-home', 'Home')}${btn('again', 'ic-replay', 'Retry')}${win && hasNext ? btn('next', 'ic-next', 'Next', 'primary') : ''}</div>
   </div>`;
 }
 
@@ -120,7 +120,19 @@ export function chapterDoneHTML(chapter, next, starCount) {
     <div class="bigstars">${[0, 1, 2].map((i) => `<svg width="70" height="70" viewBox="0 0 40 40" class="${i < Math.ceil((starCount / total) * 3 - 0.01) ? 'on' : ''}" style="animation-delay:${i * 0.25}s"><use href="#ic-star"/></svg>`).join('')}</div>
     <div class="orow ok">${use('ic-star', 26)}<b>${starCount}/${total}</b></div>
     ${next ? `<div class="pban">${{ chinese: lanternPreview, fine: finePreview, steak: steakPreview }[next.theme] || preview}</div><h2>${next.name}</h2>` : ''}
-    ${next ? btn('go', 'ic-play', 'Play', 'primary big') : ''}
-    <div class="prow">${btn('map', 'ic-pin', 'Map')}</div>
+    ${next ? btn('go', '', 'Play', 'primary big') : ''}
+    <div class="prow">${btn('map', 'ic-home', 'Home')}</div>
   </div>`;
+}
+
+// Asked when the player leaves a level that is still running: it costs one life.
+export function leaveHTML(g) {
+  const o = g.objectives[0];
+  const prog = o.type === 'noAngry' ? `${o.value} angry` : `${o.value}/${o.target}`;
+  return `<div class="popup slim leave"><h2>Exit level</h2><p class="lose-say">Leaving? About to lose these:</p>
+    <div class="lose-row">
+      <div class="lose-box" aria-label="1 life"><span class="lose-ic"><svg width="34" height="34" viewBox="0 0 40 40"><use href="#ic-heart"/></svg><i class="lose-x"></i></span><em>1</em></div>
+      <div class="lose-box" aria-label="Level progress: ${prog}">${use(OBJ_ICON[o.type], 34)}<em>${prog}</em></div>
+    </div>
+    <div class="prow wide">${btn('leave', '', 'Leave')}${btn('stay', '', 'Keep playing', 'primary')}</div></div>`;
 }
