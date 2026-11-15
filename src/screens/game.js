@@ -90,11 +90,12 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   }
   function openPause() {
     mode = 'pause'; sound.stopMusic();
-    show(pauseHTML(), { help: () => openGuide(openPause), quit: openLeave, again: replay, resume: () => { sound.startMusic(); close(); mode = 'play'; } });
+    show(pauseHTML(), { help: () => openGuide(openPause), quit: () => openLeave(false), again: () => openLeave(true), resume: () => { sound.startMusic(); close(); mode = 'play'; } });
   }
   // Leaving a level that has not run its full time costs one life (finishing, passing or failing, is handled in openResults).
-  function openLeave() {
-    show(leaveHTML(g), { leave: () => { if (!g.over) loseLife(); toMap(); }, stay: openPause });
+  // Retrying a running level costs the same life as leaving it, so Retry cannot be used to dodge the cost.
+  function openLeave(retry) {
+    show(leaveHTML(g, retry), { leave: () => { if (!g.over) loseLife(); retry ? replay() : toMap(); }, stay: openPause });
   }
   function openResults() {
     mode = 'over'; sound.stopMusic();

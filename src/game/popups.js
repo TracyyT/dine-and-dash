@@ -126,13 +126,13 @@ export function chapterDoneHTML(chapter, next, starCount) {
 }
 
 // Asked when the player leaves a level that is still running: it costs one life.
-export function leaveHTML(g) {
+export function leaveHTML(g, retry = false) {
   const o = g.objectives[0];
   const prog = o.type === 'noAngry' ? `${o.value} angry` : `${o.value}/${o.target}`;
-  return `<div class="popup slim leave"><h2>Exit level</h2><p class="lose-say">Leaving? About to lose these:</p>
+  return `<div class="popup slim leave"><h2>${retry ? 'Retry level' : 'Exit level'}</h2><p class="lose-say">${retry ? 'Restarting? About to lose these:' : 'Leaving? About to lose these:'}</p>
     <div class="lose-row">
       <div class="lose-box" aria-label="1 life"><span class="lose-ic"><svg width="34" height="34" viewBox="0 0 40 40"><use href="#ic-heart"/></svg><i class="lose-x"></i></span><em>1</em></div>
       <div class="lose-box" aria-label="Level progress: ${prog}">${use(OBJ_ICON[o.type], 34)}<em>${prog}</em></div>
     </div>
-    <div class="prow wide">${btn('leave', '', 'Leave')}${btn('stay', '', 'Keep playing', 'primary')}</div></div>`;
+    <div class="prow wide">${btn('leave', '', retry ? 'Retry' : 'Leave')}${btn('stay', '', 'Keep playing', 'primary')}</div></div>`;
 }
