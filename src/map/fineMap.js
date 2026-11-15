@@ -84,8 +84,8 @@ export function renderFine(S, LB, chapter, progress) {
   shop(S, 1980, 'ATELIER', '#6a4a1a', `${mannequin('#2a3a7a', 120, 290)}${mannequin('#fbf3e2', 220, 290)}${mannequin('#7a1d3a', 320, 290)}`);
 
   // red-carpet path
-  const YS = [1260, 1190, 1270, 1190, 1270, 1190, 1270, 1190];
-  const spots = YS.map((y, i) => [280 + i * 235, y]);
+  const YS = [1260, 1190, 1270, 1190, 1270, 1190, 1270, 1190, 1270, 1190];
+  const spots = YS.map((y, i) => [280 + i * 190, y]);
   const done = (n) => (progress.stars[n] || 0) > 0;
   const current = chapter.levels.find((l) => !done(l.n));
   const lvl = chapter.levels.map((l, i) => ({ n: l.n, name: l.name, s: progress.stars[l.n] || 0, st: done(l.n) ? 'done' : (current && current.n === l.n ? 'now' : 'lock'), pos: spots[i] }));

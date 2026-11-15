@@ -3,7 +3,7 @@ import { use } from './sprites.js';
 import { objectiveLabel } from '../data/levels.js';
 import { stars } from './engine.js';
 
-export const OBJ_ICON = { coins: 'ic-bill', guests: 'ic-people', dishes: 'd-sandwich', items: 'ic-chef', happy: 'ic-smile', takeout: 'ic-bag', noAngry: 'ic-noangry' };
+export const OBJ_ICON = { coins: 'ic-bill', guests: 'ic-people', dishes: 'd-sandwich', items: 'ic-chef', happy: 'ic-smile', takeout: 'ic-bag', noAngry: 'ic-noangry', cleanServe: 'ic-noangry' };
 const clock = (s) => (s ? `<span class="chip">${use('ic-clock', 18)}${s}s</span>` : '');
 const btn = (id, icon, label, cls = '') => `<button class="pbtn ${cls}" data-b="${id}" aria-label="${label}" title="${label}">${icon ? use(icon, cls.includes('big') ? 34 : 28) : ''}<span>${label}</span></button>`;
 
@@ -70,7 +70,7 @@ const flow = [['ic-dine', 'Seat'], ['ic-order', 'Order'], ['d-sandwich', 'Serve'
 const fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 const hearts = (n, max = 5) => Array.from({ length: max }, (_, i) => `<svg width="22" height="22" viewBox="0 0 40 40" class="${i < n ? 'on' : 'off'}"><use href="#ic-heart"/></svg>`).join('');
 // Star rule shown on the intro: stars only count guests who stormed out angry.
-const starRule = (o) => (o.type === 'noAngry' ? '' : `<div class="srule" aria-label="Stars: no angry guests 3, one angry guest 2, two or more 1">${[3, 2, 1].map((n, i) => `<span class="sr"><u>${Array.from({ length: n }, () => `<svg width="18" height="18" viewBox="0 0 40 40"><use href="#ic-star"/></svg>`).join('')}</u><i>${use('ic-angry', 20)}<b>${['0', '1', '2+'][i]}</b></i></span>`).join('')}</div>`);
+const starRule = (o) => (o.type === 'noAngry' || o.type === 'cleanServe' ? '' : `<div class="srule" aria-label="Stars: no angry guests 3, one angry guest 2, two or more 1">${[3, 2, 1].map((n, i) => `<span class="sr"><u>${Array.from({ length: n }, () => `<svg width="18" height="18" viewBox="0 0 40 40"><use href="#ic-star"/></svg>`).join('')}</u><i>${use('ic-angry', 20)}<b>${['0', '1', '2+'][i]}</b></i></span>`).join('')}</div>`);
 
 export function introHTML(g, info, lives = 5, nextLife = 0) {
   const dots = Array.from({ length: info.total || 8 }, (_, i) => i + 1).map((n) => `<i class="${n === info.level ? 'on' : n < info.level ? 'past' : ''}"></i>`).join('');
@@ -80,7 +80,7 @@ export function introHTML(g, info, lives = 5, nextLife = 0) {
   return `<div class="popup">
     <div class="pban">${{ beach: beachFront, chinese: chineseFront, fine: fineFront, steak: steakFront }[info.theme]?.(info.sign || 'TEA') ?? storefront(info.sign || 'CAFE')}</div>
     <h2>${info.name}</h2><div class="dots">${dots}</div>
-    <div class="orows">${row}${o.type === 'noAngry' ? `<div class="srule note">${use('ic-angry', 20)}<span>One angry guest ends the level</span></div>` : starRule(o)}</div>
+    <div class="orows">${row}${o.type === 'noAngry' || o.type === 'cleanServe' ? `<div class="srule note">${use('ic-angry', 20)}<span>One angry guest ends the level</span></div>` : starRule(o)}</div>
     ${dead ? `<div class="lives"><small>Next life ${fmt(nextLife)}</small></div>` : ''}
     ${dead ? `<button class="pbtn primary big" disabled aria-label="No lives left"><span>No lives</span></button>` : btn('go', '', 'Play', 'primary big')}
     <div class="prow intro-back">${btn('map', '', 'Back', 'big')}</div>

@@ -83,8 +83,8 @@ export function renderBeach(S, LB, chapter, progress) {
   boat(S, 1230, 700); boat(S, 760, 735);
 
   // level stops
-  const YS = [1250, 1140, 1250, 1140, 1250, 1140, 1250, 1140];
-  const spots = YS.map((y, i) => [280 + i * 235, y]);
+  const YS = [1250, 1140, 1250, 1140, 1250, 1140, 1250, 1140, 1250, 1140];
+  const spots = YS.map((y, i) => [280 + i * 190, y]);
   const done = (n) => (progress.stars[n] || 0) > 0;
   const current = chapter.levels.find((l) => !done(l.n));
   const lvl = chapter.levels.map((l, i) => ({ n: l.n, name: l.name, s: progress.stars[l.n] || 0, st: done(l.n) ? 'done' : (current && current.n === l.n ? 'now' : 'lock'), pos: spots[i] }));

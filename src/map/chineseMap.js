@@ -186,7 +186,8 @@ export function renderChinese(S, LB, chapter, progress) {
   add(grassBlades());
 
   // the path: spots in picture space
-  const SP = [[142, 355], [242, 332], [338, 300], [425, 268], [512, 243], [602, 228], [688, 200], [748, 160]];
+  const SP8 = [[142, 355], [242, 332], [338, 300], [425, 268], [512, 243], [602, 228], [688, 200], [748, 160]];
+  const SP = Array.from({ length: 10 }, (_, i) => { const t = (i / 9) * 7, k = Math.min(6, Math.floor(t)), f = t - k; return [Math.round(SP8[k][0] + (SP8[k + 1][0] - SP8[k][0]) * f), Math.round(SP8[k][1] + (SP8[k + 1][1] - SP8[k][1]) * f)]; }); // ten stops spread along the same trail
   const done = (n) => (progress.stars[n] || 0) > 0;
   const current = chapter.levels.find((l) => !done(l.n));
   const lvl = chapter.levels.map((l, i) => ({ n: l.n, name: l.name, s: progress.stars[l.n] || 0, st: done(l.n) ? 'done' : (current && current.n === l.n ? 'now' : 'lock'), pos: [Math.round(wx(SP[i][0])), Math.round(wy(SP[i][1]))], sp: SP[i] }));

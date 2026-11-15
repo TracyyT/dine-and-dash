@@ -123,8 +123,8 @@ export function renderSteak(S, LB, chapter, progress) {
   chair(S, 1060, 860, 1, 0.9); chair(S, 1202, 862, -1, 0.9); chair(S, 1382, 852, 1, 0.9); chair(S, 1522, 850, -1, 0.9);
 
   // stone path
-  const YS = [1230, 1140, 1240, 1140, 1240, 1140, 1240, 1150];
-  const spots = YS.map((y, i) => [280 + i * 235, y]);
+  const YS = [1230, 1140, 1240, 1140, 1240, 1140, 1240, 1140, 1240, 1150];
+  const spots = YS.map((y, i) => [280 + i * 190, y]);
   const done = (n) => (progress.stars[n] || 0) > 0;
   const current = chapter.levels.find((l) => !done(l.n));
   const lvl = chapter.levels.map((l, i) => ({ n: l.n, name: l.name, s: progress.stars[l.n] || 0, st: done(l.n) ? 'done' : (current && current.n === l.n ? 'now' : 'lock'), pos: spots[i] }));

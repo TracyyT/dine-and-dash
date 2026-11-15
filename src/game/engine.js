@@ -54,13 +54,14 @@ export function createGame(baseCfg, owned = {}) {
 
 // ---- the level's single requirement ----
 // A level is passed or failed by this one requirement alone. Stars are separate: they only count angry guests who stormed out.
-const objectiveValue = (g, type) => ({ coins: g.earned, guests: g.served, dishes: g.stats.dishes, items: g.stats.made, happy: g.stats.happy, takeout: g.stats.take, noAngry: g.lost })[type];
+const objectiveValue = (g, type) => ({ coins: g.earned, guests: g.served, dishes: g.stats.dishes, items: g.stats.made, happy: g.stats.happy, takeout: g.stats.take, noAngry: g.lost, cleanServe: g.served })[type];
 function evalObjectives(g, final) {
   const o = g.objectives[0];
   if (o.status === 'failed') return;
   o.value = objectiveValue(g, o.type); // keeps counting after the goal is met: the level plays on until the timer ends
-  if (o.type === 'noAngry') {
-    if (g.lost > 0) o.status = 'failed'; // the one case that ends the level early: an angry guest leaving
+  if (o.type === 'noAngry' || o.type === 'cleanServe') {
+    if (g.lost > 0) o.status = 'failed'; // an angry guest leaving ends the level early
+    else if (o.type === 'cleanServe' && o.status === 'open' && o.value >= o.target) { o.status = 'done'; emit(g, { type: 'goal' }); }
   } else if (o.status === 'open' && o.value >= o.target) { o.status = 'done'; emit(g, { type: 'goal' }); } // met: stays met
   if (o.status === 'failed') { g.over = true; g.result = 'fail'; return; }
   if (final) { g.over = true; g.result = o.type === 'noAngry' || o.status === 'done' ? 'pass' : 'fail'; if (g.result === 'fail') o.status = 'failed'; else o.status = 'done'; }
