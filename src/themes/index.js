@@ -3,5 +3,6 @@ import { beach } from './beach.js';
 import { chinese } from './chinese.js';
 import { fine } from './fine.js';
 import { steak } from './steak.js';
+import { italian } from './italian.js';
 
-export const themes = { city, beach, chinese, fine, steak };
+export const themes = { city, beach, chinese, fine, steak, italian };

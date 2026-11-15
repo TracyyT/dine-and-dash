@@ -1,8 +1,8 @@
 # Dine & Dash: Restaurant Game
 
-A cute pixel-style restaurant management game. Seat guests, take orders, cook, serve, collect payment and clean tables before time runs out, across five themed chapters of ten levels each.
+A cute pixel-style restaurant management game. Seat guests, take orders, cook, serve, collect payment and clean tables before time runs out, across six themed chapters of ten levels each.
 
-**Live game:** https://dine-and-dash-nu.vercel.app
+**Play it:** https://dine-and-dash-nu.vercel.app
 
 ## How to play
 
@@ -20,7 +20,7 @@ Each level has one requirement: earn coins, serve guests, deliver dishes, cook i
 
 ### Chapters
 
-Different themes include City Supper Club, Beach Bistro, Lantern Garden, Maison d'Or, Big Sky Steakhouse, etc. Finish every level of a chapter to unlock the next. More chapters are coming soon.
+City Supper Club, Beach Bistro, Lantern Garden, Maison d'Or, Big Sky Steakhouse, Italian Trattoria. Finish every level of a chapter to unlock the next.
 
 ### Upgrades
 
@@ -34,7 +34,7 @@ Lives (max 5) regrow over time. A daily bonus is available from the calendar but
 
 ## Run it locally
 
-Requires at least Node 18.
+Requires Node 18+.
 
 ```bash
 npm install
@@ -67,6 +67,13 @@ src/
   state/progress.js  saved progress (localStorage)
 public/              favicon, share image, fonts
 ```
+
+Notes for contributors:
+
+- The game engine (`src/game/engine.js`) is separate from rendering (`view.js`), so levels can be simulated headlessly in Node.
+- Each level lives in `src/data/levels.js` as `'<chapter>:<n>'` with exactly one `objective`. Level names and map order are in `src/data/chapters.js`.
+- Everything is drawn with SVG and CSS; there are no image assets besides the favicon, share image and one font.
+- Progress is stored in `localStorage` under keys starting with `dine-and-dash:`.
 
 ## Deploying
 

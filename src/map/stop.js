@@ -42,6 +42,13 @@ export const SKINS = {
     lock: { top: '#6a6678', edge: '#3a3648', dash: '#8a869a', num: '#a8a4b8', numLine: '#2a0a14', lockFill: '#8a869a' },
     label: { bg: '#15131c', line: '#d9b66a', text: '#f6e2a8', lockLine: '#6a6678', lockText: '#a8a4b8' },
   },
+  italian: {
+    ol: '#3a1c0c', shadow: '#000', pulse: '#ffe08a', starOff: '#8a8478', crown: '#d8a84a',
+    done: { top: '#fff4d8', edge: '#d8a860', dash: '#e8c880', num: '#2f7a3a', numLine: '#fffbe8' },
+    now: { top: '#fff8e0', edge: '#d8a860', dash: '#e8c880', num: '#d03a2a', numLine: '#fffbe8' },
+    lock: { top: '#d8cfba', edge: '#8a8272', dash: '#b0a48c', num: '#9a907c', numLine: '#fffbe8', lockFill: '#8a8272' },
+    label: { bg: '#2f5a3a', line: '#f6e2a8', text: '#fff4dc', lockLine: '#8a7e72', lockText: '#c8bcb0' },
+  },
   steak: {
     ol: '#2a160c', shadow: '#000', pulse: '#ffd890', starOff: '#8a8478', crown: '#e0a850',
     done: { top: '#fff0c0', edge: '#d8b860', dash: '#e0c070', num: '#8a5a1a', numLine: '#fffbe8' },
