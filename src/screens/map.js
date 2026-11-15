@@ -11,6 +11,7 @@ import { directionBoard } from '../map/board.js';
 import { renderFine, FINE_DEFS } from '../map/fineMap.js';
 import { renderSteak, STEAK_DEFS } from '../map/steakMap.js';
 import { createPanZoom } from '../map/panzoom.js';
+import { maybeShowDaily } from '../map/daily.js';
 import { MAP_DEFS } from '../map/defs.js';
 import { WW, WH } from '../map/iso.js';
 
@@ -78,6 +79,7 @@ export function renderMap(app, params = {}) {
   paintLives();
   const livesTimer = setInterval(paintLives, 1000);
   $('upb').onclick = () => go('upgrades', { chapter: chapter.id });
+  maybeShowDaily(document.body, () => { $('wallet').querySelector('b').textContent = getWallet(); }); // today's gift, if it has not been collected yet
 
   const LOCK = '<span style="margin-right:8px;font-weight:700">Locked</span><svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true"><rect x="8" y="18" width="24" height="18" rx="3" fill="#e8c766" stroke="#8f6a22" stroke-width="2.5"/><path d="M13 18v-5a7 7 0 0 1 14 0v5" fill="none" stroke="#e8c766" stroke-width="4"/><circle cx="20" cy="27" r="3" fill="#6b4a12"/></svg>';
   let toastTimer;

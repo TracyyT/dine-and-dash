@@ -46,6 +46,7 @@ export function makeSynth(ctx, sfxOut, musicOut) {
     win1: (t) => [523, 659, 784].forEach((f, i) => tone(sfxOut, f, t + i * 0.14, 0.5, { type: 'triangle', vol: 0.26 })),
     win2: (t) => [523, 659, 784, 1047].forEach((f, i) => tone(sfxOut, f, t + i * 0.13, 0.55, { type: 'triangle', vol: 0.26 })),
     win3: (t) => { [523, 659, 784, 1047, 1319, 1568].forEach((f, i) => tone(sfxOut, f, t + i * 0.11, 0.7, { type: 'triangle', vol: 0.26 })); bell(2093, t + 0.7, 0.2, 1.4); },
+    closed: (t) => { tone(sfxOut, 110, t, 0.22, { vol: 0.35, to: 60 }); noise(sfxOut, t, 0.12, { vol: 0.18, f: 600, q: 0.7 }); bell(1175, t + 0.12, 0.16, 0.8); bell(880, t + 0.34, 0.14, 0.9); }, // door shuts, shop bell
     lose: (t) => [392, 349, 311, 262].forEach((f, i) => tone(sfxOut, f, t + i * 0.22, 0.5, { type: 'triangle', vol: 0.22 })),
   };
 

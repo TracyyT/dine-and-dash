@@ -482,3 +482,10 @@ body.game-open #app{max-width:none;margin:0;padding:0}
 [data-theme=fine] .sc-closed b{border-radius:3px;letter-spacing:.1em;font-family:var(--font-display)}
 [data-theme=steak] .sc-closed{--bd:#6a3d22;--tx:#ffd890;--rim:#2b1a10;--post:#2b1a10}
 [data-theme=steak] .sc-closed b{border-radius:3px;border-style:dashed}
+
+/* a dirty table asks for attention: its broom bubble bounces and glows */
+.table.dirty .bubble{animation:dirtyCall 1.1s ease-in-out infinite}
+@keyframes dirtyCall{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.08)}}
+
+/* popups grow on small screens (--ui is set from the stage scale) */
+.overlay .popup{zoom:var(--ui,1)}

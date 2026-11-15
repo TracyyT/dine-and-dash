@@ -9,6 +9,7 @@ import { createGame, tick, tapCustomer, tapTable, tapDish, tapFountain, stars } 
 import { createView } from '../game/view.js';
 import { introHTML, pauseHTML, resultsHTML, chapterDoneHTML, leaveHTML } from '../game/popups.js';
 import { sound } from '../game/sound.js';
+import { track } from '../game/analytics.js';
 import { tutorialNeeded, tutorialDone, createCoach, guideNeeded, createGuide, newFeatures } from '../game/tutorial.js';
 
 export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {}) {
@@ -44,6 +45,8 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   const fit = () => {
     const s = Math.min(window.innerWidth / g.L.W, window.innerHeight / g.L.H);
     view.stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+    // On small screens the whole room shrinks; grow the popups back so buttons stay easy to tap (capped so a tall popup still fits).
+    view.stage.style.setProperty('--ui', Math.max(1, Math.min(1.45, 0.8 / s)).toFixed(2));
   };
   fit();
   window.addEventListener('resize', fit);
@@ -63,11 +66,12 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   let introTimer = 0;
   function openIntro() {
     const lives = getLives();
-    show(introHTML(g, info, lives, nextLifeIn()), { map: toMap, ...(lives > 0 ? { go: () => { sound.unlock(); sound.play('click'); if (guideNeeded(chapterId, level)) openGuide(startPlay, true); else if (newFeatures(chapterId, g.owned).length) openFeatures(startPlay); else startPlay(); } } : {}) });
+    show(introHTML(g, info, lives, nextLifeIn()), { map: toMap, ...(lives > 0 ? { go: () => { if (!started) { started = true; track('level_start', { chapter: chapterId, level }); } sound.unlock(); sound.play('click'); if (guideNeeded(chapterId, level)) openGuide(startPlay, true); else if (newFeatures(chapterId, g.owned).length) openFeatures(startPlay); else startPlay(); } } : {}) });
     if (lives <= 0) { // count down to the next life, then let the player in
       introTimer = setInterval(() => { if (mode === 'intro' && getLives() > 0) { clearInterval(introTimer); openIntro(); } else if (mode === 'intro') { const sm = overlay?.querySelector('.lives small'); if (sm) sm.textContent = `Next life ${Math.floor(nextLifeIn() / 60)}:${String(nextLifeIn() % 60).padStart(2, '0')}`; } }, 1000);
     }
   }
+  let started = false;
   function startPlay() { sound.startMusic(); close(); mode = 'play'; }
   // Spotlight walkthrough. The room is paused; a single guest is called in first so there is something to point at.
   function openGuide(after, interactive = false) {
@@ -95,12 +99,13 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
   // Leaving a level that has not run its full time costs one life (finishing, passing or failing, is handled in openResults).
   // Retrying a running level costs the same life as leaving it, so Retry cannot be used to dodge the cost.
   function openLeave(retry) {
-    show(leaveHTML(g, retry), { leave: () => { if (!g.over) loseLife(); retry ? replay() : toMap(); }, stay: openPause });
+    show(leaveHTML(g, retry), { leave: () => { if (!g.over) { loseLife(); track(retry ? 'level_retry' : 'level_quit', { chapter: chapterId, level, timeLeft: Math.round(g.timeLeft), progress: g.objectives[0].value, target: g.objectives[0].target }); } retry ? replay() : toMap(); }, stay: openPause });
   }
   function openResults() {
     mode = 'over'; sound.stopMusic();
     const n = stars(g);
     sound.play(n === 3 ? 'win3' : n === 2 ? 'win2' : n === 1 ? 'win1' : 'lose');
+    track('level_end', { chapter: chapterId, level, result: g.result, stars: n, progress: g.objectives[0].value });
     recordResult(chapterId, level, n); // saved once; a worse replay never lowers the best score
     if (g.result !== 'pass') loseLife(); // failing costs one life, passing never does
     bankCoins(g.earned); // coins carry over to the map, where you spend them on upgrades
