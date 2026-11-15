@@ -7,11 +7,10 @@ import { themes } from '../themes/index.js';
 import { applyTheme } from '../themes/apply.js';
 import { getWallet, getUpgrades, nextUpgradeCost, buyUpgrade } from '../state/progress.js';
 import { UPGRADE_ICONS, COIN_ICON } from '../map/upgradeIcons.js';
-import { SNACK_SHOP_ICONS } from '../game/snacks.js';
 import { sound } from '../game/sound.js';
 import { upgradeInfo } from '../data/upgradeInfo.js';
 
-const SHELVES = [['kitchen', 'Kitchen'], ['service', 'Service'], ['staff', 'Staff']];
+const SHELVES = [['staff', 'Staff'], ['speed', 'Speed Boost'], ['service', 'Service']];
 const BACK = '<svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M4 9l11-4 10 4 11-4v26l-11 4-10-4-11 4z" fill="#f2e2b0" stroke="#8f6a22" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 5v26M25 9v26" stroke="#8f6a22" stroke-width="1.8"/></svg>';
 const windowSky = (i) => {
   const b = Array.from({ length: 9 }, (_, k) => { const h = 20 + ((k * 37 + i * 17) % 46); return `<rect x="${k * 17}" y="${90 - h}" width="15" height="${h}" fill="${k % 2 ? '#2a1f48' : '#1d1634'}"/>${[0, 1, 2, 3].map((r) => ((k + r + i) % 3 ? `<rect x="${k * 17 + 4}" y="${90 - h + 6 + r * 11}" width="3" height="4" fill="#ffd98a"/>` : '')).join('')}`; }).join('');
@@ -43,7 +42,7 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
             const can = !max && wallet >= cost;
             return `<article class="ucard ${max ? 'max' : ''} ${flash === u.id ? 'flash' : ''}">
               <button class="uinfo-btn" data-info="${u.id}" aria-label="About ${u.name}" title="About ${u.name}">i</button>
-              <div class="uart">${u.id === 'lemonade' && SNACK_SHOP_ICONS[chapterId] ? SNACK_SHOP_ICONS[chapterId] : UPGRADE_ICONS[u.id]}</div>
+              <div class="uart">${UPGRADE_ICONS[u.id]}</div>
               <div class="uinfo"><b>${u.label}</b>${many ? `<span>Lv. ${lvl}/${u.tiers.length}</span>` : `<span>${max ? 'Hired' : 'Hire'}</span>`}
                 <div class="ubar">${u.tiers.map((_, k) => `<i class="${k < lvl ? 'on' : ''}"></i>`).join('')}</div></div>
               <button class="ubuy ${can ? 'can' : ''}" data-up="${u.id}" ${can ? '' : 'disabled'} aria-label="${u.name}${max ? ', maxed' : `, ${cost} coins`}">${max ? '&#10003;' : `${COIN_ICON}<span>${cost}</span>`}</button>
@@ -64,7 +63,7 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
     pop = document.createElement('div');
     pop.className = 'upop-wrap';
     pop.innerHTML = `<div class="upop" role="dialog" aria-label="${u.name}"><button class="upop-x" aria-label="Close">&#10005;</button>
-      <div class="upop-head"><div class="uart">${u.id === 'lemonade' && SNACK_SHOP_ICONS[chapterId] ? SNACK_SHOP_ICONS[chapterId] : UPGRADE_ICONS[u.id]}</div><b>${u.name}</b></div>
+      <div class="upop-head"><div class="uart">${UPGRADE_ICONS[u.id]}</div><b>${u.name}</b></div>
       <p>${info.text}</p>
       <div class="upop-each"><span>Each level</span><b>${info.each}</b></div>
       <div class="ubar">${u.tiers.map((_, k) => `<i class="${k < lvl ? 'on' : ''}"></i>`).join('')}</div><small>Level ${lvl} of ${u.tiers.length}</small></div>`;

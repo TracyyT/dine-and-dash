@@ -49,7 +49,7 @@ export function createView(host, g, info, handlers) {
 
   const FP = L.fountain;
   // The treat station is a table with a plate. Items sit on the plate (one per refill held); the table gets fancier with each upgrade.
-  const tier = Math.min(2, g.owned.lemonade || 0), slots = plateSlots(g.fountain.max);
+  const tier = 2, slots = plateSlots(g.fountain.max);
   const plateTop = Math.round(-83 + (PLATE[tier].cy - 2) * 0.8);
   const fountainEl = mk('ent fountain t' + tier, `${SN.stand(tier)}<div class="plate" style="top:${plateTop}px">${slots.map(([dx, dy]) => `<i style="left:${dx}px;top:${dy}px">${use(SN.cup, 21)}</i>`).join('')}</div><div class="bubble rfb">${use('ic-replay', 26)}</div><div class="qn"></div>`);
   fountainEl.dataset.f = 1; place(fountainEl, FP.x, FP.y); ents.append(fountainEl);
