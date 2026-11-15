@@ -2,45 +2,90 @@ import '../title/title.css';
 import { go } from '../router.js';
 import { sound } from '../game/sound.js';
 
-// The storefront, drawn in SVG so it stays sharp at any size.
-const FRONT = `<svg class="front" viewBox="0 0 360 300" aria-hidden="true">
+const star = (x, y, r, cls) => `<path class="spark ${cls}" d="M${x} ${y - r}Q${x + r * .18} ${y - r * .18} ${x + r} ${y}Q${x + r * .18} ${y + r * .18} ${x} ${y + r}Q${x - r * .18} ${y + r * .18} ${x - r} ${y}Q${x - r * .18} ${y - r * .18} ${x} ${y - r}Z" fill="#fffbe6"/>`;
+
+// The logo: chef hat, burger and noodle bowl behind a wooden sign, with a crossed spoon and spatula. All SVG, so it stays crisp at any size.
+const LOGO = `<svg class="logo" viewBox="0 0 600 640" aria-label="Dine and Dash">
   <defs>
-    <linearGradient id="tsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1a4a"/><stop offset="1" stop-color="#c0517a"/></linearGradient>
+    <radialGradient id="tl-glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd98a" stop-opacity=".75"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+    <linearGradient id="tl-wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c06f"/><stop offset=".55" stop-color="#e29a47"/><stop offset="1" stop-color="#c47530"/></linearGradient>
+    <linearGradient id="tl-bun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc760"/><stop offset="1" stop-color="#e08a2c"/></linearGradient>
+    <linearGradient id="tl-bowl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8493b"/><stop offset="1" stop-color="#a62320"/></linearGradient>
+    <linearGradient id="tl-hat" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#ece6ee"/></linearGradient>
+    <g id="tl-hatg">
+      <circle cx="300" cy="130" r="78" fill="url(#tl-hat)"/><circle cx="214" cy="172" r="64" fill="url(#tl-hat)"/><circle cx="386" cy="172" r="64" fill="url(#tl-hat)"/>
+      <circle cx="262" cy="214" r="54" fill="url(#tl-hat)"/><circle cx="338" cy="214" r="54" fill="url(#tl-hat)"/><circle cx="300" cy="190" r="60" fill="url(#tl-hat)"/>
+      <path d="M258 196c-8-26-6-50 4-70M300 190c0-26 0-52 0-76M342 196c8-26 6-50-4-70" fill="none" stroke="#e4dbe6" stroke-width="4" stroke-linecap="round"/>
+      <path d="M170 196c-6-18-2-34 10-46M430 196c6-18 2-34-10-46" fill="none" stroke="#e8e0ea" stroke-width="3.5" stroke-linecap="round"/>
+      <rect x="222" y="208" width="156" height="100" rx="20" fill="#fffdfa" stroke="#e6dcd8" stroke-width="3.5"/>
+      <rect x="236" y="214" width="128" height="14" rx="7" fill="#fff" opacity=".9"/>
+      <path d="M230 292h140" stroke="#e1d6da" stroke-width="10" stroke-linecap="round" opacity=".7"/>
+      <ellipse cx="258" cy="98" rx="28" ry="14" fill="#fff" opacity=".95" transform="rotate(-24 258 98)"/>
+    </g>
   </defs>
-  <rect width="360" height="300" rx="26" fill="url(#tsky)"/>
-  <g fill="#1d1236"><rect x="10" y="120" width="50" height="180"/><rect x="66" y="90" width="40" height="210"/><rect x="262" y="100" width="46" height="200"/><rect x="312" y="140" width="40" height="160"/></g>
-  <g fill="#ffd978" opacity=".8"><rect x="18" y="134" width="8" height="8"/><rect x="34" y="150" width="8" height="8"/><rect x="74" y="108" width="8" height="8"/><rect x="88" y="130" width="8" height="8"/><rect x="272" y="118" width="8" height="8"/><rect x="288" y="146" width="8" height="8"/><rect x="322" y="158" width="8" height="8"/></g>
-  <g fill="#fff"><circle class="tw" cx="40" cy="40" r="2"/><circle class="tw d2" cx="300" cy="50" r="2"/><circle class="tw d3" cx="200" cy="26" r="1.6"/><circle class="tw d2" cx="120" cy="56" r="1.6"/></g>
-  <rect x="70" y="120" width="220" height="150" rx="6" fill="#7d1d33"/>
-  <rect x="70" y="262" width="220" height="14" fill="#4a0f1d"/>
-  <path d="M60 120h240l-12-40H72z" fill="#f4ead2"/>
-  <g fill="#c62839"><path d="M72 80h30l-4 40H66z"/><path d="M132 80h30l-2 40h-30z"/><path d="M192 80h30l2 40h-30z"/><path d="M252 80h30l8 40h-34z"/></g>
-  <rect x="96" y="48" width="168" height="40" rx="14" fill="#1c1620" stroke="#ff7aa8" stroke-width="3"/>
-  <text x="180" y="76" text-anchor="middle" font-size="24" textLength="150" lengthAdjust="spacingAndGlyphs" fill="#ffb3cc" style="font-family:var(--title-font)" class="sign-text">DINE &amp; DASH</text>
-  <rect x="86" y="146" width="62" height="64" rx="6" fill="#ffd978" stroke="#e8b64a" stroke-width="4"/>
-  <path d="M117 146v64M86 178h62" stroke="#e8b64a" stroke-width="3"/>
-  <rect x="212" y="146" width="62" height="64" rx="6" fill="#ffd978" stroke="#e8b64a" stroke-width="4"/>
-  <path d="M243 146v64M212 178h62" stroke="#e8b64a" stroke-width="3"/>
-  <rect x="154" y="156" width="52" height="114" rx="26 26 0 0" fill="#2b1810" stroke="#e8b64a" stroke-width="4"/>
-  <circle cx="196" cy="216" r="3" fill="#e8b64a"/>
-  <g class="open"><rect x="161" y="176" width="38" height="18" rx="5" fill="#1c1620" stroke="#7ee0a0" stroke-width="2"/><text x="180" y="189" text-anchor="middle" font-size="11" fill="#7ee0a0" style="font-family:var(--title-body);font-weight:700;letter-spacing:1px">OPEN</text></g>
-  <g class="plant"><rect x="40" y="244" width="22" height="26" rx="4" fill="#c62839"/><path d="M51 244c-14-14-10-30 0-34 10 4 14 20 0 34z" fill="#4aa86a"/><path d="M51 244c-20-4-24-16-20-24 10 0 22 8 20 24z" fill="#3a8f58"/></g>
-  <rect x="0" y="270" width="360" height="30" rx="0" fill="#2a1a22"/>
-  <g class="guests">
-    <g transform="translate(26 232)"><circle cx="0" cy="0" r="12" fill="#f4c9a0"/><rect x="-11" y="10" width="22" height="26" rx="8" fill="#f2a43a"/><circle cx="-4" cy="-2" r="1.6" fill="#3a1d1d"/><circle cx="4" cy="-2" r="1.6" fill="#3a1d1d"/></g>
-    <g transform="translate(318 236)"><circle cx="0" cy="0" r="12" fill="#c98f66"/><rect x="-11" y="10" width="22" height="26" rx="8" fill="#5aa0d6"/><circle cx="-4" cy="-2" r="1.6" fill="#3a1d1d"/><circle cx="4" cy="-2" r="1.6" fill="#3a1d1d"/></g>
+  <ellipse cx="300" cy="250" rx="300" ry="230" fill="url(#tl-glow)"/>
+
+  <g transform="translate(30 210) rotate(-9 90 80)">
+    <path d="M14 106h150q0 24-22 24H36q-22 0-22-24z" fill="#e8963a" stroke="#a85a1c" stroke-width="3"/>
+    <rect x="0" y="78" width="178" height="30" rx="15" fill="#6e301b" stroke="#4a1d10" stroke-width="3"/>
+    <path d="M8 72H170L158 96L138 80L118 98L98 80L78 98L58 80L38 96Z" fill="#ffc933" stroke="#d99a0e" stroke-width="2"/>
+    <path d="M0 74V66q11-14 22 0t22 0 22 0 22 0 22 0 22 0 22 0 22 0V74Z" fill="#7cc243" stroke="#4d8f26" stroke-width="2"/>
+    <path d="M6 60Q6 6 89 6Q172 6 172 60Z" fill="url(#tl-bun)" stroke="#a85a1c" stroke-width="3"/>
+    <g fill="#fff3d0"><ellipse cx="50" cy="30" rx="6" ry="3.4" transform="rotate(-25 50 30)"/><ellipse cx="86" cy="22" rx="6" ry="3.4"/><ellipse cx="122" cy="30" rx="6" ry="3.4" transform="rotate(25 122 30)"/><ellipse cx="68" cy="46" rx="6" ry="3.4" transform="rotate(-12 68 46)"/><ellipse cx="108" cy="46" rx="6" ry="3.4" transform="rotate(12 108 46)"/><ellipse cx="144" cy="48" rx="6" ry="3.4" transform="rotate(30 144 48)"/><ellipse cx="32" cy="50" rx="6" ry="3.4" transform="rotate(-30 32 50)"/></g>
+  </g>
+
+  <g transform="translate(396 204)">
+    <g class="steam" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="7" opacity=".6"><path d="M104 6q-14-18 0-34t0-36"/><path d="M136 10q-12-16 0-30t0-30" class="s2"/></g>
+    <path d="M0 44H176C176 108 134 138 88 138C42 138 0 108 0 44Z" fill="url(#tl-bowl)" stroke="#7a1a14" stroke-width="4"/>
+    <path d="M18 100Q88 124 158 100" fill="none" stroke="#ff8a78" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+    <ellipse cx="88" cy="44" rx="88" ry="17" fill="#8a2a1c"/>
+    <ellipse cx="88" cy="46" rx="80" ry="12" fill="#e9a248"/>
+    <g fill="none" stroke="#f8dc92" stroke-width="7" stroke-linecap="round"><path d="M22 44q16-16 32 0t32 0 32 0 26-4"/><path d="M30 52q16-12 30 0t30 0 28-2"/></g>
+    <rect x="44" y="20" width="30" height="14" rx="4" fill="#2f5a3a" transform="rotate(-10 59 27)"/>
+    <ellipse cx="124" cy="32" rx="26" ry="18" fill="#fff6e4" stroke="#e2cfa6" stroke-width="2"/><circle cx="126" cy="33" r="10" fill="#ffc233"/>
+    <path d="M40 38Q74 -6 124 24" fill="none" stroke="#f08a4b" stroke-width="16" stroke-linecap="round"/>
+    <path d="M52 22l8 10M72 12l6 12M94 12l2 12" stroke="#ffd0a0" stroke-width="3" stroke-linecap="round"/>
+    <path d="M126 22l22-12M126 26l26-2M124 30l22 8" stroke="#f08a4b" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <use href="#tl-hatg"/>
+  ${star(196, 84, 22, '')}${star(238, 50, 12, 'b')}${star(170, 126, 9, 'c')}
+
+  <path d="M16 376C16 338 40 318 82 314L204 298C238 292 268 302 300 298C332 302 362 292 396 298L518 314C560 318 584 338 584 376L584 412C584 452 560 470 520 472L80 472C40 470 16 452 16 412Z" fill="url(#tl-wood)" stroke="#7a3a14" stroke-width="9" stroke-linejoin="round"/>
+  <path d="M16 376C16 338 40 318 82 314L204 298C238 292 268 302 300 298C332 302 362 292 396 298L518 314C560 318 584 338 584 376L584 412C584 452 560 470 520 472L80 472C40 470 16 452 16 412Z" fill="none" stroke="#ffd69a" stroke-width="3" opacity=".75" transform="translate(300 386) scale(.95 .88) translate(-300 -386)"/>
+  <g fill="none" stroke="#fff0c8" stroke-width="2.5" stroke-linecap="round" opacity=".4"><path d="M50 440q60-8 120 0"/><path d="M430 340q60-8 120 0"/><path d="M60 350q40-6 80 0"/><path d="M440 446q50-6 100 0"/></g>
+
+
+  <g transform="translate(43 0) skewX(-6)" font-family="'Lilita One','Baloo 2',system-ui,sans-serif" stroke-linejoin="round">
+    <g fill="#5a1410" stroke="#5a1410" stroke-width="16" transform="translate(0 7)">
+      <text x="40" y="424" font-size="124" textLength="212" lengthAdjust="spacingAndGlyphs">Dine</text>
+      <text x="318" y="424" font-size="124" textLength="232" lengthAdjust="spacingAndGlyphs">Dash</text>
+      <text x="262" y="414" font-size="88" textLength="62" lengthAdjust="spacingAndGlyphs">&amp;</text>
+    </g>
+    <g fill="#fff3d9" stroke="#8a2a1c" stroke-width="12" paint-order="stroke">
+      <text x="40" y="424" font-size="124" textLength="212" lengthAdjust="spacingAndGlyphs">Dine</text>
+      <text x="318" y="424" font-size="124" textLength="232" lengthAdjust="spacingAndGlyphs">Dash</text>
+    </g>
+    <text x="262" y="414" font-size="88" textLength="62" lengthAdjust="spacingAndGlyphs" fill="#ffb81c" stroke="#8a2a1c" stroke-width="10" paint-order="stroke">&amp;</text>
+  </g>
+
+  <g transform="translate(300 556) scale(1.12)">
+    <g transform="rotate(40)"><rect x="-7" y="-4" width="14" height="86" rx="7" fill="#f7cd62" stroke="#b98424" stroke-width="4"/><ellipse cx="0" cy="-34" rx="27" ry="34" fill="#ffd96e" stroke="#b98424" stroke-width="4"/><ellipse cx="-8" cy="-44" rx="8" ry="14" fill="#fff0b0" opacity=".8"/></g>
+    <g transform="rotate(-40)"><rect x="-6" y="-4" width="12" height="86" rx="6" fill="#f3f1f3" stroke="#b9b2bb" stroke-width="4"/><rect x="-24" y="-82" width="48" height="76" rx="9" fill="#fafafa" stroke="#b9b2bb" stroke-width="4"/><g fill="#b3a9b6"><rect x="-14" y="-72" width="6" height="32" rx="3"/><rect x="-3" y="-72" width="6" height="32" rx="3"/><rect x="8" y="-72" width="6" height="32" rx="3"/></g></g>
   </g>
 </svg>`;
 
 export function renderTitle(app) {
   document.body.classList.add('title-open');
   app.innerHTML = `<main class="title">
-    <div class="title-glow"></div>
-    ${FRONT}
-    <h1 class="title-name">Dine <span>&amp;</span> Dash</h1>
-    <p class="title-tag">Seat them, serve them, send them home happy.</p>
-    <button class="title-play" id="tplay">Play</button>
-    <p class="title-hint">Tap Play to start</p>
+    <div class="t-windows"></div><div class="t-shade"></div>
+    <div class="t-awning"></div>
+    <div class="t-cloth"></div>
+    <div class="t-rim"></div>
+    <div class="t-stage">
+      ${LOGO}
+      <button class="title-play" id="tplay">Play</button>
+    </div>
   </main>`;
   const start = () => { sound.unlock(); sound.play('click'); go('map'); };
   app.querySelector('#tplay').onclick = start;
