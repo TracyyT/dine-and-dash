@@ -10,9 +10,14 @@
 .mu-badge { position: absolute; right: 2px; top: 0; min-width: 18px; height: 18px; padding: 0 4px; box-sizing: border-box; border-radius: 9px; background: #e0262f; border: 2px solid #fff; color: #fff; font: 400 11px/14px 'Lilita One', system-ui, sans-serif; text-align: center; -webkit-text-stroke: 0; animation: mubadge 1.4s ease-in-out infinite; }
 @keyframes mubadge { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
 
-.mu-title { position: fixed; left: 50%; top: 12px; transform: translateX(-50%); z-index: 20; display: flex; align-items: center; gap: 10px; max-width: 34vw; padding: 5px 16px 6px; border-radius: 99px; border: 3px solid #b9843a; background: linear-gradient(#fff6dc, #f1d79b); color: var(--mu-ink); box-shadow: 0 3px 0 #8a5a22, 0 6px 12px #0005; pointer-events: none; white-space: nowrap; }
-.mu-title b { font: 400 17px 'Lilita One', system-ui, sans-serif; overflow: hidden; text-overflow: ellipsis; }
-.mu-title span { font: 400 14px 'Lilita One', system-ui, sans-serif; color: #b8741f; }
+/* The chapter banner hangs from the top edge like a pennant, so it reads as a place-name and not as another button. */
+.mu-title { position: fixed; left: 50%; top: 0; transform: translateX(-50%); z-index: 19; display: flex; flex-direction: column; align-items: center; gap: 0; min-width: 200px; max-width: 32vw; box-sizing: border-box; padding: 7px 30px 24px; color: #fff3d9; pointer-events: none; white-space: nowrap; filter: drop-shadow(0 5px 0 #4a1410) drop-shadow(0 8px 8px #0006); }
+.mu-title::before, .mu-title::after { content: ''; position: absolute; z-index: -1; clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), 50% 100%, 0 calc(100% - 16px)); }
+.mu-title::before { inset: 0; background: linear-gradient(#f6d27a, #d9a23c); }
+.mu-title::after { inset: 0 4px 4px 4px; background: linear-gradient(#a8283a, #7d1d33); clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), 50% 100%, 0 calc(100% - 15px)); }
+.mu-title small { font: 400 11px 'Lilita One', system-ui, sans-serif; letter-spacing: .22em; color: #ffd978; }
+.mu-title b { font: 400 22px/1.1 'Lilita One', system-ui, sans-serif; color: #fff3d9; text-shadow: 0 2px 0 #4a1410; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.mu-title span { margin-top: 1px; font: 400 13px 'Lilita One', system-ui, sans-serif; color: #ffd978; }
 
 .mu-top { position: fixed; right: 12px; top: 8px; z-index: 20; display: flex; align-items: center; gap: 8px; }
 .mu-pill { display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 14px 0 8px; box-sizing: border-box; border-radius: 99px; border: 3px solid #b9843a; background: linear-gradient(#fff6dc, #f1d79b); color: var(--mu-ink); font: 400 19px 'Lilita One', system-ui, sans-serif; box-shadow: 0 3px 0 #8a5a22, 0 6px 12px #0005; pointer-events: none; }
@@ -57,9 +62,9 @@
 @media (max-width: 760px), (max-height: 520px) {
   .mu-side { left: 8px; top: 62px; padding: 6px 4px; gap: 2px; }
   .mu-btn { width: 54px; font-size: 11px; } .mu-btn .ic { width: 40px; height: 40px; border-radius: 13px; } .mu-btn .ic svg { width: 30px; height: 30px; }
-  .mu-title { top: 8px; padding: 3px 12px 4px; } .mu-title b { font-size: 14px; } .mu-title span { font-size: 12px; }
+  .mu-title { min-width: 150px; padding: 4px 20px 20px; } .mu-title small { font-size: 9px; } .mu-title b { font-size: 16px; } .mu-title span { font-size: 11px; }
   .mu-top { right: 8px; top: 6px; gap: 5px; } .mu-pill { height: 32px; font-size: 16px; padding: 0 10px 0 6px; } .mu-pill small { display: none; } .mu-gear { width: 36px; height: 36px; } .mu-gear svg { width: 24px; height: 24px; }
   .mu-logo svg { width: 96px; height: auto; }
   .mu-hint { display: none; }
 }
-@media (max-width: 600px) { .mu-title { top: 52px; max-width: 60vw; } .mu-logo { display: none; } .mu-side { top: 96px; } }
+@media (max-width: 600px) { .mu-title { top: 44px; max-width: 60vw; } .mu-logo { display: none; } .mu-side { top: 96px; } }
