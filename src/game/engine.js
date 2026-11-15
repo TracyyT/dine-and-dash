@@ -264,7 +264,7 @@ function updateWaiter(g, dt) {
     if (valid(g, t)) w.task = { ...t, phase: 'walk', t: 0 };
   }
   const task = w.task;
-  if (!task) { step(w, g.L.home.x, g.L.home.y, 300, dt); return; }
+  if (!task) return; // the waiter stays where he finished his last job instead of walking back to the start spot
   if (task.phase === 'walk') {
     const spot = aim(g, task);
     if (!spot) { w.task = null; w.carry = null; return; }

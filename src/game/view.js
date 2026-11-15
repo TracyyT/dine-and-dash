@@ -54,6 +54,7 @@ export function createView(host, g, info, handlers) {
   const fountainEl = mk('ent fountain t' + tier, `${SN.stand(tier)}<div class="plate" style="top:${plateTop}px">${slots.map(([dx, dy]) => `<i style="left:${dx}px;top:${dy}px">${use(SN.cup, 21)}</i>`).join('')}</div><div class="bubble rfb">${use('ic-replay', 26)}</div><div class="qn"></div>`);
   fountainEl.dataset.f = 1; place(fountainEl, FP.x, FP.y); ents.append(fountainEl);
 
+  let wPrev = { x: g.waiter.x, y: g.waiter.y }; // to tell whether he moved since the last frame
   const waiter = mk('ent waiter', `<div class="wbody">${waiterSVG()}</div><div class="carry"></div><div class="meter work"><div></div></div>`);
   ents.append(waiter);
   const guests = new Map(), dishes = new Map(), staffEls = new Map();
@@ -189,7 +190,8 @@ export function createView(host, g, info, handlers) {
     // waiter
     const w = g.waiter;
     place(waiter, w.x, w.y);
-    waiter.classList.toggle('walk', !!w.task && w.task.phase === 'walk' || (Math.abs(w.x - L.home.x) > 1 || Math.abs(w.y - L.home.y) > 1));
+    const wMoved = Math.hypot(w.x - wPrev.x, w.y - wPrev.y) > 0.05; wPrev = { x: w.x, y: w.y };
+    waiter.classList.toggle('walk', !!w.task && w.task.phase === 'walk' || wMoved); // walking animation only while he actually moves
     waiter.querySelector('.wbody').style.transform = `scaleX(${w.face})`;
     const carry = waiter.querySelector('.carry');
     const cs = w.carry ? (w.carry.kind === 'dish' ? 'd-' + w.carry.dish : 'ic-ticket') : '';
