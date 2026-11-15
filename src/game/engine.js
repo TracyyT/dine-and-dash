@@ -20,7 +20,7 @@ export function refillProgress(g) {
   return -1;
 }
 export const workTime = (g, type) => WORK[type] * (type === 'clean' ? 1 - 0.3 * g.owned.cleaning : 1);
-const WORK = { refill: 0.8, order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop: 0.3, deliver: 0.4 };
+const WORK = { refill: 1.6, order: 0.5, bill: 0.4, clean: 2.2, pickup: 0.3, drop: 0.3, deliver: 0.4 };
 const MOOD_RATE = { queue: 1, wantOrder: 1.3, waitFood: 1, wantBill: 1.5, eating: 0.1 };
 
 export function createGame(baseCfg, owned = {}) {
@@ -312,7 +312,7 @@ function updateKitchen(g, dt) {
   g.pickup.forEach((d) => { d.age += dt; });
 }
 
-const STAFF_WORK = { refill: 0.8, seat: 0.4, clean: 1.6, fetch: 0.3, bring: 0.4 };
+const STAFF_WORK = { refill: 1.6, seat: 0.4, clean: 1.6, fetch: 0.3, bring: 0.4 };
 const STAFF_SPEED = { host: 260, busser: 260, runner: 340 };
 const waiterBusyWith = (g, type, id) => (g.waiter.task && g.waiter.task.type === type && g.waiter.task.id === id) || g.tasks.some((t) => t.type === type && t.id === id);
 
