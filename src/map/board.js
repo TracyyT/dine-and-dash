@@ -7,6 +7,7 @@ const THEMES = {
   beach: { face: '#7a4a22', edge: '#4a2f18', text: '#fff4e0', sub: '#ffd9a0', post: '#7a4a22', font: 'Pacifico,cursive' },
   chinese: { face: '#8a1414', edge: '#e8b64a', text: '#ffe39a', sub: '#ffc87a', post: '#5a2a18', font: 'Cinzel Decorative,serif' },
   fine: { face: '#15131c', edge: '#d9b66a', text: '#f6e2a8', sub: '#d9b66a', post: '#8a6a2a', font: 'Playfair Display,serif' },
+  italian: { face: '#2f5a3a', edge: '#f6e2a8', text: '#fff4dc', sub: '#f0c878', post: '#7a4a2a', font: 'Playfair Display,serif' },
   steak: { face: '#4a2c1c', edge: '#e0a850', text: '#ffe9c0', sub: '#ffc870', post: '#6a4420', font: 'Rye,serif' },
 };
 

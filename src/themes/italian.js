@@ -1,0 +1,26 @@
+export const italian = {
+  id: 'italian',
+  name: 'Italian Trattoria',
+  era: 'tuscan afternoon',
+  palette: {
+    wall: '#b8663a',
+    wallDeep: '#5a2a16',
+    brass: '#d8a84a',
+    brassLight: '#f6d890',
+    brassDark: '#8a5a1a',
+    burgundy: '#b03a2a',
+    burgundyLight: '#d8503a',
+    ivory: '#fff4dc',
+    marble: '#3a1c0c',
+    nightTop: '#6a9ad8',
+    nightMid: '#f0b878',
+    nightLow: '#ffe0a8',
+    ink: '#2a1408',
+    glow: '#ffd890',
+  },
+  fonts: {
+    display: "'Playfair Display', 'Limelight', serif",
+    body: "'Josefin Sans', system-ui, sans-serif",
+  },
+  light: { vignette: 0.4, beam: 0.55 },
+};

@@ -93,6 +93,24 @@ export const chapters = [
       { n: 10, name: 'Grill Master Cup', sign: 'CUP' },
     ],
   },
+  {
+    id: 'italian',
+    name: 'Italian Trattoria',
+    theme: 'italian',
+    map: 'italian',
+    levels: [
+      { n: 1, name: 'Piazza Cafe', sign: 'CAFFE' },
+      { n: 2, name: 'Pizza Corner', sign: 'PIZZA' },
+      { n: 3, name: "Nonna's Kitchen", sign: 'NONNA' },
+      { n: 4, name: 'Vineyard Terrace', sign: 'VINO' },
+      { n: 5, name: 'Gelato Garden', sign: 'GELATO' },
+      { n: 6, name: 'Amalfi Coast', sign: 'AMALFI' },
+      { n: 7, name: 'Roman Holiday', sign: 'ROMA' },
+      { n: 8, name: 'Tuscan Harvest', sign: 'TUSCAN' },
+      { n: 9, name: 'La Bella Notte', sign: 'BELLA' },
+      { n: 10, name: 'Gran Festa', sign: 'FESTA' },
+    ],
+  },
 ];
 
 // Level numbers run on through the whole game (chapter 2 starts at 9, and so on). `n` stays the level's place inside its chapter, which is what saves use.

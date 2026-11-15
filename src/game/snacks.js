@@ -1,10 +1,11 @@
 // The little treat stand in the wait line. Every chapter has its own: it is the same game (empty at the start, the waiter refills it,
-// the upgrade adds refills) but dressed to match the restaurant. Lemonade belongs to the steakhouse.
+// the upgrade adds refills) but dressed to match the restaurant. Lemonade belongs to the steakhouse, gelato to the trattoria.
 
 const O = '#3a1f12'; // outline
 
 // 40x40 symbols, shared by the cup counter, the "+35%" float and the toast. Added to the page once with the other icons.
 export const SNACK_SYMBOLS = `
+ <symbol id="sn-gelato" viewBox="0 0 40 40"><path d="M12 20h16L20 38Z" fill="#e8b868" stroke="${O}" stroke-width="2.5" stroke-linejoin="round"/><path d="M15 24l8 8M20 22l5 7M16 29l3-3" stroke="#b88438" stroke-width="1.4" stroke-linecap="round"/><circle cx="20" cy="15" r="9" fill="#f6a8c4" stroke="${O}" stroke-width="2.5"/><circle cx="12.5" cy="21" r="5.5" fill="#a8d8b0" stroke="${O}" stroke-width="2.2"/><circle cx="27.5" cy="21" r="5.5" fill="#fff4d8" stroke="${O}" stroke-width="2.2"/><circle cx="20" cy="5" r="2.8" fill="#d8302a" stroke="${O}" stroke-width="1.6"/></symbol>
  <symbol id="sn-cookie" viewBox="0 0 40 40"><circle cx="20" cy="21" r="14" fill="#e0a85c" stroke="${O}" stroke-width="2.5"/><circle cx="14" cy="16" r="2.6" fill="#5a2f1a"/><circle cx="25" cy="14" r="2.2" fill="#5a2f1a"/><circle cx="26" cy="25" r="2.8" fill="#5a2f1a"/><circle cx="15" cy="27" r="2.2" fill="#5a2f1a"/><circle cx="21" cy="21" r="1.6" fill="#5a2f1a"/></symbol>
  <symbol id="sn-coconut" viewBox="0 0 40 40"><ellipse cx="18" cy="24" rx="13" ry="13" fill="#8a5a32" stroke="${O}" stroke-width="2.5"/><ellipse cx="18" cy="14" rx="9" ry="4" fill="#fff6e0" stroke="${O}" stroke-width="2"/><path d="M20 14L31 3" stroke="#e0533f" stroke-width="3.5" stroke-linecap="round"/><path d="M25 9l3 3" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="13" cy="26" r="1.5" fill="${O}"/><circle cx="19" cy="29" r="1.5" fill="${O}"/><circle cx="23" cy="24" r="1.5" fill="${O}"/></symbol>
  <symbol id="sn-tea" viewBox="0 0 40 40"><ellipse cx="20" cy="33" rx="15" ry="4" fill="#fff" stroke="#3a5a8a" stroke-width="2"/><path d="M7 15h24q0 15-12 15T7 15Z" fill="#fff" stroke="#3a5a8a" stroke-width="2.5" stroke-linejoin="round"/><path d="M31 18q8 0 6 6q-2 4-8 3" fill="none" stroke="#3a5a8a" stroke-width="2.5" stroke-linecap="round"/><path d="M8 15h22" stroke="#7bb26a" stroke-width="3"/><path d="M14 10q-3-3 0-6M21 10q-3-3 0-6" stroke="#fff" stroke-opacity=".8" stroke-width="2.5" fill="none" stroke-linecap="round"/></symbol>
@@ -17,6 +18,7 @@ const PAL = {
   beach:   { top: '#d8a85e', dk: '#7a5426', cloth: '#2aa6b8', cloth2: '#ffffff', gold: '#f0c060', tray: '#e8c88a', trayIn: '#f8ecd0' },
   chinese: { top: '#b8312f', dk: '#6a1414', cloth: '#c8282a', cloth2: '#e8c766', gold: '#e8c766', tray: '#d8a85e', trayIn: '#f0d8a0' },
   fine:    { top: '#f1e6cf', dk: '#b8a888', cloth: '#7d1d33', cloth2: '#e8c766', gold: '#e8c766', tray: '#e8c766', trayIn: '#f8ecc0' },
+  italian: { top: '#c8794a', dk: '#6a2a14', cloth: '#d8402f', cloth2: '#fff4e0', gold: '#e8c766', tray: '#d8c8a8', trayIn: '#f6ecd4' },
   steak:   { top: '#9a6a3a', dk: '#4a2c14', cloth: '#c83a3a', cloth2: '#ffffff', gold: '#c8d0d4', tray: '#9aa4aa', trayIn: '#dfe5e8' },
 };
 // Where the tray sits (svg units, 80x110 box), so the items can be laid on it.
@@ -89,6 +91,19 @@ const maker = (theme, t, c) => {
     if (t === 2) s += row(5, 52).replace(/^/, '') + `<circle cx="40" cy="17" r="3.6" fill="${c.gold}" ${sw(1.8)}/><path d="M32 20h16" stroke="${c.gold}" stroke-width="3"/>`;
     return s;
   }
+  if (theme === 'italian') { // a gelato cart: striped canopy over tubs of gelato
+    let s = `<rect x="14" y="34" width="4.5" height="26" fill="#a8743c" ${sw(2)}/><rect x="61.5" y="34" width="4.5" height="26" fill="#a8743c" ${sw(2)}/>`;
+    s += `<rect x="18" y="44" width="44" height="16" rx="4" fill="#dff0f6" fill-opacity=".6" ${sw(2.2)}/>`;
+    const tub = (x, col) => `<ellipse cx="${x}" cy="55" rx="7" ry="3.4" fill="#c8d0d4" ${sw(1.6)}/><path d="M${x - 6.4} 54q0-9 6.4-9t6.4 9Z" fill="${col}" ${sw(1.6)}/><circle cx="${x}" cy="43.5" r="0" fill="none"/>`;
+    s += tub(27, '#f6a8c4') + tub(40, '#a8d8b0') + tub(53, '#fff4d8');
+    const k = t === 0 ? 24 : 16;
+    s += `<path d="M6 36L40 ${k}L74 36Z" fill="#fff4e0" ${sw()}/>`;
+    s += `<path d="M40 ${k}L19 36H6ZM40 ${k}L40 36H31ZM40 ${k}L61 36H49ZM40 ${k}L74 36H70Z" fill="${c.cloth}" opacity=".95"/>`;
+    s += `<path d="M6 36L40 ${k}L74 36Z" fill="none" ${sw()}/><path d="M6 36q5 7 9.7 0t9.7 0 9.7 0 9.7 0 9.7 0 9.7 0 9.7 0" fill="${c.cloth2}" ${sw(2)}/>`;
+    if (t >= 1) s += `<path d="M10 40q30 8 60 0" stroke="${O}" stroke-width="1.4" fill="none"/>` + [[18, 42, '#3f9a4a'], [30, 44, '#fff'], [42, 44.4, '#d8402f'], [54, 44, '#3f9a4a'], [66, 42, '#fff']].map(([x, y, f]) => `<path d="M${x - 3.4} ${y}h6.8l-3.4 6Z" fill="${f}" ${sw(1.2)}/>`).join('');
+    if (t === 2) s += `<circle cx="40" cy="${k - 3}" r="3.4" fill="${c.gold}" ${sw(1.6)}/>`;
+    return s;
+  }
   // steakhouse: a lemonade dispenser with glass tanks and a tap
   const tank = (x, w, liq, cap) => `<rect x="${x}" y="24" width="${w}" height="34" rx="8" fill="#fff6c8" fill-opacity=".55" ${sw()}/><rect x="${x + 2}" y="32" width="${w - 4}" height="24" rx="6" fill="${liq}"/><circle cx="${x + w / 2}" cy="42" r="4.6" fill="#fff27a" stroke="#a8861a" stroke-width="1.5"/><circle cx="${x + w / 2 + 5}" cy="50" r="3.6" fill="#fff27a" stroke="#a8861a" stroke-width="1.4"/><rect x="${x + w * 0.15}" y="19" width="${w * 0.7}" height="6" rx="2.5" fill="${cap}" ${sw(1.8)}/><rect x="${x + w / 2 - 4}" y="57" width="8" height="5" rx="2" fill="#c8d0d4" ${sw(1.5)}/><path d="M${x + w / 2} 62v3" stroke="${O}" stroke-width="2.2" stroke-linecap="round"/>`;
   let s = t === 0 ? tank(22, 36, '#ffd93a', '#8a949a') : tank(14, 24, '#ffd93a', t === 2 ? c.gold : '#8a949a') + tank(42, 24, '#f6a8c4', t === 2 ? c.gold : '#8a949a');
@@ -126,6 +141,7 @@ export const SNACKS = {
   beach:   { id: 'coconuts',  name: 'coconuts',  label: 'Coconuts',  upName: 'More coconuts',     cup: 'sn-coconut', stand: (t) => stationSVG('beach', t) },
   chinese: { id: 'tea',       name: 'tea',       label: 'Tea',       upName: 'Bigger tea pot',    cup: 'sn-tea',     stand: (t) => stationSVG('chinese', t) },
   fine:    { id: 'macarons',  name: 'macarons',  label: 'Macarons',  upName: 'More macarons',     cup: 'sn-macaron', stand: (t) => stationSVG('fine', t) },
+  italian: { id: 'gelato',    name: 'gelato',    label: 'Gelato',    upName: 'More gelato',       cup: 'sn-gelato',  stand: (t) => stationSVG('italian', t) },
   steak:   { id: 'lemonade',  name: 'lemonade',  label: 'Lemonade',  upName: 'Bigger jar',        cup: 'ic-cup',     stand: (t) => stationSVG('steak', t) },
 };
 export const snackFor = (theme) => SNACKS[theme] || SNACKS.steak;

@@ -29,4 +29,10 @@ export const DISHES = {
   ribeye:     { name: 'Ribeye',         time: 11, price: 34 },
   tomahawk:   { name: 'Tomahawk',       time: 14, price: 44 },
   lobster:    { name: 'Lobster Plate',  time: 13, price: 30 },
+  // Italian Trattoria menu
+  caprese:    { name: 'Caprese',        time: 4,  price: 11 },
+  pizza:      { name: 'Margherita',     time: 6,  price: 17 },
+  spaghetti:  { name: 'Spaghetti',      time: 9,  price: 26 },
+  tiramisu:   { name: 'Tiramisu',       time: 11, price: 34 },
+  lasagna:    { name: 'Lasagna',        time: 14, price: 44 },
 };
