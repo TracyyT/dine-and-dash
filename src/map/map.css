@@ -13,19 +13,8 @@ body.map-open{overflow:hidden}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .bob{animation:bob 1.4s ease-in-out infinite}
 #vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 62%,rgba(26,10,32,.45))}
-#hud{position:fixed;left:20px;top:20px;background:#14100f;border:3px solid #c9a24a;outline:1px solid #c9a24a;outline-offset:-8px;padding:10px 16px 10px;pointer-events:none}
-#hud b{display:block;font:400 18px/1.3 Limelight,serif;color:#ffe9a8}
-#hud span{font-weight:600;font-size:12px;letter-spacing:1.5px;color:#e8d9b0}
-#tools{position:fixed;right:20px;bottom:20px;display:flex;gap:8px}
-#tools button{font:600 14px 'Josefin Sans',sans-serif;min-width:44px;height:44px;padding:0 12px;background:#14100f;color:#ffe9a8;border:2px solid #c9a24a;cursor:pointer}
-#tools button:hover{background:#7d1d33}
-#tools button:focus-visible{outline:3px solid #fff;outline-offset:2px}
-#hint{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#14100fcc;color:#f2e2b8;border:1px solid #c9a24a;padding:6px 14px;font-size:13px;pointer-events:none;transition:opacity .6s}
-#toast{position:fixed;left:50%;top:24px;transform:translateX(-50%);background:#14100f;color:#ffe9a8;border:2px solid #c9a24a;padding:8px 18px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .25s}
 @media(prefers-reduced-motion:reduce){.pulse,.bob{animation:none}.node .lift,#hint,#toast{transition:none}}
 
-#wallet{position:fixed;left:20px;top:120px;display:flex;align-items:center;gap:8px;background:#14100f;border:2px solid #c9a24a;border-radius:20px;padding:5px 14px 5px 10px;color:#ffe9a8;font:700 18px 'Josefin Sans',sans-serif;pointer-events:none}
-#wallet svg{width:22px;height:22px}
 #up{position:fixed;right:20px;bottom:76px;background:#14100f;border:3px solid #c9a24a;outline:1px solid #c9a24a;outline-offset:-8px;padding:16px;z-index:5;box-shadow:0 10px 30px #000a}
 #up[hidden]{display:none}
 .up-grid{display:grid;grid-template-columns:repeat(4,72px);gap:8px}
@@ -40,60 +29,18 @@ body.map-open{overflow:hidden}
 .up-tile .cost{display:flex;align-items:center;gap:3px;min-height:18px}
 .up-tile .cost svg{width:14px;height:14px}
 
-#hud .pips{display:flex;gap:6px;margin-top:6px}
-#hud .pips i{width:14px;height:14px;border-radius:50%;background:#000a;border:2px solid #c9a24a}
-#hud .pips i.on{background:radial-gradient(circle at 35% 30%,#fff3b8,#e8c766)}
-#hint{display:flex;align-items:center;gap:10px;padding:6px 14px}
-#toast{display:flex;align-items:center}
-#tools button{display:grid;place-items:center}
 
-#tools button:disabled{opacity:.35;cursor:default}
-#tools button:disabled:hover{background:#14100f}
 /* Beach map chrome */
-body[data-map=beach] #hud,body[data-map=beach] #wallet,body[data-map=beach] #tools button,body[data-map=beach] #hint,body[data-map=beach] #toast{background:#6b4420;border-color:#ffe6b0;color:#fff4e0}
-body[data-map=beach] #hud{outline-color:#ffe6b0;border-radius:14px}
-body[data-map=beach] #hud b{font-family:Pacifico,cursive;font-weight:400}
-body[data-map=beach] #tools button:hover:not(:disabled){background:#b8442f}
 body[data-map=beach] #vig{background:radial-gradient(ellipse at center,transparent 62%,rgba(40,20,10,.35))}
-body[data-map=beach] #wallet{top:120px}
 
 /* Phones */
 #view{overscroll-behavior:none}
 @media (max-width:820px),(max-height:520px){
-  #hud{left:10px;top:10px;padding:6px 10px}#hud b{font-size:14px}#hud span{font-size:10px}
-  #wallet{left:10px;top:70px;font-size:15px}body[data-map=beach] #wallet{top:96px}
-  #tools{right:10px;bottom:10px;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:60vw}
-  #tools button{min-width:44px;height:44px}
-  #hint{display:none}
 }
-@media (pointer:coarse){#zin,#zout{display:none}} /* pinch to zoom on touch */
 
 /* Chinese map chrome */
-body[data-map=chinese] #hud,body[data-map=chinese] #wallet,body[data-map=chinese] #tools button,body[data-map=chinese] #hint,body[data-map=chinese] #toast{background:#7a1818;border-color:#e8b64a;color:#fff0d8}
-body[data-map=chinese] #hud{outline-color:#e8b64a}
-body[data-map=chinese] #hud b{font-family:'Cinzel Decorative',serif}
-body[data-map=chinese] #tools button:hover:not(:disabled){background:#d9302a}
-body[data-map=chinese] #wallet{top:120px}
 
 /* Fine dining map chrome */
-body[data-map=fine] #hud,body[data-map=fine] #wallet,body[data-map=fine] #tools button,body[data-map=fine] #hint,body[data-map=fine] #toast{background:#15131c;border-color:#d9b66a;color:#f6e2a8}
-body[data-map=fine] #hud{outline-color:#d9b66a}
-body[data-map=fine] #hud b{font-family:'Playfair Display',serif}
-body[data-map=fine] #tools button:hover:not(:disabled){background:#7a1d3a}
-body[data-map=fine] #wallet{top:120px}
 
 /* Steakhouse map chrome */
-body[data-map=steak] #hud,body[data-map=steak] #wallet,body[data-map=steak] #tools button,body[data-map=steak] #hint,body[data-map=steak] #toast{background:#4a2c1c;border-color:#e0a850;color:#ffe9c0}
-body[data-map=steak] #hud{outline-color:#e0a850}
-body[data-map=steak] #hud b{font-family:'Rye',serif;font-weight:400}
-body[data-map=steak] #tools button:hover:not(:disabled){background:#b03a30}
-body[data-map=steak] #wallet{top:120px}
 
-#lives{position:fixed;left:20px;top:166px;display:flex;align-items:center;gap:6px;background:#14100f;border:2px solid #c9a24a;border-radius:20px;padding:5px 12px 5px 10px;color:#ffe9a8;font:700 18px 'Josefin Sans',sans-serif;pointer-events:none}
-#lives small{font-size:12px;opacity:.8;min-width:30px}
-#lives.empty{border-color:#e0476a}
-body[data-map=beach] #lives{background:#6b4420;border-color:#ffe6b0;color:#fff4e0}
-body[data-map=chinese] #lives{background:#7a1818;border-color:#e8b64a;color:#fff0d8}
-body[data-map=fine] #lives{background:#15131c;border-color:#d9b66a;color:#f6e2a8}
-body[data-map=steak] #lives{background:#4a2c1c;border-color:#e0a850;color:#ffe9c0}
-@media (max-width:700px){#lives{left:10px;top:108px;font-size:15px}}
