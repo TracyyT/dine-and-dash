@@ -92,12 +92,17 @@ export function renderItalian(S, LB, chapter, progress) {
   el('rect', { width: WW, height: 620, fill: 'url(#sky)' }, S);
   [[1500, 440, 900, 220, '#9fb4d0'], [1800, 420, 700, 280, '#8aa2c4'], [2150, 450, 600, 240, '#7a94b8']].forEach(([x, y, w, h, c]) => el('path', { d: `M${x - w / 2} ${y}L${x - w * 0.1} ${y - h}L${x + w * 0.2} ${y - h * 0.7}L${x + w / 2} ${y}Z`, fill: c }, S));
   [[300, 120, 1.2], [1000, 70, 1.4], [1700, 110, 1], [2200, 60, 1.1]].forEach(([x, y, k]) => G(S, x, y, `<g fill="#fff" opacity=".85"><ellipse rx="80" ry="22"/><ellipse cx="-44" cy="8" rx="50" ry="16"/><ellipse cx="50" cy="10" rx="56" ry="16"/></g>`, sc(k)));
-  el('path', { d: 'M1500 520Q1700 400 1900 430T2400 380V560H1500Z', fill: '#a8c488' }, S);
+  el('path', { d: 'M1500 560Q1700 420 1900 450T2400 400V570H1500Z', fill: '#a8c488' }, S);
   hillTown(S, 1700, 2400, 400, 540);
   // sea
-  el('path', { d: 'M2180 470H2400V1250L2300 1230Q2200 1170 2190 1080Q2230 960 2200 850Q2170 700 2180 470Z', fill: 'url(#water)' }, S);
-  for (let i = 0; i < 14; i++) { const x = 2210 + rnd() * 170, y = 520 + rnd() * 650; el('path', { d: `M${x} ${y}q8 -5 16 0t16 0`, fill: 'none', stroke: '#fff', 'stroke-width': 2.4, opacity: 0.5, 'stroke-linecap': 'round' }, S); }
-  sailboat(S, 2290, 640, 1.4); sailboat(S, 2340, 820, 1.1); sailboat(S, 2260, 1000, 1.2);
+  el('path', { d: 'M1800 566H2400V1340Q2250 1290 2190 1160H1800Z', fill: 'url(#water)' }, S);
+  el('rect', { x: 1800, y: 566, width: 600, height: 60, fill: '#fff', opacity: 0.22 }, S);
+  const edge = 'M2150 620Q2180 720 2195 850Q2215 980 2195 1090Q2160 1160 2100 1190Q1900 1270 1500 1300';
+  [[110, '#7fe8ee', 0.4], [64, '#b8f6f6', 0.55], [26, '#ffffff', 0.9]].forEach(([w, c, o]) => el('path', { d: edge, fill: 'none', stroke: c, 'stroke-width': w, opacity: o, 'stroke-linecap': 'round' }, S));
+  for (let i = 0; i < 26; i++) { const x = 2230 + rnd() * 150, y = 600 + rnd() * 700; el('path', { d: `M${x} ${y}q8 -5 16 0t16 0`, fill: 'none', stroke: '#fff', 'stroke-width': 2.4, opacity: 0.5, 'stroke-linecap': 'round' }, S); }
+  sailboat(S, 2300, 700, 1.4); sailboat(S, 2340, 860, 1.1); sailboat(S, 2290, 1010, 1.2);
+  rock(S, 2270, 1110, 110, 60, '#c4b090', '#a89472'); rock(S, 2350, 1200, 120, 80, '#c4b090', '#a89472'); rock(S, 2250, 930, 70, 40, '#c4b090', '#a89472');
+  [[2250, 640], [2340, 790], [2330, 960]].forEach(([x, y]) => G(S, x, y, `<path d="M-14 0Q-7 -9 0 0Q7 -9 14 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>`));
   // ground terrace
   const gd = 'M0 520H1900Q2100 530 2170 700Q2190 850 2210 980Q2190 1100 2120 1180Q1900 1270 1500 1300L1400 1500H0Z';
   el('path', { d: gd, fill: '#e6d5b0' }, S); el('path', { d: gd, fill: 'url(#cob)', opacity: 0.55 }, S);
