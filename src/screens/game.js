@@ -12,12 +12,13 @@ import { sound } from '../game/sound.js';
 import { track } from '../game/analytics.js';
 import { tutorialNeeded, tutorialDone, createCoach, guideNeeded, createGuide, newFeatures } from '../game/tutorial.js';
 
-export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {}) {
+export function renderGame(app, { chapter: chapterId = 'city', level = 1, loss = null } = {}) {
   const chapter = chapters.find((c) => c.id === chapterId);
   applyTheme(themes[chapter.theme]); // the restaurant look applies inside a level only
   document.body.classList.add('game-open');
   const info = { ...chapter.levels.find((l) => l.n === level), level, num: chapter.levels.find((l) => l.n === level)?.num, theme: chapter.theme, total: chapter.levels.length };
   const g = createGame(levelConfig(chapterId, level), getUpgrades(chapterId));
+  if (loss) Object.assign(g, loss); // coming back from the Upgrade store: rebuild the same Failed screen (nothing is recorded or charged twice)
 
   const root = document.createElement('div');
   root.className = 'game-root';
@@ -109,8 +110,13 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     recordResult(chapterId, level, n); // saved once; a worse replay never lowers the best score
     if (g.result !== 'pass') loseLife(); // failing costs one life, passing never does
     bankCoins(g.earned); // coins carry over to the map, where you spend them on upgrades
+    showResults();
+  }
+  function showResults() {
     const win = g.result === 'pass';
-    show(resultsHTML(g, info, !!next || !!nextChapter, getLives()), { map: toMap, again: replay, ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}), ...(win && nextChapter ? { next: openChapterDone } : {}) });
+    // A failed level can open the Upgrade store; its cross button brings the player back to this same Failed screen.
+    const snap = () => JSON.parse(JSON.stringify({ objectives: g.objectives, result: g.result, stats: g.stats, served: g.served, earned: g.earned, lost: g.lost, over: true, timeLeft: g.timeLeft }));
+    show(resultsHTML(g, info, !!next || !!nextChapter, getLives()), { map: toMap, again: replay, ...(!win ? { upgrade: () => go('upgrades', { chapter: chapterId, back: { screen: 'game', params: { chapter: chapterId, level, loss: snap() } } }) } : {}), ...(win && next ? { next: () => go('game', { chapter: chapterId, level: level + 1 }) } : {}), ...(win && nextChapter ? { next: openChapterDone } : {}) });
   }
 
   function openChapterDone() {
@@ -144,7 +150,7 @@ export function renderGame(app, { chapter: chapterId = 'city', level = 1 } = {})
     raf = requestAnimationFrame(loop);
   };
   raf = requestAnimationFrame(loop);
-  openIntro();
+  if (loss) { mode = 'over'; showResults(); } else openIntro();
 
   // Test hook so automated checks can read the game state. Harmless in production.
   window.__game = { g, get mode() { return mode; } };
