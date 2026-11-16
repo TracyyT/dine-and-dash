@@ -128,7 +128,7 @@ export function resultsHTML(g, info, hasNext, lives = 5) {
     <div class="orows">${row}${angry}</div>
     <div class="stats2"><span>${use('ic-people', 34)}<div><b>${g.served}</b><small>Guests</small></div></span><span>${use('ic-smile', 34)}<div><b>${avg}%</b><small>Mood</small></div></span><span>${use('ic-bill', 34)}<div><b>+${g.earned}</b><small>Coins</small></div></span></div>
     ${coinPile}
-    <div class="prow wide">${btn('map', 'ic-home', 'Home')}${btn('again', 'ic-replay', 'Retry')}${win && hasNext ? btn('next', 'ic-next', 'Next', 'primary') : ''}</div>
+    <div class="prow wide">${btn('map', 'ic-home', 'Home')}${btn('again', 'ic-replay', 'Retry')}${win ? '' : btn('upgrade', 'ic-spark', 'Upgrade', 'primary')}${win && hasNext ? btn('next', 'ic-next', 'Next', 'primary') : ''}</div>
   </div>`;
 }
 

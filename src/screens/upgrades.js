@@ -11,13 +11,15 @@ import { sound } from '../game/sound.js';
 import { upgradeInfo } from '../data/upgradeInfo.js';
 
 const SHELVES = [['staff', 'Staff'], ['speed', 'Speed Boost'], ['service', 'Service']];
-const BACK = '<svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><path d="M4 9l11-4 10 4 11-4v26l-11 4-10-4-11 4z" fill="#f2e2b0" stroke="#8f6a22" stroke-width="2.2" stroke-linejoin="round"/><path d="M15 5v26M25 9v26" stroke="#8f6a22" stroke-width="1.8"/></svg>';
+const CLOSE = '<svg viewBox="0 0 40 40" width="28" height="28" aria-hidden="true"><path d="M9 9l22 22M31 9L9 31" stroke="#8f6a22" stroke-width="6" stroke-linecap="round" fill="none"/></svg>';
 const windowSky = (i) => {
   const b = Array.from({ length: 9 }, (_, k) => { const h = 20 + ((k * 37 + i * 17) % 46); return `<rect x="${k * 17}" y="${90 - h}" width="15" height="${h}" fill="${k % 2 ? '#2a1f48' : '#1d1634'}"/>${[0, 1, 2, 3].map((r) => ((k + r + i) % 3 ? `<rect x="${k * 17 + 4}" y="${90 - h + 6 + r * 11}" width="3" height="4" fill="#ffd98a"/>` : '')).join('')}`; }).join('');
   return `<svg viewBox="0 0 150 90" width="100%" height="100%" preserveAspectRatio="none"><defs><linearGradient id="usk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#25357a"/><stop offset=".62" stop-color="#8a4f9c"/><stop offset="1" stop-color="#ffa77a"/></linearGradient></defs><rect width="150" height="90" fill="url(#usk)"/>${b}</svg>`;
 };
 
-export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
+export function renderUpgrades(app, { chapter: chapterId = 'city', back = null } = {}) {
+  // The cross exits the store: back to where the player came from (e.g. the Failed screen), otherwise to the map.
+  const exit = () => (back ? go(back.screen, back.params) : go('map', { chapter: chapterId }));
   const chapter = chapters.find((c) => c.id === chapterId);
   applyTheme(themes[chapter.theme]);
   document.body.classList.add('upg-open');
@@ -33,7 +35,7 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
         <div class="win w1">${windowSky(1)}</div><div class="win w2">${windowSky(2)}</div>
         <div class="lamp l1"></div><div class="lamp l2"></div>
         <h1 class="neon"><span>Upgrade</span></h1>
-        <div class="top-r"><div class="coinpill">${COIN_ICON}<b>${wallet}</b></div><button class="back" aria-label="Map" title="Map">${BACK}</button></div>
+        <div class="top-r"><div class="coinpill">${COIN_ICON}<b>${wallet}</b></div><button class="back" aria-label="Close" title="Close">${CLOSE}</button></div>
       </div>
       <div class="shelves">${SHELVES.map(([g, title]) => `
         <section class="shelf"><h2><span>${title}</span></h2>
@@ -48,7 +50,7 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
               <button class="ubuy ${can ? 'can' : ''}" data-up="${u.id}" ${can ? '' : 'disabled'} aria-label="${u.name}${max ? ', maxed' : `, ${cost} coins`}">${max ? '&#10003;' : `${COIN_ICON}<span>${cost}</span>`}</button>
             </article>`; }).join('')}</div>
         </section>`).join('')}</div>`;
-    root.querySelector('.back').onclick = () => go('map', { chapter: chapterId });
+    root.querySelector('.back').onclick = exit;
     root.querySelectorAll('[data-up]').forEach((b) => {
       b.onclick = () => { if (buyUpgrade(chapterId, b.dataset.up)) { sound.unlock(); sound.play('upgrade'); draw(b.dataset.up); } };
     });
@@ -71,7 +73,7 @@ export function renderUpgrades(app, { chapter: chapterId = 'city' } = {}) {
     root.appendChild(pop);
   });
   draw();
-  const onKey = (e) => { if (e.key !== 'Escape') return; if (pop) closeInfo(); else go('map', { chapter: chapterId }); };
+  const onKey = (e) => { if (e.key !== 'Escape') return; if (pop) closeInfo(); else exit(); };
   window.addEventListener('keydown', onKey);
   return () => { window.removeEventListener('keydown', onKey); document.body.classList.remove('upg-open'); };
 }
