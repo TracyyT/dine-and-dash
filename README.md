@@ -1,6 +1,6 @@
 # Dine & Dash: Restaurant Game
 
-A cute pixel-style restaurant management game. Seat guests, take orders, cook, serve, collect payment and clean tables before time runs out, across six themed chapters of ten levels each.
+A cute pixel-style restaurant management game. Seat guests, take orders, cook, serve, collect payment and clean tables before time runs out, across seven themed chapters of ten levels each.
 
 **Play it:** https://dine-and-dash-nu.vercel.app
 
@@ -20,7 +20,7 @@ Each level has one requirement: earn coins, serve guests, deliver dishes, cook i
 
 ### Chapters
 
-City Supper Club, Beach Bistro, Lantern Garden, Maison d'Or, Big Sky Steakhouse, Italian Trattoria. Finish every level of a chapter to unlock the next.
+City Supper Club, Beach Bistro, Lantern Garden, Maison d'Or, Big Sky Steakhouse, Italian Trattoria, Cali Burger. Finish every level of a chapter to unlock the next.
 
 ### Upgrades
 

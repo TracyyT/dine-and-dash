@@ -65,6 +65,10 @@ export const ICONS = `
  <symbol id="d-spaghetti" viewBox="0 0 40 40"><ellipse cx="20" cy="27" rx="18" ry="9" fill="#fffaf0" stroke="#b8a888" stroke-width="1.6"/><ellipse cx="20" cy="24" rx="12.5" ry="7" fill="#f2cf6b" stroke="#b8902b" stroke-width="1.5"/><path d="M10 23q5-6 10 0t10 0M12 27q8 4 16 0M13 20q7-4 14 0" fill="none" stroke="#d9a93b" stroke-width="1.6" stroke-linecap="round"/><path d="M12 21q8-9 16 0q-8 5-16 0Z" fill="#d8402f" opacity=".92"/><circle cx="17" cy="17" r="4.4" fill="#8a3a1a" stroke="#4a1a08" stroke-width="1.6"/><circle cx="25" cy="18" r="4" fill="#8a3a1a" stroke="#4a1a08" stroke-width="1.6"/><path d="M19 11q4-6 8-1q-3 5-8 1Z" fill="#3f9a3a" stroke="#1f5a22" stroke-width="1.4"/></symbol>
  <symbol id="d-lasagna" viewBox="0 0 40 40"><ellipse cx="20" cy="35" rx="17" ry="3.6" fill="#fffaf0" stroke="#b8a888" stroke-width="1.5"/><path d="M6 20L12 12H34L30 20Z" fill="#e8a23a" stroke="#8a5a1c" stroke-width="2" stroke-linejoin="round"/><path d="M10 17l5-3M18 18l5-4M25 17l4-3" stroke="#fff0a0" stroke-width="2" stroke-linecap="round"/><rect x="6" y="20" width="24" height="13" rx="1.5" fill="#f6e2a0" stroke="#8a5a1c" stroke-width="2"/><path d="M6 24h24M6 28.5h24" stroke="#d8402f" stroke-width="3"/><path d="M6 26.2h24M6 31h24" stroke="#fff4c0" stroke-width="1.6"/><path d="M30 20L34 12V25L30 33Z" fill="#d89a3a" stroke="#8a5a1c" stroke-width="2" stroke-linejoin="round"/><path d="M13 12q2-6 6-3q-1 5-6 3Z" fill="#3f9a3a" stroke="#1f5a22" stroke-width="1.2"/></symbol>
  <symbol id="d-tiramisu" viewBox="0 0 40 40"><ellipse cx="20" cy="35" rx="17" ry="3.6" fill="#fffaf0" stroke="#b8a888" stroke-width="1.5"/><path d="M7 16L13 10H33L28 16Z" fill="#6a3a22" stroke="#3a1c0c" stroke-width="2" stroke-linejoin="round"/><circle cx="15" cy="13.5" r=".9" fill="#a06a42"/><circle cx="22" cy="12.5" r=".9" fill="#a06a42"/><circle cx="27" cy="13.6" r=".9" fill="#a06a42"/><rect x="7" y="16" width="21" height="16" rx="1.5" fill="#fff4d8" stroke="#3a1c0c" stroke-width="2"/><rect x="8" y="19" width="19" height="4" fill="#c8924a"/><rect x="8" y="26.5" width="19" height="4" fill="#c8924a"/><path d="M28 16L33 10V26L28 32Z" fill="#e8d8b0" stroke="#3a1c0c" stroke-width="2" stroke-linejoin="round"/><ellipse cx="17" cy="9" rx="2.4" ry="1.8" fill="#4a2a14" stroke="#2a1408" stroke-width="1"/></symbol>
+ <symbol id="d-hotdog" viewBox="0 0 40 40"><ellipse cx="20" cy="35" rx="17" ry="3" fill="#0003"/><path d="M3 24Q3 14 20 14T37 24Q37 33 20 33T3 24Z" fill="#e8b068" stroke="#8a5a28" stroke-width="1.8"/><rect x="2" y="17" width="36" height="9" rx="4.5" fill="#c8402a" stroke="#6a1c10" stroke-width="1.8"/><path d="M6 21q3-3 6 0t6 0t6 0t6 0t6 0" stroke="#ffd83a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M4 26Q4 33 20 33T36 26" fill="none" stroke="#8a5a28" stroke-width="1.8"/></symbol>
+ <symbol id="d-cheeseburger" viewBox="0 0 40 40"><ellipse cx="20" cy="36" rx="16" ry="3" fill="#0003"/><path d="M5 19Q5 6 20 6T35 19Z" fill="#e8a048" stroke="#7a4a1c" stroke-width="2" stroke-linejoin="round"/><circle cx="14" cy="11" r="1" fill="#fff4d0"/><circle cx="22" cy="9" r="1" fill="#fff4d0"/><circle cx="27" cy="13" r="1" fill="#fff4d0"/><path d="M4 19q4 4 8 0t8 0 8 0 8 0v2H4Z" fill="#4fa84a" stroke="#2a6a2a" stroke-width="1.4"/><path d="M5 21h30l-5 5-5-3-5 6-5-6-5 3-5-5Z" fill="#ffc83a" stroke="#b8801a" stroke-width="1.4" stroke-linejoin="round"/><rect x="5" y="25" width="30" height="5" rx="2.5" fill="#6a3418" stroke="#3a1c0c" stroke-width="1.6"/><path d="M5 30h30q0 6-6 6H11q-6 0-6-6Z" fill="#e8a048" stroke="#7a4a1c" stroke-width="2" stroke-linejoin="round"/></symbol>
+ <symbol id="d-shake" viewBox="0 0 40 40"><g transform="translate(2.4 7) scale(.88)"><ellipse cx="20" cy="37" rx="10" ry="2.4" fill="#0003"/><path d="M9 14h22l-3 23H12Z" fill="#fff4f0" fill-opacity=".9" stroke="#b85a7a" stroke-width="2" stroke-linejoin="round"/><path d="M11 20h18l-2 15H13Z" fill="#f6a8c4"/><path d="M10 14Q8 6 14 5Q16 0 22 3Q28 1 28 6Q32 8 30 14Z" fill="#fffaf0" stroke="#b8a898" stroke-width="1.8" stroke-linejoin="round"/><circle cx="21" cy="3" r="3.2" fill="#d8302a" stroke="#7a1010" stroke-width="1.4"/><path d="M26 1L31-5" stroke="#d8302a" stroke-width="3" stroke-linecap="round"/><path d="M15 24v8" stroke="#fff" stroke-width="2" opacity=".6" stroke-linecap="round"/></g></symbol>
+ <symbol id="d-combo" viewBox="0 0 40 40"><ellipse cx="20" cy="37" rx="18" ry="2.8" fill="#0003"/><path d="M20 22l2-14M25 22l5-13M30 23l4-9" stroke="#ffd83a" stroke-width="3.6" stroke-linecap="round"/><path d="M22 22l8 10h-14Z" fill="#d8302a" stroke="#7a1010" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 24Q3 14 14 14T25 24Z" fill="#e8a048" stroke="#7a4a1c" stroke-width="1.8"/><rect x="2" y="24" width="24" height="4" rx="2" fill="#6a3418" stroke="#3a1c0c" stroke-width="1.4"/><path d="M3 28h22q0 5-5 5H8q-5 0-5-5Z" fill="#e8a048" stroke="#7a4a1c" stroke-width="1.8"/><path d="M29 18h8l-1.6 18h-4.8Z" fill="#fff4f0" stroke="#c8302a" stroke-width="1.6" stroke-linejoin="round"/><path d="M29.6 24h7l-.6 7h-5.8Z" fill="#c8302a"/><path d="M33 18v-6" stroke="#2f9aaa" stroke-width="2.2" stroke-linecap="round"/></symbol>
  <symbol id="ic-home" viewBox="0 0 40 40"><path d="M6 20L20 7l14 13M10 17v16h7V24h6v9h7V17" fill="none" stroke="#7d1d33" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
  <symbol id="ic-back" viewBox="0 0 40 40"><path d="M35 20H9M20 7L7 20l13 13" fill="none" stroke="#7d1d33" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>`;
@@ -146,6 +150,36 @@ const steakTable = (n) => `<svg viewBox="0 0 130 92" width="130" height="92">
   <rect x="96" y="28" width="6" height="8" rx="2" fill="#b03030"/><rect x="104" y="29" width="5" height="7" rx="2" fill="#e8c766"/></g>
   <circle cx="65" cy="84" r="9" fill="#8a2a2a" stroke="#ffd890" stroke-width="1.5"/><text x="65" y="88.5" text-anchor="middle" font-size="12" font-weight="700" fill="#ffe9c0" font-family="Josefin Sans,sans-serif">${n}</text>
 </svg>`;
+const fastTable = (n) => `<svg viewBox="0 0 130 92" width="130" height="92">
+  <ellipse cx="65" cy="82" rx="50" ry="9" fill="#000" opacity=".26"/>
+  <rect x="59" y="50" width="12" height="30" fill="#c8d0d4" stroke="#6a747a" stroke-width="2"/><ellipse cx="65" cy="80" rx="24" ry="6" fill="#aab4ba" stroke="#6a747a" stroke-width="2"/>
+  <ellipse cx="65" cy="44" rx="58" ry="28" fill="#c8d0d4" stroke="#6a747a" stroke-width="2"/>
+  <ellipse cx="65" cy="41" rx="55" ry="26" fill="#fff6e4" stroke="#d8c8a8" stroke-width="2"/>
+  <ellipse cx="65" cy="41" rx="46" ry="19.5" fill="none" stroke="#f0a8b8" stroke-width="3" stroke-dasharray="7 5"/>
+  <path d="M26 38Q55 25 92 33" stroke="#fff" stroke-width="3" opacity=".8" fill="none" stroke-linecap="round"/>
+  <g class="deco"><circle cx="65" cy="22" r="22" fill="#ffd890" opacity=".22"/>
+  <rect x="42" y="26" width="8" height="13" rx="3" fill="#d8302a" stroke="#7a1010" stroke-width="1.2"/><path d="M44 26l2-5 2 5Z" fill="#fff4e0" stroke="#7a1010" stroke-width="1"/>
+  <rect x="53" y="27" width="8" height="12" rx="3" fill="#ffc83a" stroke="#a8781a" stroke-width="1.2"/><path d="M55 27l2-5 2 5Z" fill="#fff4e0" stroke="#a8781a" stroke-width="1"/>
+  <rect x="84" y="28" width="9" height="9" rx="1.5" fill="#fff" stroke="#c8302a" stroke-width="1.4"/><path d="M85 31h7M85 34h7" stroke="#c8302a" stroke-width="1.2"/><circle cx="104" cy="32" r="5" fill="#fff" stroke="#c8302a" stroke-width="1.4"/><path d="M104 28v-5" stroke="#2f9aaa" stroke-width="2"/></g>
+  <circle cx="65" cy="84" r="9" fill="#c8322a" stroke="#fff6e0" stroke-width="1.8"/><text x="65" y="88.5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff6e0" font-family="Josefin Sans,sans-serif">${n}</text>
+</svg>`;
+const fastBooth = () => `<svg viewBox="0 0 170 80" width="170" height="80">
+  <path d="M6 76V26Q6 4 30 4H140Q164 4 164 26V76Z" fill="#a8201c" stroke="#3a0c0a" stroke-width="3.4" stroke-linejoin="round"/>
+  <path d="M16 70V28Q16 14 32 14H138Q154 14 154 28V70Z" fill="#d8302a"/>
+  ${Array.from({ length: 3 }, (_, r) => Array.from({ length: 8 }, (_, c) => `<path d="M${20 + c * 17} ${14 + r * 18}l8.5 9-8.5 9z" fill="none" stroke="#a8201c" stroke-width="1.6" opacity=".8" transform="translate(${r % 2 ? 8 : 0} 0)"/>`).join('')).join('')}
+  ${[0, 1, 2].map((r) => Array.from({ length: 8 }, (_, c) => `<circle cx="${28 + c * 17 + (r % 2 ? 8 : 0)}" cy="${23 + r * 18}" r="1.8" fill="#ffd0c0"/>`).join('')).join('')}
+  <path d="M6 30Q80 10 164 30" stroke="#ff9a8a" stroke-width="2" fill="none" opacity=".5"/>
+  <path d="M2 28Q2 70 14 78H20V30Z M168 28Q168 70 156 78H150V30Z" fill="#8a1814" stroke="#3a0c0a" stroke-width="2.6"/>
+  <path d="M0 6Q85 -6 170 6" stroke="#e8e0d0" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M0 6Q85 -6 170 6" stroke="#9aa4aa" stroke-width="1.6" fill="none" opacity=".7"/>
+</svg>`;
+const fastStove = () => `<svg viewBox="0 0 110 80" width="110" height="80">
+  <rect x="4" y="30" width="102" height="46" rx="6" fill="#c8d0d4" stroke="#3a4248" stroke-width="3"/>
+  <path d="M8 34h94M8 38h94" stroke="#fff" stroke-width="2" opacity=".5"/>
+  <rect x="4" y="22" width="102" height="14" rx="4" fill="#2a2e32" stroke="#3a4248" stroke-width="3"/><path d="M10 25h90" stroke="#6a727a" stroke-width="2" opacity=".6"/>
+  <g class="flame">${[24, 52, 80].map((x, i) => `<ellipse cx="${x}" cy="24" rx="12" ry="5.4" fill="#6a3418" stroke="#2a1008" stroke-width="2"/><ellipse cx="${x - 2}" cy="22.6" rx="7" ry="2.2" fill="#8a4a24"/><path d="M${x - 3} 16q-3-4 0-8M${x + 3} 16q-3-4 0-8" stroke="#fff" stroke-width="2" fill="none" opacity=".75" stroke-linecap="round"/>`).join('')}</g>
+  <rect x="10" y="46" width="90" height="22" rx="3" fill="#8a929a" stroke="#3a4248" stroke-width="2"/><path d="M14 56h82" stroke="#3a4248" stroke-width="2"/><rect x="48" y="50" width="14" height="4" rx="2" fill="#2a2e32"/>
+  <circle cx="20" cy="73" r="0" fill="none"/>${[22, 44, 66, 88].map((x, i) => `<circle cx="${x}" cy="62" r="3.4" fill="${['#d8302a', '#ffc83a', '#d8302a', '#ffc83a'][i]}" stroke="#2a1008" stroke-width="1.4"/>`).join('')}
+</svg>`;
 const italianTable = (n) => `<svg viewBox="0 0 130 92" width="130" height="92">
   <defs><pattern id="gingh" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#fff6e6"/><rect width="7" height="14" fill="#d8402f" opacity=".78"/><rect width="14" height="7" fill="#d8402f" opacity=".78"/></pattern></defs>
   <ellipse cx="65" cy="82" rx="52" ry="10" fill="#000" opacity=".26"/>
@@ -159,7 +193,7 @@ const italianTable = (n) => `<svg viewBox="0 0 130 92" width="130" height="92">
   <ellipse cx="96" cy="34" rx="9" ry="3.6" fill="#fff" stroke="#b8a888" stroke-width="1"/><ellipse cx="96" cy="33.5" rx="5.4" ry="2" fill="#f2f2ea"/></g>
   <circle cx="65" cy="84" r="9" fill="#3f7a4a" stroke="#f6e2a8" stroke-width="1.5"/><text x="65" y="88.5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff4dc" font-family="Josefin Sans,sans-serif">${n}</text>
 </svg>`;
-export const tableSVG = (n, v) => v === 'italian' ? italianTable(n) : v === 'steak' || v === true ? steakTable(n) : `<svg viewBox="0 0 130 92" width="130" height="92">
+export const tableSVG = (n, v) => v === 'fastfood' ? fastTable(n) : v === 'italian' ? italianTable(n) : v === 'steak' || v === true ? steakTable(n) : `<svg viewBox="0 0 130 92" width="130" height="92">
   <ellipse cx="65" cy="80" rx="50" ry="11" fill="#000" opacity=".25"/>
   <rect x="58" y="48" width="14" height="30" fill="#8f6a22"/><ellipse cx="65" cy="78" rx="24" ry="6" fill="#c9a24a"/>
   <ellipse cx="65" cy="44" rx="58" ry="28" fill="#a52e4a"/>
@@ -188,7 +222,7 @@ const italianChair = () => `<svg viewBox="0 0 80 70" width="80" height="70">
   ${[28, 40, 52].map((x) => `<circle cx="${x}" cy="20" r="1.6" fill="#2a5a30"/>`).join('')}
   <path d="M16 56v10M64 56v10" stroke="#3a1c0c" stroke-width="5" stroke-linecap="round"/>
 </svg>`;
-export const chairSVG = (v) => v === 'italian' ? italianChair() : v === 'steak' || v === true ? boothSVG() : `<svg viewBox="0 0 80 70" width="80" height="70">
+export const chairSVG = (v) => v === 'fastfood' ? fastBooth() : v === 'italian' ? italianChair() : v === 'steak' || v === true ? boothSVG() : `<svg viewBox="0 0 80 70" width="80" height="70">
   <rect x="12" y="6" width="56" height="48" rx="18" fill="#7d1d33" stroke="#f4dd8e" stroke-width="2.5"/>
   <rect x="22" y="14" width="36" height="30" rx="10" fill="#a52e4a" opacity=".6"/>
 </svg>`;
@@ -209,7 +243,7 @@ const italianStove = () => `<svg viewBox="0 0 110 80" width="110" height="80">
   <path d="M60 26q0-8 8-8h20q8 0 8 8Z" fill="#d8844a" stroke="#3a1c0c" stroke-width="2.4"/><path d="M96 22h10" stroke="#3a1c0c" stroke-width="3.4" stroke-linecap="round"/>
   <circle cx="22" cy="42" r="0" fill="none"/>
 </svg>`;
-export const stoveSVG = (v) => v === 'italian' ? italianStove() : v === 'steak' || v === true ? grillSVG() : `<svg viewBox="0 0 110 80" width="110" height="80">
+export const stoveSVG = (v) => v === 'fastfood' ? fastStove() : v === 'italian' ? italianStove() : v === 'steak' || v === true ? grillSVG() : `<svg viewBox="0 0 110 80" width="110" height="80">
   <rect x="4" y="22" width="102" height="54" rx="8" fill="#2a2233" stroke="#c9a24a" stroke-width="3"/>
   <rect x="4" y="22" width="102" height="14" rx="6" fill="#4a3f57"/>
   <circle cx="30" cy="29" r="7" fill="#12101a"/><circle cx="55" cy="29" r="7" fill="#12101a"/>

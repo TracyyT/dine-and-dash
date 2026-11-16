@@ -20,4 +20,5 @@ UPGRADES.chinese = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => M
 UPGRADES.fine = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.4) / 5) * 5) }));
 UPGRADES.steak = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 2.8) / 5) * 5) }));
 UPGRADES.italian = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 3.2) / 5) * 5) }));
+UPGRADES.fastfood = UPGRADES.city.map((u) => ({ ...u, tiers: u.tiers.map((t) => Math.round((t * 3.6) / 5) * 5) }));
 export const upgradeList = (chapterId) => UPGRADES[chapterId] || [];

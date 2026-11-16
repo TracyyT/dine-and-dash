@@ -35,4 +35,9 @@ export const DISHES = {
   spaghetti:  { name: 'Spaghetti',      time: 9,  price: 26 },
   tiramisu:   { name: 'Tiramisu',       time: 11, price: 34 },
   lasagna:    { name: 'Lasagna',        time: 14, price: 44 },
+  // Cali Burger menu (fries are shared with the steakhouse)
+  hotdog:     { name: 'Hot Dog',        time: 6,  price: 16 },
+  cheeseburger: { name: 'Cheeseburger', time: 9,  price: 26 },
+  shake:      { name: 'Milkshake',      time: 11, price: 34 },
+  combo:      { name: 'Mega Combo',     time: 14, price: 44 },
 };
