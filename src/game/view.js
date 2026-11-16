@@ -35,7 +35,7 @@ export function createView(host, g, info, handlers) {
 
   // static pieces
   const tableEls = g.tables.map((t) => {
-    const chair = mk('ent chair' + (info.theme === 'steak' ? ' booth' : ''), chairSVG(info.theme)); place(chair, t.x, t.y - 36); chair.style.zIndex = Math.round(t.y - 60);
+    const chair = mk('ent chair' + (info.theme === 'steak' || info.theme === 'fastfood' ? ' booth' : ''), chairSVG(info.theme)); place(chair, t.x, t.y - 36); chair.style.zIndex = Math.round(t.y - 60);
     const el = mk('ent table', `${tableSVG(t.id, info.theme)}<div class="mess"></div><div class="bubble tb">${use('ic-spark', 24)}</div><div class="qn"></div>`);
     el.dataset.t = t.id; place(el, t.x, t.y);
     ents.append(chair, el);

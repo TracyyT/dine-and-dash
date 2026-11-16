@@ -111,6 +111,25 @@ export const chapters = [
       { n: 10, name: 'Gran Festa', sign: 'FESTA' },
     ],
   },
+  {
+    id: 'fastfood',
+    name: 'Cali Burger',
+    theme: 'fastfood',
+    map: 'fastfood',
+    path: [[5, 23], [5, 17], [11, 17], [11, 11], [17, 11], [17, 23], [23, 23], [23, 17], [29, 17]],
+    levels: [
+      { n: 1, name: 'Beach Stand', sign: 'STAND', arc: 2.5 },
+      { n: 2, name: 'Burger Joint', sign: 'BURGER', arc: 7.8 },
+      { n: 3, name: 'Fry Shack', sign: 'FRIES', arc: 13.1 },
+      { n: 4, name: 'Shake Shop', sign: 'SHAKE', arc: 18.4 },
+      { n: 5, name: 'Pier Diner', sign: 'PIER', arc: 23.7 },
+      { n: 6, name: 'Boardwalk Rush', sign: 'RUSH', arc: 29 },
+      { n: 7, name: 'Food Truck Rally', sign: 'TRUCK', arc: 34.3 },
+      { n: 8, name: 'Sunset Strip', sign: 'STRIP', arc: 39.6 },
+      { n: 9, name: 'Squeaky Clean', sign: 'CLEAN', arc: 44.9 },
+      { n: 10, name: 'Grand Slam Burger', sign: 'SLAM', arc: 50.2 },
+    ],
+  },
 ];
 
 // Level numbers run on through the whole game (chapter 2 starts at 9, and so on). `n` stays the level's place inside its chapter, which is what saves use.

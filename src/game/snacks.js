@@ -6,6 +6,7 @@ const O = '#3a1f12'; // outline
 // 40x40 symbols, shared by the cup counter, the "+35%" float and the toast. Added to the page once with the other icons.
 export const SNACK_SYMBOLS = `
  <symbol id="sn-gelato" viewBox="0 0 40 40"><path d="M12 20h16L20 38Z" fill="#e8b868" stroke="${O}" stroke-width="2.5" stroke-linejoin="round"/><path d="M15 24l8 8M20 22l5 7M16 29l3-3" stroke="#b88438" stroke-width="1.4" stroke-linecap="round"/><circle cx="20" cy="15" r="9" fill="#f6a8c4" stroke="${O}" stroke-width="2.5"/><circle cx="12.5" cy="21" r="5.5" fill="#a8d8b0" stroke="${O}" stroke-width="2.2"/><circle cx="27.5" cy="21" r="5.5" fill="#fff4d8" stroke="${O}" stroke-width="2.2"/><circle cx="20" cy="5" r="2.8" fill="#d8302a" stroke="${O}" stroke-width="1.6"/></symbol>
+ <symbol id="sn-soda" viewBox="0 0 40 40"><path d="M10 13h20l-3 25H13Z" fill="#fff6f0" stroke="${O}" stroke-width="2.5" stroke-linejoin="round"/><path d="M11.4 22h17.2l-1.8 15H13.2Z" fill="#d8302a"/><path d="M11 13h18" stroke="${O}" stroke-width="2.5"/><rect x="8" y="9" width="24" height="5" rx="2.5" fill="#fff" stroke="${O}" stroke-width="2.2"/><path d="M22 9L27 1l6 1" fill="none" stroke="#2f9aaa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="28" r="1.6" fill="#ffd0c0"/><circle cx="23" cy="32" r="1.2" fill="#ffd0c0"/></symbol>
  <symbol id="sn-cookie" viewBox="0 0 40 40"><circle cx="20" cy="21" r="14" fill="#e0a85c" stroke="${O}" stroke-width="2.5"/><circle cx="14" cy="16" r="2.6" fill="#5a2f1a"/><circle cx="25" cy="14" r="2.2" fill="#5a2f1a"/><circle cx="26" cy="25" r="2.8" fill="#5a2f1a"/><circle cx="15" cy="27" r="2.2" fill="#5a2f1a"/><circle cx="21" cy="21" r="1.6" fill="#5a2f1a"/></symbol>
  <symbol id="sn-coconut" viewBox="0 0 40 40"><ellipse cx="18" cy="24" rx="13" ry="13" fill="#8a5a32" stroke="${O}" stroke-width="2.5"/><ellipse cx="18" cy="14" rx="9" ry="4" fill="#fff6e0" stroke="${O}" stroke-width="2"/><path d="M20 14L31 3" stroke="#e0533f" stroke-width="3.5" stroke-linecap="round"/><path d="M25 9l3 3" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/><circle cx="13" cy="26" r="1.5" fill="${O}"/><circle cx="19" cy="29" r="1.5" fill="${O}"/><circle cx="23" cy="24" r="1.5" fill="${O}"/></symbol>
  <symbol id="sn-tea" viewBox="0 0 40 40"><ellipse cx="20" cy="33" rx="15" ry="4" fill="#fff" stroke="#3a5a8a" stroke-width="2"/><path d="M7 15h24q0 15-12 15T7 15Z" fill="#fff" stroke="#3a5a8a" stroke-width="2.5" stroke-linejoin="round"/><path d="M31 18q8 0 6 6q-2 4-8 3" fill="none" stroke="#3a5a8a" stroke-width="2.5" stroke-linecap="round"/><path d="M8 15h22" stroke="#7bb26a" stroke-width="3"/><path d="M14 10q-3-3 0-6M21 10q-3-3 0-6" stroke="#fff" stroke-opacity=".8" stroke-width="2.5" fill="none" stroke-linecap="round"/></symbol>
@@ -19,6 +20,7 @@ const PAL = {
   chinese: { top: '#b8312f', dk: '#6a1414', cloth: '#c8282a', cloth2: '#e8c766', gold: '#e8c766', tray: '#d8a85e', trayIn: '#f0d8a0' },
   fine:    { top: '#f1e6cf', dk: '#b8a888', cloth: '#7d1d33', cloth2: '#e8c766', gold: '#e8c766', tray: '#e8c766', trayIn: '#f8ecc0' },
   italian: { top: '#c8794a', dk: '#6a2a14', cloth: '#d8402f', cloth2: '#fff4e0', gold: '#e8c766', tray: '#d8c8a8', trayIn: '#f6ecd4' },
+  fastfood:{ top: '#f0e6d0', dk: '#b8302a', cloth: '#c8322a', cloth2: '#fff6e8', gold: '#ffc83a', tray: '#c8d0d4', trayIn: '#fff6e8' },
   steak:   { top: '#9a6a3a', dk: '#4a2c14', cloth: '#c83a3a', cloth2: '#ffffff', gold: '#c8d0d4', tray: '#9aa4aa', trayIn: '#dfe5e8' },
 };
 // Where the tray sits (svg units, 80x110 box), so the items can be laid on it.
@@ -104,6 +106,16 @@ const maker = (theme, t, c) => {
     if (t === 2) s += `<circle cx="40" cy="${k - 3}" r="3.4" fill="${c.gold}" ${sw(1.6)}/>`;
     return s;
   }
+  if (theme === 'fastfood') { // a soda fountain: red machine with a sign, taps and a stack of cups
+    let s = `<rect x="16" y="20" width="48" height="40" rx="6" fill="${t === 0 ? '#c8d0d4' : '#c8322a'}" ${sw()}/>`;
+    s += `<rect x="20" y="10" width="40" height="13" rx="4" fill="#fff6e8" ${sw(2.2)}/><text x="40" y="20.4" text-anchor="middle" font-size="9.5" font-weight="800" fill="#c8322a" font-family="Josefin Sans,sans-serif">SODA</text>`;
+    s += [[26, '#d8302a'], [40, '#2f9aaa'], [54, '#ffc83a']].map(([x, col]) => `<rect x="${x - 5}" y="27" width="10" height="9" rx="2" fill="${col}" ${sw(1.6)}/><rect x="${x - 2}" y="44" width="4" height="6" rx="1" fill="#6a747a" ${sw(1.2)}/>`).join('');
+    s += `<path d="M20 53h40" stroke="${O}" stroke-width="2"/>`;
+    if (t >= 1) s += `<path d="M16 24h48" stroke="#fff6e8" stroke-width="2.4" stroke-dasharray="6 4"/>`;
+    s += `<path d="M66 60V38l5 0v22Z" fill="#fff" stroke="${O}" stroke-width="1.8"/>` + `<path d="M68.5 38v-7M70.5 38l2-6" stroke="#2f9aaa" stroke-width="2" stroke-linecap="round"/>`;
+    if (t === 2) s += `<circle cx="40" cy="5" r="3" fill="${c.gold}" ${sw(1.4)}/><path d="M24 8h32" stroke="${c.gold}" stroke-width="2" opacity=".9"/>`;
+    return s;
+  }
   // steakhouse: a lemonade dispenser with glass tanks and a tap
   const tank = (x, w, liq, cap) => `<rect x="${x}" y="24" width="${w}" height="34" rx="8" fill="#fff6c8" fill-opacity=".55" ${sw()}/><rect x="${x + 2}" y="32" width="${w - 4}" height="24" rx="6" fill="${liq}"/><circle cx="${x + w / 2}" cy="42" r="4.6" fill="#fff27a" stroke="#a8861a" stroke-width="1.5"/><circle cx="${x + w / 2 + 5}" cy="50" r="3.6" fill="#fff27a" stroke="#a8861a" stroke-width="1.4"/><rect x="${x + w * 0.15}" y="19" width="${w * 0.7}" height="6" rx="2.5" fill="${cap}" ${sw(1.8)}/><rect x="${x + w / 2 - 4}" y="57" width="8" height="5" rx="2" fill="#c8d0d4" ${sw(1.5)}/><path d="M${x + w / 2} 62v3" stroke="${O}" stroke-width="2.2" stroke-linecap="round"/>`;
   let s = t === 0 ? tank(22, 36, '#ffd93a', '#8a949a') : tank(14, 24, '#ffd93a', t === 2 ? c.gold : '#8a949a') + tank(42, 24, '#f6a8c4', t === 2 ? c.gold : '#8a949a');
@@ -142,6 +154,7 @@ export const SNACKS = {
   chinese: { id: 'tea',       name: 'tea',       label: 'Tea',       upName: 'Bigger tea pot',    cup: 'sn-tea',     stand: (t) => stationSVG('chinese', t) },
   fine:    { id: 'macarons',  name: 'macarons',  label: 'Macarons',  upName: 'More macarons',     cup: 'sn-macaron', stand: (t) => stationSVG('fine', t) },
   italian: { id: 'gelato',    name: 'gelato',    label: 'Gelato',    upName: 'More gelato',       cup: 'sn-gelato',  stand: (t) => stationSVG('italian', t) },
+  fastfood:{ id: 'soda',      name: 'soda',      label: 'Soda',      upName: 'More soda',         cup: 'sn-soda',    stand: (t) => stationSVG('fastfood', t) },
   steak:   { id: 'lemonade',  name: 'lemonade',  label: 'Lemonade',  upName: 'Bigger jar',        cup: 'ic-cup',     stand: (t) => stationSVG('steak', t) },
 };
 export const snackFor = (theme) => SNACKS[theme] || SNACKS.steak;

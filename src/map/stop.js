@@ -49,6 +49,13 @@ export const SKINS = {
     lock: { top: '#d8cfba', edge: '#8a8272', dash: '#b0a48c', num: '#9a907c', numLine: '#fffbe8', lockFill: '#8a8272' },
     label: { bg: '#2f5a3a', line: '#f6e2a8', text: '#fff4dc', lockLine: '#8a7e72', lockText: '#c8bcb0' },
   },
+  fastfood: {
+    ol: '#8a6aa8', shadow: '#7a5a98', pulse: '#ffd6e6', starOff: '#d6cae8', crown: '#ffd98a',
+    done: { top: '#fff8e6', edge: '#ffb3cc', dash: '#ffd0e0', num: '#ee5c8c', numLine: '#ffffff' },
+    now: { top: '#ffffff', edge: '#ff8fb4', dash: '#ffd0e0', num: '#ee5c8c', numLine: '#ffffff' },
+    lock: { top: '#eee6f8', edge: '#b9a6da', dash: '#d2c4ea', num: '#9d89c4', numLine: '#ffffff', lockFill: '#b9a6da' },
+    label: { bg: '#e8547e', line: '#ffffff', text: '#ffffff', lockLine: '#ffffff', lockText: '#ffe4ee' },
+  },
   steak: {
     ol: '#2a160c', shadow: '#000', pulse: '#ffd890', starOff: '#8a8478', crown: '#e0a850',
     done: { top: '#fff0c0', edge: '#d8b860', dash: '#e0c070', num: '#8a5a1a', numLine: '#fffbe8' },

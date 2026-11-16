@@ -1,0 +1,26 @@
+export const fastfood = {
+  id: 'fastfood',
+  name: 'Cali Burger',
+  era: 'california summer',
+  palette: {
+    wall: '#f08a6a',
+    wallDeep: '#7a2a1c',
+    brass: '#ffc83a',
+    brassLight: '#ffe08a',
+    brassDark: '#b8801a',
+    burgundy: '#c8322a',
+    burgundyLight: '#e8503a',
+    ivory: '#fff6e8',
+    marble: '#4a1c14',
+    nightTop: '#4fa8e8',
+    nightMid: '#8cd0f0',
+    nightLow: '#ffe8b0',
+    ink: '#3a1410',
+    glow: '#ffd890',
+  },
+  fonts: {
+    display: "'Pacifico', 'Limelight', cursive",
+    body: "'Josefin Sans', system-ui, sans-serif",
+  },
+  light: { vignette: 0.3, beam: 0.5 },
+};
